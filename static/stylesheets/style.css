@@ -55,7 +55,7 @@ p {
     padding: 12px 55px;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 22px;
-    background-color: #007bff;
+    background-color: #004CFF;
     color: white;
     border: none;
     border-radius: 16px;
@@ -77,9 +77,9 @@ p {
 
 .login-btn i {
     font-size: 13px;
-    border: 2px solid #007bff;
+    border: 2px solid #004CFF;
     border-radius: 50%;
     padding: 4px;
     color: white;
-    background-color: #007bff;
+    background-color: #004CFF;
 }
