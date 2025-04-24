@@ -1,3 +1,85 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full screen height */
+    text-align: center;
+    padding: 20px;
+}
+
+.logo {
+    padding-bottom: 23px;
+}
+
+.logo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border: 2px solid white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 h1 {
-    background-color: blue;   
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 52px;
+    font-weight: 700px;
+}
+
+p {
+    margin: 10px 0 30px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 300px;
+}
+
+.button {
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; /* center buttons on mobile */
+}
+
+.signup-btn {
+    padding: 12px 55px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 22px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    width: 335px;
+    max-width: 300px;
+}
+
+.login-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.login-btn i {
+    font-size: 13px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    padding: 4px;
+    color: white;
+    background-color: #007bff;
 }

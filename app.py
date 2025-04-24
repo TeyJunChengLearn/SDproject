@@ -102,8 +102,8 @@ class ReportGenerator:
             ReportGenerator._instance = ReportGenerator()
         return ReportGenerator._instance
 
-    def generate_report(self, admin_id):
-        return Report(generated_by=admin_id, data="System data...", created_at=datetime.utcnow())
+    # def generate_report(self, admin_id):
+    #     return Report(generated_by=admin_id, data="System data...", created_at=datetime.utcnow())
 
 # Decorator base class (not a table)
 class ListingDecorator:
