@@ -168,7 +168,13 @@ class TradeStrategy(RequestStrategy):
 def index():
     return render_template('index.html')
 
+@app.route("/login")
+def login():
+    return render_template('login.html')
 
+@app.route("/insertpassword")
+def password():
+    return render_template('insertpassword.html')
 
 if __name__ == "__main__":
     with app.app_context():
