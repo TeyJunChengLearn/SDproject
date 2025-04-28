@@ -1,0 +1,108 @@
+body {
+  background-color: white;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  position: relative; /* Ensure body takes the whole space */
+  z-index: 1; /* Ensure content is above background */
+}
+
+.background {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  position: absolute; /* Ensures it's positioned behind the content */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevents overflow if the image is larger than the viewport */
+  z-index: 0; /* Ensures background is behind content */
+}
+
+.background img {
+  width: 100%; /* Stretches the image horizontally */
+  height: 100%; /* Stretches the image vertically */
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+}
+
+.header {
+  margin-left: 20px; /* optional: give a little space from the very edge */
+  margin-bottom: 20px;
+  z-index: 2; /* Make sure header is on top */
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  font-size: 52px;
+  font-weight: 700px;
+}
+
+p {
+  margin: 10px 0 30px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 300px;
+}
+
+input[type="email"] {
+  width: 100%;
+  max-width: 335px;     
+  padding-top: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 16px;
+  margin-top: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #f8f8f8;
+  border-radius: 60px;
+  font-size: 16px;
+  gap: 10px;
+  box-sizing: border-box
+}
+
+input[type="email"]::placeholder {
+  color: #D2D2D2;
+  font-family: 'Poppins', sans-serif;
+}
+
+.button {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  gap: 20px; /* space between the two buttons */
+  margin-top: 20px;
+  text-align: center;
+  z-index: 2; /* Make sure buttons are on top */
+}
+
+.next-btn {
+  padding: 12px 55px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 22px;
+  background-color: #004CFF;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  gap: 8px; /* space between the text and icon */
+  width: 335px;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: none;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  gap: 8px; /* space between the text and icon */
+  width: 335px;
+}

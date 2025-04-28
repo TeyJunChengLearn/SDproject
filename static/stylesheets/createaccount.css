@@ -1,0 +1,162 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: white;
+    position: relative; /* Important: so child elements (background, container) can layer */
+    overflow: hidden;
+}
+
+.background {
+    position: absolute; /* Cover the entire page */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 0; /* Put background at the bottom */
+}
+
+.background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.container {
+    position: relative; /* Content stays above background */
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 50px;
+}
+
+/* Camera upload */
+.uploadprofile {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed #004CFF;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 25px;
+    margin-bottom: 20px;
+}
+
+.uploadprofile i {
+    font-size: 40px;
+    color: #004CFF;
+}
+
+/* Form inputs */
+input[type="email"],
+input[type="password"],
+input[type="tel"] {
+    width: 100%;
+    max-width: 335px;
+    padding: 16px 20px;
+    margin-top: 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #f8f8f8;
+    border-radius: 60px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input::placeholder {
+    color: #D2D2D2;
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+    max-width: 335px;
+}
+  
+.password-container input {
+    width: 100%;
+    padding: 16px 50px 16px 20px; /* Extra right padding for icon */
+    margin-top: 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #f8f8f8;
+    border-radius: 60px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+  
+#togglePassword {
+    position: absolute;
+    right: 20px;
+    top: 60%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #D2D2D2;
+    font-size: 18px;
+}
+  
+.toggle-password i {
+    font-size: 18px;
+}
+  
+/* Phone input container */
+.phone-container {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 335px;
+}
+
+/* Country select dropdown */
+.iti {
+    width: 100%;
+}
+.iti__selected-flag {
+    padding: 0 10px 0 20px;
+    border-radius: 60px 0 0 60px;
+}
+.iti__flag-container {
+    padding: 16px 0;
+}
+.iti__selected-dial-code {
+    font-family: 'Nunito Sans', sans-serif;
+}
+.iti__country-list {
+    border-radius: 10px;
+}
+
+/* Buttons */
+.button {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.done-btn {
+    padding: 12px 55px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 22px;
+    background-color: #004CFF;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    width: 335px;
+    margin-top: 30px;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    width: 335px;
+}
