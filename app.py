@@ -114,14 +114,9 @@ class ListingFactory:
     def create_listing(type, data):
         return Listing(**data)
 
-<<<<<<< HEAD
-    # def generate_report(self, admin_id):
-    #     return Report(generated_by=admin_id, data="System data...", created_at=datetime.utcnow())
-=======
 class ItemObserver:
     def update(self, listing):
         raise NotImplementedError
->>>>>>> 19d67b298ad9a1ba2107c0f15c79f70807f01a9c
 
 class ListingDecorator:
     def __init__(self, wrapped):
@@ -189,7 +184,6 @@ class ReportGenerator:
 
 @app.route("/")
 def index():
-<<<<<<< HEAD
     return render_template('index.html')
 
 @app.route("/login")
@@ -199,9 +193,6 @@ def login():
 @app.route("/insertpassword")
 def password():
     return render_template('insertpassword.html')
-=======
-    return "Welcome to ShareBear!"
->>>>>>> 19d67b298ad9a1ba2107c0f15c79f70807f01a9c
 
 if __name__ == "__main__":
     with app.app_context():
