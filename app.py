@@ -1,12 +1,13 @@
-from flask import Flask, render_template
-from flask_scss import Scss
+from flask import Flask, render_template, session, redirect, url_for, request as flask_request
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, date
 
 app = Flask(__name__)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.secret_key = 'super_secret_key'
 db = SQLAlchemy(app)
+
+# =========================== MODELS ===========================
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,7 +32,6 @@ class Listing(db.Model):
     description = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    owner = db.relationship('User', backref='listings')
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,27 +39,41 @@ class Transaction(db.Model):
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     type = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50))
     status = db.Column(db.String(50), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     decision_time = db.Column(db.DateTime)
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
     requester_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    strategy = None
+
     __mapper_args__ = {
         'polymorphic_identity': 'request',
         'polymorphic_on': type
     }
+
+    def approve(self):
+        if self.strategy:
+            self.strategy.approve(self)
+
+    def reject(self):
+        if self.strategy:
+            self.strategy.reject(self)
+
+    def set_strategy(self, strategy):
+        self.strategy = strategy
 
 class PurchaseRequest(Request):
     __tablename__ = 'purchase_request'
     id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
     proposed_price = db.Column(db.Float)
     __mapper_args__ = {
-        'polymorphic_identity': 'purchase_request',
+        'polymorphic_identity': 'purchase_request'
     }
 
 class BorrowRequest(Request):
@@ -68,7 +82,7 @@ class BorrowRequest(Request):
     borrow_start = db.Column(db.Date)
     borrow_end = db.Column(db.Date)
     __mapper_args__ = {
-        'polymorphic_identity': 'borrow_request',
+        'polymorphic_identity': 'borrow_request'
     }
 
 class TradeRequest(Request):
@@ -76,7 +90,7 @@ class TradeRequest(Request):
     id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
     offered_item_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
     __mapper_args__ = {
-        'polymorphic_identity': 'trade_request',
+        'polymorphic_identity': 'trade_request'
     }
 
 class DonationRequest(Request):
@@ -84,28 +98,31 @@ class DonationRequest(Request):
     id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
     reason = db.Column(db.String(255))
     __mapper_args__ = {
-        'polymorphic_identity': 'donation_request',
+        'polymorphic_identity': 'donation_request'
     }
 
 class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     generated_by = db.Column(db.Integer, db.ForeignKey('admin.id'))
     data = db.Column(db.Text)
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-class ReportGenerator:
-    _instance = None
+# =========================== DESIGN PATTERNS ===========================
 
+class ListingFactory:
     @staticmethod
-    def get_instance():
-        if ReportGenerator._instance is None:
-            ReportGenerator._instance = ReportGenerator()
-        return ReportGenerator._instance
+    def create_listing(type, data):
+        return Listing(**data)
 
+<<<<<<< HEAD
     # def generate_report(self, admin_id):
     #     return Report(generated_by=admin_id, data="System data...", created_at=datetime.utcnow())
+=======
+class ItemObserver:
+    def update(self, listing):
+        raise NotImplementedError
+>>>>>>> 19d67b298ad9a1ba2107c0f15c79f70807f01a9c
 
-# Decorator base class (not a table)
 class ListingDecorator:
     def __init__(self, wrapped):
         self.wrapped = wrapped
@@ -128,12 +145,6 @@ class VerifiedListing(ListingDecorator):
     def get_title(self):
         return "[VERIFIED] " + super().get_title()
 
-# Observer interface (not a DB model)
-class ItemObserver:
-    def update(self, listing):
-        raise NotImplementedError
-
-# Strategy interface
 class RequestStrategy:
     def approve(self, request):
         raise NotImplementedError
@@ -162,10 +173,23 @@ class TradeStrategy(RequestStrategy):
     def reject(self, request):
         request.status = "rejected"
 
+class ReportGenerator:
+    _instance = None
 
+    @staticmethod
+    def get_instance():
+        if ReportGenerator._instance is None:
+            ReportGenerator._instance = ReportGenerator()
+        return ReportGenerator._instance
+
+    def generate_report(self, admin_id):
+        return Report(generated_by=admin_id, data="System Report", created_at=datetime.utcnow())
+
+# =========================== ROUTES ===========================
 
 @app.route("/")
 def index():
+<<<<<<< HEAD
     return render_template('index.html')
 
 @app.route("/login")
@@ -175,6 +199,9 @@ def login():
 @app.route("/insertpassword")
 def password():
     return render_template('insertpassword.html')
+=======
+    return "Welcome to ShareBear!"
+>>>>>>> 19d67b298ad9a1ba2107c0f15c79f70807f01a9c
 
 if __name__ == "__main__":
     with app.app_context():
