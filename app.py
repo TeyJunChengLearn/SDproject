@@ -190,6 +190,10 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route("/createacc")
+def createacc():
+    return render_template('createaccount.html')
+
 @app.route("/insertpassword")
 def password():
     return render_template('insertpassword.html')
