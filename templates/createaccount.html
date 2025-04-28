@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/createaccount.css') }}">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Country select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  
+  <title>Create Account</title>
+</head>
+
+<body>
+    <div class="background">
+        <img src="static/createbubble.png" alt="background" />
+      </div>
+    <div class="container">
+    <div class="header">
+    <h1>Create</h1>
+    <h1>Account</h1>
+    <div class="uploadprofile" onclick="document.getElementById('fileInput').click();">
+        <i class="bi bi-camera"></i>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      <form action="/login" method="POST" id="signupForm">
+        <input type="email" id="email" name="email" placeholder="Email" required />
+        <div class="password-container">
+            <input type="password" id="password" name="password" placeholder="Password in 8 characters" minlength="8" maxlength="8" pattern=".{8}"required />
+            <i class="bi bi-eye-slash" id="togglePassword"></i>
+        </div>
+        <div class="phone-container">
+          <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{6,15}" required />
+        </div>
+        <div class="button">
+          <button type="submit" class="done-btn">Done</button>
+          <button type="button" class="cancel-btn" onclick="window.location.href='/'">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
+
+  <script src="{{ url_for('static', filename='js/createaccount.js') }}"></script>
+</body>
+</html>

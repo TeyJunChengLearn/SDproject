@@ -4,9 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
-    <title>My App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ShareBear</title>
 </head>
-<body>
-    <h1> Welcome to my App</h1>
+<body>    
+    <div class="title-container">
+        <div class="logo">
+            <img src="static/sharebear.jpg" alt="ShareBear" />
+        </div>
+        <div class="text">
+            <h1>Share Bear</h1>
+            <p>Marketplace to Buy, Sell and Trade preloved items</p>
+        </div>
+        <div class="button">
+            <button type="button" class="signup-btn" onclick="window.location.href='/createacc'">Let's get started</button>
+            <button type="button" class="login-btn" onclick="window.location.href='/login'">I already have an account<i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
 </body>
 </html>
