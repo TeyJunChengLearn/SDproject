@@ -33,6 +33,7 @@ class Listing(db.Model):
     status = db.Column(db.String(50), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     image_filename = db.Column(db.String(255), nullable=True)
+    category = db.Column(db.String(100), nullable=True)
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
