@@ -215,6 +215,10 @@ def password():
 def homepage():
     return render_template('homepage.html')
 
+@app.route("/sellitem")
+def sellitem():
+    return render_template('sellitem.html')
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
