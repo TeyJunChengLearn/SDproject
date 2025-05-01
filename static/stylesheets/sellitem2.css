@@ -45,7 +45,7 @@ p {
 }
 
 .form-container {
-    padding: 10px 20px;
+    padding: 25px 20px;
     box-sizing: border-box;
   }
   
@@ -53,7 +53,7 @@ p {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap; /* wrap on small screens */
-    gap: 18px;
+    gap: 20px;
     justify-content: space-between;
 }
   
@@ -76,24 +76,16 @@ p {
   outline: none;
 }
 
-#ItemDetailsForm textarea {
-    flex: 1 1 200px;
-    padding: 10px;
-    font-size: 14px;
-    font-family: "Prompt", sans-serif;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-    min-width: 150px;
-    resize: vertical; /* or none, if you don't want users to resize it */
+.itempage-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
 }
 
-#ItemDetailsForm textarea:focus {
-    border-color: #007BFF;
-    background-color: #e6f0ff;
-    outline: none;
-  }
-  
 .details-btn {
     background-color: #004BFE;
     color: white;
@@ -107,4 +99,16 @@ p {
     width: 100%;
     max-width: 336px;;
 }
-  
+
+.back-btn {
+    background-color: transparent;
+    color: #004BFE;
+    border: 1px solid #ccc;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    width: 100%;
+    max-width: 336px;
+}

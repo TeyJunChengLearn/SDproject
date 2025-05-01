@@ -274,7 +274,7 @@ p {
 .sellitem-container {
     position: fixed;
     bottom: 60px;
-    right: 20px;
+    right: 40px;
     z-index: 999;
 }
 

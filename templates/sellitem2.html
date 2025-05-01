@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem2.css') }}">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +22,10 @@
 </head>
 <body>
     <div class="navigation-bar-container">
-        <div class="leftarrowicon" onclick="window.location.href='/homepage'" style="cursor: pointer;">
+        <div class="leftarrowicon">
             <i class="bi bi-arrow-left"></i>
         </div>
-        <div class="header-text">Item Details Page</div>
+        <div class="header-text">Pricing & Shipping Page</div>
         <div class="icon">
             <div class="notify">
                 <i class="bi bi-bell"></i>
@@ -36,28 +36,22 @@
         </div>
     </div>
     <div class="text-container">
-        <h1>Describe Your Item</h1>
-        <p>Complete these details to make your item stand out to buyers.</p>
+        <h1>Set Your Price & Delivery Options</h1>
+        <p>Price your item and choose how you'd like to deliver it to buyers.</p>
     </div>
     <div class="form-container">
         <form action="/" method="POST" id="ItemDetailsForm">
-          <input type="text" name="itemname" placeholder="Item Title" />
-          <select name="category" required>
-            <option value="" disabled selected hidden>Category</option>
-            <option value="clothing">Clothing</option>
-            <option value="electronics">Electronics</option>
-            <option value="books">Books</option>
-            <option value="furniture">Furniture</option>
+          <input type="text" name="itemprice" placeholder="Item Price" />
+          <select name="shipping" required>
+            <option value="" disabled selected hidden>Shipping Options</option>
+            <option value="doorstep-delivery">Doorstep Delivery</option>
+            <option value="cod">Cash on Delivery</option>
           </select>
-          <input type="text" name="condition" placeholder="Condition" />
-          <textarea name="description" placeholder="Description"></textarea>
-          <input type="text" name="brand" placeholder="Brand" />
-          <input type="text" name="size" placeholder="Dimensions/Size" />
-          <input type="text" name="color" placeholder="Color" />
         </form>
     </div>
     <div class="itempage-btn">
-      <button type="button" class="details-btn" onclick="window.location.href='/sellitem2'">Next</button>
+        <button type="button" class="back-btn" onclick="window.location.href='/sellitem'">Back</button>
+      <button type="button" class="details-btn" onclick="window.location.href='#'">Next</button>
     </div>
 </body>
 </html>
