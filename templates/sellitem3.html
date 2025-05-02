@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem2.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem3.css') }}">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
         <div class="leftarrowicon">
             <i class="bi bi-arrow-left"></i>
         </div>
-        <div class="header-text">Pricing & Shipping Page</div>
+        <div class="header-text">Photos</div>
         <div class="icon">
             <div class="notify">
                 <i class="bi bi-bell"></i>
@@ -36,22 +36,21 @@
         </div>
     </div>
     <div class="text-container">
-        <h1>Set Your Price & Delivery Options</h1>
-        <p>Price your item and choose how you'd like to deliver it to buyers.</p>
+        <h1>Add Photos</h1>
+        <p>Great photos help your item sell faster! Upload images from different angles.</p>
     </div>
-    <div class="form-container">
-        <form action="/" method="POST" id="ItemDetailsForm">
-          <input type="text" name="itemprice" placeholder="Item Price" />
-          <select name="shipping" required>
-            <option value="" disabled selected hidden>Shipping Options</option>
-            <option value="doorstep-delivery">Doorstep Delivery</option>
-            <option value="cod">Cash on Delivery</option>
-          </select>
-        </form>
+    <div class="upload-box" id="uploadBox">
+        <div class="upload-icon">📤</div> <!-- or use an SVG/icon -->
+        <p><strong>Choose a file or drag & drop it here</strong></p>
+        <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
+        <label class="browse-button">
+          Browse File
+          <input type="file" hidden>
+        </label>
     </div>
     <div class="itempage-btn">
-        <button type="button" class="back-btn" onclick="window.location.href='/sellitem'">Back</button>
-      <button type="button" class="details-btn" onclick="window.location.href='/sellitem3'">Next</button>
+        <button type="button" class="back-btn" onclick="window.location.href='/sellitem2'">Back</button>
+      <button type="button" class="details-btn" onclick="window.location.href='#'">Next</button>
     </div>
 </body>
 </html>

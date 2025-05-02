@@ -223,6 +223,10 @@ def sellitem():
 def sellitem2():
     return render_template('sellitem2.html')
 
+@app.route("/sellitem3")
+def sellitem3():
+    return render_template('sellitem3.html')
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
