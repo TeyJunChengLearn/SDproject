@@ -40,17 +40,24 @@
         <p>Great photos help your item sell faster! Upload images from different angles.</p>
     </div>
     <div class="upload-box" id="uploadBox">
-        <div class="upload-icon">📤</div> <!-- or use an SVG/icon -->
-        <p><strong>Choose a file or drag & drop it here</strong></p>
-        <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
-        <label class="browse-button">
-          Browse File
-          <input type="file" hidden>
-        </label>
+    <div class="upload-icon">📤</div>
+    <p><strong>Choose a file or drag & drop it here</strong></p>
+    <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
+    <label class="browse-button">
+        Browse File
+        <input type="file" id="fileInput" hidden accept="image/*" multiple>
+    </label>
     </div>
+
+    <!-- Image Preview Section -->
+    <div id="previewContainer"></div>
+
     <div class="itempage-btn">
         <button type="button" class="back-btn" onclick="window.location.href='/sellitem2'">Back</button>
       <button type="button" class="details-btn" onclick="window.location.href='#'">Next</button>
     </div>
+    
+    
+    <script src="{{ url_for('static', filename='js/sellitem3.js') }}"></script>
 </body>
 </html>
