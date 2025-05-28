@@ -53,7 +53,7 @@ p {
     font-family: "Prompt", sans-serif;
     color: #333;
     width: 100%;
-    max-width: 270px;
+    max-width: 250px;
     margin: 0 auto;
 }
 
@@ -96,7 +96,6 @@ p {
     gap: 20px;
     z-index: 1000; /* Make sure it’s above other elements */
 }
-
 
 #previewContainer {
   margin-top: 20px;
