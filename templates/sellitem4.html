@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem3.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem4.css') }}">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,10 +22,10 @@
 </head>
 <body>
     <div class="navigation-bar-container">
-        <div class="leftarrowicon" onclick="window.location.href='/sellitem2'" style="cursor: pointer;">
+        <div class="leftarrowicon" onclick="window.location.href='/sellitem3'" style="cursor: pointer;">
             <i class="bi bi-arrow-left"></i>
         </div>
-        <div class="header-text">Photos</div>
+        <div class="header-text">Review & Publish</div>
         <div class="icon">
             <div class="notify">
                 <i class="bi bi-bell"></i>
@@ -36,25 +36,24 @@
         </div>
     </div>
     <div class="text-container">
-        <h1>Add Photos</h1>
-        <p>Great photos help your item sell faster! Upload images from different angles.</p>
+        <h1>Review & Publish Your Listing</h1>
+        <p>Here’s a preview of how your listing will appear to potential buyers.</p>
     </div>
     <div class="upload-box" id="uploadBox">
-    <div class="upload-icon">📤</div>
-    <p><strong>Choose a file or drag & drop it here</strong></p>
-    <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
-    <label class="browse-button">
-        Browse File
-        <input type="file" id="fileInput" hidden accept="image/*" multiple>
-    </label>
+        <p><strong>Picture </strong></p>
     </div>
-
-    <!-- Image Preview Section -->
-    <div id="previewContainer"></div>
+    <div class="description-box">
+        <h3>Galaxy S20 in Gray</h3>
+        <p><del>Rm699</del> <span style="color:blue; font-weight:bold;">Rm499</span></p>
+        <p>
+        Experience the power of the Galaxy S20, featuring a brilliant AMOLED display, pro-grade camera system,
+        and ultra-fast performance for smooth multitasking.
+        </p>
+    </div>
 
     <div class="itempage-btn">
         <button type="button" class="back-btn" onclick="window.location.href='/sellitem2'">Back</button>
-      <button type="button" class="details-btn" onclick="window.location.href='/sellitem4'">Next</button>
+      <button type="button" class="details-btn" onclick="window.location.href='#'">Next</button>
     </div>
     
     
