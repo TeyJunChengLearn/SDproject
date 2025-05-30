@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Success</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/itemsuccess.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <div class="illustration">
+      <img src="static/success.png" alt="Profile" />
+    </div>
+
+    <div class="message">
+      <h1>Success! Your item has been published.</h1>
+      <p>
+        Keep an eye out for the payment to be processed.<br/>
+        We'll notify you once the payment is complete.
+      </p>
+    </div>
+
+    <button onclick="returnHome()">Return To Homepage</button>
+  </div>
+
+  <script>
+    function returnHome() {
+      window.location.href = "/";
+    }
+  </script>
+</body>
+</html>

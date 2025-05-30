@@ -1,0 +1,114 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+
+p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300px;
+}
+
+.form-container {
+    padding: 25px 20px;
+    box-sizing: border-box;
+  }
+  
+#ItemDetailsForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; /* wrap on small screens */
+    gap: 20px;
+    justify-content: space-between;
+}
+  
+#ItemDetailsForm input,
+#ItemDetailsForm select {
+    flex: 1 1 200px; /* grow/shrink with min width */
+    padding: 13px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    min-width: 150px;
+}
+
+#ItemDetailsForm input:focus,
+#ItemDetailsForm select:focus {
+  border-color: #007BFF;
+  background-color: #e6f0ff;
+  outline: none;
+}
+
+.itempage-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+
+.details-btn {
+    background-color: #004BFE;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 100%;
+    max-width: 336px;;
+}
+
+.back-btn {
+    background-color: transparent;
+    color: #004BFE;
+    border: 1px solid #ccc;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    width: 100%;
+    max-width: 336px;
+}
