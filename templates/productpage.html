@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/productpage.css') }}">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <title>ShareBear</title>
+</head>
+<body>
+  <div class="navigation-bar-container">
+      <div class="leftarrowicon" onclick="window.history.back()" style="cursor: pointer;">
+          <i class="bi bi-arrow-left"></i>
+      </div>
+      <div class="header-text">Product Detail</div>
+      <div class="icon">
+          <div class="notify">
+              <i class="bi bi-bell"></i>
+          </div>
+          <div class="cart">
+              <i class="bi bi-cart3"></i>
+          </div>
+      </div>
+  </div>
+
+  <div class="upload-box" id="uploadBox">
+      <img src="{{ url_for('static', filename=product.image_path) }}" alt="Product Image" style="width:100%; max-width:300px; height:auto;">
+  </div>
+
+  <div class="description-box">
+    <h3>{{ product.name }}</h3>
+
+    {% if product.discounted_price < product.original_price %}
+      <!-- Show original price struck through and discounted price -->
+      <h2>
+          <del style="color: #999;">RM{{ product.original_price }}</del>
+          <span style="color: #004BFE; font-weight: bold;">RM{{ product.discounted_price }}</span>
+      </h2>
+    {% else %}
+      <!-- No discount, show only original price -->
+      <h2 style="font-weight: bold; color: #004BFE;">RM{{ product.original_price }}</h2>
+    {% endif %}
+
+    <p>{{ product.description }}</p>
+</div>
+
+  <div class="contact-seller-box">
+      <div class="contact-seller-information">
+          <div class="profile-img">
+              <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+          </div>
+          <div class="seller-details">
+              <p class="seller-name">{{ product.seller_name }}</p>
+          </div>
+          <div class="contact-action" onclick="window.location.href='#'">
+              <span>Contact seller</span>
+              <i class="bi bi-arrow-right"></i>
+          </div>
+      </div>
+  </div>
+
+  <p class="location-title">Location</p>
+  <div class="location-box">
+      <div class="map-container">
+          <img src="{{ url_for('static', filename=product.location_image) }}" alt="Map" />
+      </div>
+  </div>
+
+  <div class="itempage-btn">
+      <button type="button" class="back-btn" onclick="alert('Feature not implemented yet')">Trade</button>
+      <button type="button" class="details-btn" onclick="alert('Feature not implemented yet')">Buy Now</button>
+  </div>
+</body>
+</html>

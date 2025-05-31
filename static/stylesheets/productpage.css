@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 120px;
+    font-family: "Prompt", sans-serif;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 16px;
+    font-family: "Prompt", sans-serif;
+}
+
+h2 {
+    font-size: 16px;
+    font-family: "Prompt", sans-serif;
+}
+
+p {
+    font-size: 12px;
+    font-weight: 300px;
+    font-family: "Prompt", sans-serif;
+}
+
+.upload-box {
+    border-radius: 10px;
+    padding: 10px 30px;
+    text-align: center;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+.description-box {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.itempage-btn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background-color: #fff; /* Optional: Add background to separate from content */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1000; /* Make sure it’s above other elements */
+}
+
+.contact-seller-box {
+    border: 1px solid #EFEFEF;
+    background: #fff;
+    border-radius: 12px;
+    padding: 5px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+    max-width: 320px;
+    margin: 0 auto;
+    margin-bottom: 40px;
+}
+
+.contact-seller-information {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-img img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-details {
+    flex-grow: 1;
+    margin-left: 12px;
+}
+
+.seller-name {
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0;
+}
+
+.contact-action {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    color: #333;
+}
+
+.contact-action i {
+    font-size: 10px;
+}
+
+.location-box {
+    border: 1px solid black; /* Black border */
+    border-radius: 12px;
+    padding: 15px;
+    background-color: #fff;
+    margin: 20px auto;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.location-title {
+    font-size: 12px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    font-family: "Prompt", sans-serif;
+}
+
+.map-container img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
+.details-btn {
+    background-color: #004BFE;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    margin-left: 20px;
+    width: 100%;
+    max-width: 336px;;
+}
+
+.back-btn {
+    background-color: transparent;
+    color: #004BFE;
+    border: 1px solid #ccc;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    width: 100%;
+    max-width: 336px;
+}

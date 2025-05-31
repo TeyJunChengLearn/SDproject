@@ -278,6 +278,11 @@ p {
     z-index: 999;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .sell-btn {
     background-color: #004BFE;
     color: white;

@@ -235,6 +235,77 @@ def sellitem4():
 def itemsuccess():
     return render_template('itemsuccess.html')
 
+dummy_products = {
+    1: {
+        "name": "Blouse Besaty White Blue Beau",
+        "original_price": 48,
+        "discounted_price": None,
+        "description": "Beautiful H&M blouse with blue floral pattern.",
+        "image_path": "beau.png",
+        "seller_name": "H&M",
+        "location_image": "map1.png"
+    },
+    2: {
+        "name": "Zara Classic White Shirt - White - M",
+        "original_price": 58,
+        "discounted_price": 28,
+        "description": "Zara's clean-cut white shirt for modern style.",
+        "image_path": "shirt.png",
+        "seller_name": "H&M",
+        "location_image": "map2.png"
+    },
+    3: {
+        "name": "Zara Classic Man Black Shirt",
+        "original_price": 60,
+        "discounted_price": 28,
+        "description": "Elegant black shirt by Zara for men.",
+        "image_path": "blackshirt.png",
+        "seller_name": "Vrinda",
+        "location_image": "map3.png"
+    },
+    4: {
+        "name": "Sleeveless Rock Black Marita",
+        "original_price": 55,
+        "discounted_price": None,
+        "description": "Stylish sleeveless dress perfect for events.",
+        "image_path": "marita.png",
+        "seller_name": "Barbara",
+        "location_image": "map4.png"
+    },
+    5: {
+        "name": "Blouse Besaty White Blue Beau",
+        "original_price": 48,
+        "discounted_price": None,
+        "description": "Same stylish blouse, another listing.",
+        "image_path": "beau.png",
+        "seller_name": "H&M",
+        "location_image": "map1.png"
+    },
+    6: {
+        "name": "Zara Classic White Shirt - White - M",
+        "original_price": 58,
+        "discounted_price": 28,
+        "description": "Another listing for Zara classic white shirt.",
+        "image_path": "shirt.png",
+        "seller_name": "H&M",
+        "location_image": "map2.png"
+    }
+    
+}
+
+@app.route('/product/<int:product_id>')
+def product_page(product_id):
+    product = dummy_products.get(product_id)
+    if not product:
+        return "Product not found", 404
+
+    # If discounted_price is None or not less than original_price,
+    # set discounted_price to original_price so your template can handle it cleanly.
+    if product['discounted_price'] is None or product['discounted_price'] >= product['original_price']:
+        product['discounted_price'] = product['original_price']
+
+    return render_template('productpage.html', product=product)
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
