@@ -99,6 +99,13 @@ body.no-results-page {
     box-sizing: border-box;
 }
 
+body.no-results-page::after {
+  content: "";
+  display: block;
+  height: 100px; /* match nav height */
+}
+
+
 .product-card {
   position: relative;
   border-radius: 8px;

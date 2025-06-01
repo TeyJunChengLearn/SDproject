@@ -6,6 +6,12 @@ body.results-page {
   color: black;
 }
 
+html, body {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto;
+}
+
 .search-header {
   display: flex;
   align-items: center;
@@ -103,6 +109,12 @@ body.results-page {
   padding: 0 10px 20px 10px;
   box-sizing: border-box;
   margin: 0 auto;
+}
+
+body.results-page::after {
+  content: "";
+  display: block;
+  height: 100px; /* match nav height */
 }
 
 .product-card {
