@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request as flask_request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
+from flask import jsonify
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -211,30 +212,6 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
-@app.route("/homepage")
-def homepage():
-    return render_template('homepage.html')
-
-@app.route("/sellitem")
-def sellitem():
-    return render_template('sellitem.html')
-
-@app.route("/sellitem2")
-def sellitem2():
-    return render_template('sellitem2.html')
-
-@app.route("/sellitem3")
-def sellitem3():
-    return render_template('sellitem3.html')
-
-@app.route("/sellitem4")
-def sellitem4():
-    return render_template('sellitem4.html')
-
-@app.route("/itemsuccess")
-def itemsuccess():
-    return render_template('itemsuccess.html')
-
 dummy_products = {
     1: {
         "name": "Blouse Besaty White Blue Beau",
@@ -290,8 +267,88 @@ dummy_products = {
         "seller_name": "H&M",
         "location_image": "map2.png"
     }
-    
 }
+
+# Search suggestions
+search_suggestions = [
+    "Zara White Shirt",
+    "Zara Black Blazer for Women", 
+    "Zara Men's Casual Jackets",
+    "Zara Kids Clothing",
+    "Zara Leather Handbags",
+    "Zara Summer Collection",
+    "Zara Office Wear"
+]
+
+# Related products for no results page
+related_products = [
+    {"name": "Buy Luna Puff Beige Dress", "seller_name": "Barbara", "price": 28, "is_new": True},
+    {"name": "Zara Classic White Shirt - White - M", "seller_name": "H&M", "price": 28, "is_new": True},
+    {"name": "Basic White Tee", "seller_name": "Uniqlo", "price": 25, "is_new": False},
+    {"name": "Black Cotton Shirt", "seller_name": "Zara", "price": 35, "is_new": False, "is_liked": True}
+]
+
+@app.route("/homepage")
+def homepage():
+    return render_template('homepage.html')
+
+@app.route('/search')
+def search():
+    query = flask_request.args.get('q', '').strip()
+    
+    related_products = []
+    for pid, pdata in dummy_products.items():
+        product_copy = pdata.copy()
+        product_copy['id'] = pid
+        related_products.append(product_copy)
+
+    if not query:
+        # Show typing state with suggestions
+        return render_template('search.html', suggestions=search_suggestions)
+    
+    # Filter products based on query
+    filtered_products = []
+    for product_id, product in dummy_products.items():
+        if (query.lower() in product['name'].lower() or 
+            query.lower() in product['seller_name'].lower()):
+            product_copy = product.copy()
+            product_copy['id'] = product_id
+            filtered_products.append(product_copy)
+    
+    if not filtered_products:
+        # Show no results state
+        return render_template('search_noresults.html', 
+                             query=query, 
+                             related_products=related_products)
+    
+    # Show results state
+    most_viewed = filtered_products[:4]  # First 4 as most viewed
+    other_results = filtered_products[4:]  # Rest as other results
+    
+    return render_template('search_results.html', 
+                         query=query,
+                         most_viewed=most_viewed,
+                         other_results=other_results,
+                         total_results=len(filtered_products))
+
+    
+
+@app.route('/api/like/<int:product_id>', methods=['POST'])
+def toggle_like(product_id):
+    # In a real app, you'd save this to a database
+    # For now, just return success
+    return jsonify({'success': True, 'liked': True})
+
+@app.route("/sellitem/<int:step>")
+def sellitem(step):
+    if step == 1:
+        return render_template("sellitem.html")
+    else:
+        return render_template(f"sellitem{step}.html")
+
+@app.route("/itemsuccess")
+def itemsuccess():
+    return render_template('itemsuccess.html')
 
 @app.route('/product/<int:product_id>')
 def product_page(product_id):
@@ -299,12 +356,14 @@ def product_page(product_id):
     if not product:
         return "Product not found", 404
 
-    # If discounted_price is None or not less than original_price,
-    # set discounted_price to original_price so your template can handle it cleanly.
-    if product['discounted_price'] is None or product['discounted_price'] >= product['original_price']:
-        product['discounted_price'] = product['original_price']
+    product_copy = product.copy()
+    product_copy['id'] = product_id  # add id here
 
-    return render_template('productpage.html', product=product)
+    if product_copy['discounted_price'] is None or product_copy['discounted_price'] >= product_copy['original_price']:
+        product_copy['discounted_price'] = product_copy['original_price']
+
+    return render_template('productpage.html', product=product_copy)
+
 
 if __name__ == "__main__":
     with app.app_context():

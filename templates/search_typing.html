@@ -1,0 +1,45 @@
+{% extends "homepage.html" %}
+
+{% block title %}Search - Typing{% endblock %}
+
+{% block content %}
+<div class="search-page">
+    <div class="header-container">
+        <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
+        <div class="search-input-container">
+            <form action="{{ url_for('search') }}" method="GET" id="searchForm">
+                <input type="text" name="q" id="searchInput" placeholder="Search products..." 
+                       value="{{ request.args.get('q', '') }}" autocomplete="off">
+                {% if request.args.get('q') %}
+                    <i class="fas fa-times-circle clear-btn" onclick="clearSearch()"></i>
+                {% else %}
+                    <i class="fas fa-search search-icon"></i>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="suggestions-container">
+        {% for suggestion in suggestions %}
+        <div class="suggestion-item" onclick="selectSuggestion('{{ suggestion }}')">
+            <i class="fas fa-search suggestion-icon"></i>
+            <span><strong>{{ request.args.get('q') }}</strong>{{ suggestion[len(request.args.get('q')):] }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function clearSearch() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('searchForm').submit();
+    }
+
+    function selectSuggestion(value) {
+        document.getElementById('searchInput').value = value;
+        document.getElementById('searchForm').submit();
+    }
+</script>
+{% endblock %}

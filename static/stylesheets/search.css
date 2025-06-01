@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+  padding: 1rem;
+  margin: 0;
+}
+.search-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.product-card {
+  background: #f9f9f9;
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+.tag-new {
+  font-size: 0.75rem;
+  color: green;
+}
+.liked {
+  color: red;
+  float: right;
+}

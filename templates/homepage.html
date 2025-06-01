@@ -29,9 +29,14 @@
             </div>
         </div>
     </div>
+
     <div class="searchbar-container">
-        <input type="text" id="text" name="searchbar" placeholder="Search for products, brands or categories..."/>
+        <form action="{{ url_for('search') }}" method="get">
+        <input type="text" class="search-input" id="searchInput" name="q" placeholder="Search for products, brands or categories..." autocomplete="off">
+</form>
+
     </div>
+
     <div class="banner-container">
         <a href="#" class="sale-banner">
             <div class="banner-content">
@@ -137,7 +142,7 @@
     </div>
 
     <div class="sellitem-container">
-        <button type="button" class="sell-btn" onclick="window.location.href='/sellitem'">Sell An Item<i class="bi bi-plus-circle"></i></button>
+        <button type="button" class="sell-btn" onclick="window.location.href='/sellitem/1'">Sell An Item <i class="bi bi-plus-circle"></i></button>
     </div>
 
     <div class="navigation-bar-container">
@@ -158,5 +163,8 @@
             <span class="account-text">Account</span>
         </div>
     </div>
+
+
+    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </body>
 </html>
