@@ -1,0 +1,24 @@
+<!-- templates/search.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/search.css') }}">
+</head>
+<body class="search-page">
+  <div class="search-header">
+    <a href="{{ url_for('homepage') }}" class="back-btn">←</a>
+    <input type="text" placeholder="Search Zara items..." value="" />
+    <button class="clear-btn">✕</button>
+  </div>
+
+  <div class="suggestions">
+    {% for suggestion in suggestions %}
+      <div class="suggestion-item">
+        🔍 {{ suggestion }}
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

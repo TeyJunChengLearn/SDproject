@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request as flask_request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
+from flask import jsonify
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -211,29 +212,158 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
+dummy_products = {
+    1: {
+        "name": "Blouse Besaty White Blue Beau",
+        "original_price": 48,
+        "discounted_price": None,
+        "description": "Beautiful H&M blouse with blue floral pattern.",
+        "image_path": "beau.png",
+        "seller_name": "H&M",
+        "location_image": "map1.png"
+    },
+    2: {
+        "name": "Zara Classic White Shirt - White - M",
+        "original_price": 58,
+        "discounted_price": 28,
+        "description": "Zara's clean-cut white shirt for modern style.",
+        "image_path": "shirt.png",
+        "seller_name": "H&M",
+        "location_image": "map2.png"
+    },
+    3: {
+        "name": "Zara Classic Man Black Shirt",
+        "original_price": 60,
+        "discounted_price": 28,
+        "description": "Elegant black shirt by Zara for men.",
+        "image_path": "blackshirt.png",
+        "seller_name": "Vrinda",
+        "location_image": "map3.png"
+    },
+    4: {
+        "name": "Sleeveless Rock Black Marita",
+        "original_price": 55,
+        "discounted_price": None,
+        "description": "Stylish sleeveless dress perfect for events.",
+        "image_path": "marita.png",
+        "seller_name": "Barbara",
+        "location_image": "map4.png"
+    },
+    5: {
+        "name": "Blouse Besaty White Blue Beau",
+        "original_price": 48,
+        "discounted_price": None,
+        "description": "Same stylish blouse, another listing.",
+        "image_path": "beau.png",
+        "seller_name": "H&M",
+        "location_image": "map1.png"
+    },
+    6: {
+        "name": "Zara Classic White Shirt - White - M",
+        "original_price": 58,
+        "discounted_price": 28,
+        "description": "Another listing for Zara classic white shirt.",
+        "image_path": "shirt.png",
+        "seller_name": "H&M",
+        "location_image": "map2.png"
+    }
+}
+
+# Search suggestions
+search_suggestions = [
+    "Zara White Shirt",
+    "Zara Black Blazer for Women", 
+    "Zara Men's Casual Jackets",
+    "Zara Kids Clothing",
+    "Zara Leather Handbags",
+    "Zara Summer Collection",
+    "Zara Office Wear"
+]
+
+# Related products for no results page
+related_products = [
+    {"name": "Buy Luna Puff Beige Dress", "seller_name": "Barbara", "price": 28, "is_new": True},
+    {"name": "Zara Classic White Shirt - White - M", "seller_name": "H&M", "price": 28, "is_new": True},
+    {"name": "Basic White Tee", "seller_name": "Uniqlo", "price": 25, "is_new": False},
+    {"name": "Black Cotton Shirt", "seller_name": "Zara", "price": 35, "is_new": False, "is_liked": True}
+]
+
 @app.route("/homepage")
 def homepage():
     return render_template('homepage.html')
 
-@app.route("/sellitem")
-def sellitem():
-    return render_template('sellitem.html')
+@app.route('/search')
+def search():
+    query = flask_request.args.get('q', '').strip()
+    
+    related_products = []
+    for pid, pdata in dummy_products.items():
+        product_copy = pdata.copy()
+        product_copy['id'] = pid
+        related_products.append(product_copy)
 
-@app.route("/sellitem2")
-def sellitem2():
-    return render_template('sellitem2.html')
+    if not query:
+        # Show typing state with suggestions
+        return render_template('search.html', suggestions=search_suggestions)
+    
+    # Filter products based on query
+    filtered_products = []
+    for product_id, product in dummy_products.items():
+        if (query.lower() in product['name'].lower() or 
+            query.lower() in product['seller_name'].lower()):
+            product_copy = product.copy()
+            product_copy['id'] = product_id
+            filtered_products.append(product_copy)
+    
+    if not filtered_products:
+        # Show no results state
+        return render_template('search_noresults.html', 
+                             query=query, 
+                             related_products=related_products)
+    
+    # Show results state
+    most_viewed = filtered_products[:4]  # First 4 as most viewed
+    other_results = filtered_products[4:]  # Rest as other results
+    
+    return render_template('search_results.html', 
+                         query=query,
+                         most_viewed=most_viewed,
+                         other_results=other_results,
+                         total_results=len(filtered_products))
 
-@app.route("/sellitem3")
-def sellitem3():
-    return render_template('sellitem3.html')
+    
 
-@app.route("/sellitem4")
-def sellitem4():
-    return render_template('sellitem4.html')
+@app.route('/api/like/<int:product_id>', methods=['POST'])
+def toggle_like(product_id):
+    # In a real app, you'd save this to a database
+    # For now, just return success
+    return jsonify({'success': True, 'liked': True})
+
+@app.route("/sellitem/<int:step>")
+def sellitem(step):
+    if step == 1:
+        return render_template("sellitem.html")
+    else:
+        return render_template(f"sellitem{step}.html")
 
 @app.route("/itemsuccess")
 def itemsuccess():
     return render_template('itemsuccess.html')
+
+@app.route('/product/<int:product_id>')
+def product_page(product_id):
+    product = dummy_products.get(product_id)
+    if not product:
+        return "Product not found", 404
+
+    product_copy = product.copy()
+    product_copy['id'] = product_id  # add id here
+
+    if product_copy['discounted_price'] is None or product_copy['discounted_price'] >= product_copy['original_price']:
+        product_copy['discounted_price'] = product_copy['original_price']
+
+    return render_template('productpage.html', product=product_copy)
+
 
 if __name__ == "__main__":
     with app.app_context():

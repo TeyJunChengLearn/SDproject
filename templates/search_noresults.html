@@ -1,0 +1,94 @@
+<!-- templates/search_noresults.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/search_noresults.css') }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>ShareBear</title>
+</head>
+<body class="no-results-page">
+    <div class="search-header">
+        <div class="leftarrowicon" onclick="window.location.href='/homepage'" style="cursor: pointer;">
+            <i class="bi bi-arrow-left"></i>
+        </div>
+        <input type="text" id="searchInput" value="{{ query }}" />
+        <div class="empty-button" onclick="clearSearch()" style="cursor: pointer;">
+            <i class="bi bi-x-circle"></i>
+        </div>
+    </div>
+
+  <div class="no-results-message">No matches found for '{{ query }}'</div>
+
+  <div class="filter-bar">
+    <button>Filter</button>
+    <button>Sort</button>
+    <button>Price</button>
+    <button>Deal Option</button>
+  </div>
+
+  <div class="section-title">
+    Check Out These Related Products <a href="#" class="see-all">See all</a>
+  </div>
+
+    <div class="product-container">
+  {% for product in related_products %}
+<a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
+    <!-- Product image -->
+    <img src="{{ url_for('static', filename=product.image_path|default('placeholder.png')) }}"
+         alt="{{ product.name|default('Product') }}">
+    <!-- Seller name -->
+    <div class="seller-name">{{ product.seller_name|default('Unknown Seller') }}</div>
+    <!-- Product title -->
+    <div class="product-title">{{ product.name|default('Unnamed Product') }}</div>
+    <!-- Price -->
+    <div class="price">
+      {% if product.discounted_price is defined and product.discounted_price is not none %}
+        <del class="original-price">Rm{{ product.original_price|default('0') }}</del>
+        <span class="discounted-price">Rm{{ product.discounted_price }}</span>
+      {% else %}
+        <span class="price-only">Rm{{ product.original_price|default('0') }}</span>
+      {% endif %}
+    </div>
+</a>
+{% else %}
+<p>No products found.</p>
+{% endfor %}
+
+</div>
+
+
+
+    <div class="navigation-bar-container">
+        <div class="home-icon">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <span class="home-text">Home</span>
+        </div>
+        <div class="explore-icon">
+            <i class="bi bi-search"></i>
+            <span class="explore-text">Explore</span>
+        </div>
+        <div class="favourite-icon">
+            <i class="bi bi-heart-fill"></i>
+            <span class="favourite-text">Favourites</span>
+        </div>
+        <div class="account-icon">
+            <i class="bi bi-person-fill"></i>
+            <span class="account-text">Account</span>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/search_noresults.js') }}"></script>
+</body>
+</body>
+</html>
