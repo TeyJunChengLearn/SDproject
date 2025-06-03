@@ -54,7 +54,7 @@
     <!-- Price -->
     <div class="price">
       {% if product.discounted_price is defined and product.discounted_price is not none %}
-        <del class="original-price">Rm{{ product.original_price|default('0') }}</del>
+        <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>
         <span class="discounted-price">Rm{{ product.discounted_price }}</span>
       {% else %}
         <span class="price-only">Rm{{ product.original_price|default('0') }}</span>

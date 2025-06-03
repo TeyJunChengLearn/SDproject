@@ -304,7 +304,8 @@ def search():
 
     if not query:
         # Show typing state with suggestions
-        return render_template('search.html', suggestions=search_suggestions)
+        search_suggestions = list({p['name'] for p in dummy_products.values()})
+        return render_template('search_typing.html', suggestions=search_suggestions)
     
     # Filter products based on query
     filtered_products = []
