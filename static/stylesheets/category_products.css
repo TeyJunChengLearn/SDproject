@@ -71,7 +71,7 @@ p {
 }
 
 .text-content {
-  flex: 1;
+  flex: 0.9;
   font-weight: bold;
   font-size: 20px;
   padding-left: 15px; /* keep or reduce if you want */
@@ -79,14 +79,13 @@ p {
 }
 
 .title-banner img {
-  width: 50px;
-  height: 75px;
+  width: 65px;
+  height: 70px;
   object-fit: cover;
   border-radius: 8px;
   /* optional: move image a bit closer */
   margin-left: -5px; /* small negative margin to bring it closer */
 }
-
 
 .filter-bar {
   display: flex;
@@ -159,4 +158,33 @@ p {
   margin: 5px 10px 0 10px;
 }
 
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
 

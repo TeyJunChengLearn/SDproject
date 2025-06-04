@@ -192,14 +192,17 @@ input::placeholder {
 
 .categories-container {
     justify-content: center;
-    margin-left: 10px;
+    margin-left: 8px;
     align-items: center;
 }
 
 .category {
     display: flex;
+    justify-content: center; /* centers the items horizontally */
+    align-items: center;      /* vertically centers if needed */
     width: 100%;
     max-width: 360px;
+    margin: 0 auto;           /* centers the row container itself */
 }
 
 .category-text {
@@ -211,7 +214,8 @@ input::placeholder {
     max-width: 360px;
     padding: 0 15px;
     box-sizing: border-box;
-    flex-wrap: nowrap;  
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
 }
 
 .see-all-link {
@@ -229,28 +233,30 @@ input::placeholder {
 .women-wardrobe-container,
 .books-magazine-container,
 .gadgets-container {
+    display: flex;            /* make sure flex is applied */
     flex-direction: column;
     align-items: center;
-    margin: 10px;
     text-align: center;
+    margin: 8px;              /* consistent spacing between items */
 }
 
 .men-image, .women-image, .book-image, .gadgets-image {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100px; /* make sure this is the same for all */
+    width: 70px;
+    height: 70px;
+    background-color: #f0f0f0; /* light background */
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
 }
 
 .men-image img, .women-image img, .book-image img, .gadgets-image img {
-    max-height: 100%;
+    width: 70%; /* scale image inside the circle */
+    height: 65%;
     object-fit: contain;
 }
-
-.men-text, .women-text, .book-text, .gadgets-text {
-    margin-top: 5px;
-}
-
 
 h1 {
     margin: 0;
@@ -266,7 +272,7 @@ p {
 
 .recommend-container {
     justify-content: center;
-    margin-left: 10px;
+    margin-left: 8px;
     align-items: center;
 }
 
