@@ -95,7 +95,7 @@ body.no-results-page {
     gap: 20px;
     max-width: 720px;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 0 10px;
     box-sizing: border-box;
 }
 
@@ -105,11 +105,11 @@ body.no-results-page::after {
   height: 100px; /* match nav height */
 }
 
-
 .product-card {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Updated box shadow */
 }
 
 .product-card img {
