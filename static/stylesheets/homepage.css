@@ -112,6 +112,7 @@ body {
   background-color: #f0f4ff;
 }
 
+
 input[type="text"] {
     padding-left: 36px; /* Space for icon */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='grey' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
@@ -124,7 +125,6 @@ input[type="text"] {
     border-radius: 60px;
     font-size: 12px;
     box-sizing: border-box;
-    margin-left: 20px;
     margin-top: -10px;
   }
 
@@ -215,7 +215,6 @@ input::placeholder {
     display: flex;
     width: 100%;
     max-width: 360px;
-    margin-top: -25px;
 }
 
 .category-text {
@@ -228,6 +227,17 @@ input::placeholder {
     padding: 0 15px;
     box-sizing: border-box;
     flex-wrap: nowrap;  
+}
+
+.see-all-link {
+    color: #004BFE;
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.see-all-link:hover {
+    text-decoration: underline;
 }
 
 .men-wardrobe-container,
@@ -244,7 +254,7 @@ input::placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 120px; /* make sure this is the same for all */
+    height: 100px; /* make sure this is the same for all */
 }
 
 .men-image img, .women-image img, .book-image img, .gadgets-image img {
@@ -253,7 +263,7 @@ input::placeholder {
 }
 
 .men-text, .women-text, .book-text, .gadgets-text {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 
@@ -282,6 +292,7 @@ p {
     align-items: center;
     width: 100%;
     max-width: 360px;
+    margin-top: 10px;
     padding: 0 15px;
     box-sizing: border-box;
     flex-wrap: nowrap;  
@@ -342,11 +353,6 @@ p {
     bottom: 60px;
     right: 40px;
     z-index: 999;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
 }
 
 .sell-btn {
