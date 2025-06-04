@@ -1,0 +1,30 @@
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+.categories-container .category-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.category-box, .product-card {
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.category-box img, .product-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}

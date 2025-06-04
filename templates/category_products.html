@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/category_products.css') }}">
+</head>
+<body>
+    <h1>{{ category_name }}</h1>
+    <div class="products">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+            <h3>{{ product.brand }}</h3>
+            <p>{{ product.name }}</p>
+            <strong>{{ product.price }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/categories.css') }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>ShareBear</title>
+</head>
+<body>
+    <div class="navigation-bar-container">
+        <div class="leftarrowicon" onclick="window.location.href='/homepage'" style="cursor: pointer;">
+            <i class="bi bi-arrow-left"></i>
+        </div>
+        <div class="header-text">All Categories</div>
+        <div class="icon">
+            <div class="notify">
+                <i class="bi bi-bell"></i>
+            </div>
+            <div class="cart">
+                <i class="bi bi-cart3"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="searchbar-container">
+        <form action="{{ url_for('search') }}" method="get">
+        <input type="text" class="search-input" id="searchInput" name="q" placeholder="Search for products, brands or categories..." autocomplete="off">
+        </form>
+    </div>
+    
+    <div class="categories">
+        {% for cat in categories %}
+        <a href="{{ url_for('category_products', category_name=cat.name) }}">
+            <div class="category-box">
+                <img src="{{ url_for('static', filename=cat.image) }}" alt="{{ cat.name }}">
+                <span>{{ cat.name }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>

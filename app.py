@@ -212,6 +212,10 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
+@app.route("/homepage")
+def homepage():
+    return render_template('homepage.html')
+
 dummy_products = {
     1: {
         "name": "Blouse Besaty White Blue Beau",
@@ -288,9 +292,19 @@ related_products = [
     {"name": "Black Cotton Shirt", "seller_name": "Zara", "price": 35, "is_new": False, "is_liked": True}
 ]
 
-@app.route("/homepage")
-def homepage():
-    return render_template('homepage.html')
+categories = [
+    {"name": "Women's Closet", "image": "women.png"},
+    {"name": "Men's Wardrobe", "image": "men.png"},
+    {"name": "Books & Magazines", "image": "books.png"},
+    {"name": "Gadgets & Gear", "image": "gadgets.png"},
+]
+
+products = {
+    "Women's Closet": [
+        {"brand": "H&M", "name": "Blouse Besaty White", "price": "Rm28", "image": "product1.png"},
+        {"brand": "Barbara", "name": "Sleeveless Rock", "price": "Rm28", "image": "product2.png"}
+    ]
+}
 
 @app.route('/search')
 def search():
@@ -365,6 +379,14 @@ def product_page(product_id):
 
     return render_template('productpage.html', product=product_copy)
 
+@app.route('/categories')
+def categories_page():
+    return render_template('categories.html', categories=categories)
+
+@app.route('/category/<category_name>')
+def category_products(category_name):
+    category_items = products.get(category_name, [])
+    return render_template('category_products.html', category_name=category_name, products=category_items)
 
 if __name__ == "__main__":
     with app.app_context():
