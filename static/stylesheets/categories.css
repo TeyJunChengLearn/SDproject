@@ -9,7 +9,7 @@ body {
     overflow-x: hidden;
 }
 
-.navigation-bar-container {
+.top-bar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -168,9 +168,12 @@ input::placeholder {
     width: 100%;
     padding: 0 10px;
     box-sizing: border-box;
-    margin-top: 10px;
+    margin-top: 13px;
 }
 
+.categories {
+    padding-bottom: 80px; /* Adjust depending on navbar height */
+}
 .category-box {
     max-width: 174px; /* fixed box width */
     height: 130px;     /* fixed box height */
@@ -190,13 +193,32 @@ input::placeholder {
     background: #C2CBFF;
 }
 
+.image-wrapper {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
 
 .category-box img {
-    width: 75px;
-    height: 75px; /* adjust as needed */
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 12px;
-    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Normal image (default) */
+.normal-image {
+    width: 75px;
+    height: 75px;
+}
+
+/* Smaller image (for oversized ones like gadgets/instruments) */
+.small-image {
+    width: 60px;
+    height: 60px;
 }
 
 .category-box span {
@@ -211,6 +233,34 @@ input::placeholder {
     color: inherit; /* Keeps the text color consistent with surrounding elements */
 }
 
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
 
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
 
 

@@ -297,6 +297,9 @@ categories = [
     {"name": "Men's Wardrobe", "image": "men.png"},
     {"name": "Books & Magazines", "image": "books.png"},
     {"name": "Gadgets & Gear", "image": "gadgets.png"},
+    {"name": "Musical Instruments", "image": "instrument.png"},
+    {"name": "Beauty & Wellness", "image": "beauty.png"},
+    {"name": "Accessories", "image": "gadgets.png"},
 ]
 
 products = {
