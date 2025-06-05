@@ -374,8 +374,6 @@ def search():
                          other_results=other_results,
                          total_results=len(filtered_products))
 
-    
-
 @app.route('/api/like/<int:product_id>', methods=['POST'])
 def toggle_like(product_id):
     # In a real app, you'd save this to a database
@@ -415,6 +413,13 @@ def categories_page():
 def category_products(category_name):
     category_items = products.get(category_name, [])
     return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
+
+@app.route('/myaccount')
+def myaccount():
+    return render_template('myaccount.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 if __name__ == "__main__":
     with app.app_context():
