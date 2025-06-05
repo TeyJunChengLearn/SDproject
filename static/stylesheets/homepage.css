@@ -43,11 +43,12 @@ body {
     border-radius: 60px;
     font-size: 12px;
     font-family: 'Nunito Sans', sans-serif;
-    padding-left: 40px;
-    box-sizing: border-box;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23B3B3B3' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+    padding-left: 36px; /* Combined spacing for icon */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='grey' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: 12px center;
+    box-sizing: border-box;
+    margin-top: -10px;
 }
 
 .searchbar-container input[type="text"]::placeholder {
@@ -112,22 +113,6 @@ body {
   background-color: #f0f4ff;
 }
 
-input[type="text"] {
-    padding-left: 36px; /* Space for icon */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='grey' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 12px center;
-    width: 100%;
-    height: 40px;
-    background-color: #f8f8f8;
-    border: 1px solid #f8f8f8;
-    border-radius: 60px;
-    font-size: 12px;
-    box-sizing: border-box;
-    margin-left: 20px;
-    margin-top: -10px;
-  }
-
 input::placeholder {
     color: #B3B3B3;
 }
@@ -135,15 +120,15 @@ input::placeholder {
 .banner-container {
     display: flex;
     width: 100%;
-    max-width: 360px;
+    max-width: 330px;
     height: 157px;
     margin: 20px auto;
-    padding: 0 15px;
+    padding: 0 5px;
     margin-left: 10px;
 }
 
 .sale-banner {
-    max-width: 127px;
+    max-width: 120px;
     display: block;
     background-color: #004BFE;
     border-top-left-radius: 10px;
@@ -207,15 +192,17 @@ input::placeholder {
 
 .categories-container {
     justify-content: center;
-    margin-left: 10px;
+    margin-left: 8px;
     align-items: center;
 }
 
 .category {
     display: flex;
+    justify-content: center; /* centers the items horizontally */
+    align-items: center;      /* vertically centers if needed */
     width: 100%;
     max-width: 360px;
-    margin-top: -25px;
+    margin: 0 auto;           /* centers the row container itself */
 }
 
 .category-text {
@@ -227,35 +214,49 @@ input::placeholder {
     max-width: 360px;
     padding: 0 15px;
     box-sizing: border-box;
-    flex-wrap: nowrap;  
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+}
+
+.see-all-link {
+    color: #004BFE;
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.see-all-link:hover {
+    text-decoration: underline;
 }
 
 .men-wardrobe-container,
 .women-wardrobe-container,
 .books-magazine-container,
 .gadgets-container {
+    display: flex;            /* make sure flex is applied */
     flex-direction: column;
     align-items: center;
-    margin: 10px;
     text-align: center;
+    margin: 8px;              /* consistent spacing between items */
 }
 
 .men-image, .women-image, .book-image, .gadgets-image {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 120px; /* make sure this is the same for all */
+    width: 70px;
+    height: 70px;
+    background-color: #f0f0f0; /* light background */
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
 }
 
 .men-image img, .women-image img, .book-image img, .gadgets-image img {
-    max-height: 100%;
+    width: 70%; /* scale image inside the circle */
+    height: 65%;
     object-fit: contain;
 }
-
-.men-text, .women-text, .book-text, .gadgets-text {
-    margin-top: 10px;
-}
-
 
 h1 {
     margin: 0;
@@ -271,8 +272,12 @@ p {
 
 .recommend-container {
     justify-content: center;
-    margin-left: 10px;
+    margin-left: 8px;
     align-items: center;
+}
+
+.recommend-container {
+    padding-bottom: 80px; /* Adjust depending on navbar height */
 }
 
 .recommend-text {
@@ -282,9 +287,18 @@ p {
     align-items: center;
     width: 100%;
     max-width: 360px;
+    margin-top: 10px;
     padding: 0 15px;
     box-sizing: border-box;
     flex-wrap: nowrap;  
+}
+
+.recommend-container a {
+    text-decoration: none;
+}
+
+.recommend-container a:visited {
+    color: inherit;
 }
 
 .recommend-product {
@@ -300,7 +314,7 @@ p {
 .product-container {
     background: white;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -322,6 +336,7 @@ p {
 }
 
 .product-name {
+    color: black;
     font-weight: 600;
     font-size: 15px;
     margin-bottom: 8px;
@@ -339,14 +354,9 @@ p {
 
 .sellitem-container {
     position: fixed;
-    bottom: 60px;
-    right: 40px;
-    z-index: 999;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
+    bottom: 60px; /* ⬅️ adjust this value based on your nav bar height */
+    right: 20px;
+    z-index: 1001; /* ⬅️ ensure it's above the navbar */
 }
 
 .sell-btn {
@@ -401,3 +411,4 @@ a {
 .navigation-bar-container span {
     margin-top: 6px;           /* small gap under the icon */
 }
+

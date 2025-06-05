@@ -1,71 +1,98 @@
-body.results-page {
-  font-family: 'Nunito Sans', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-  color: black;
+* {
+  box-sizing: border-box;
 }
 
-html, body {
-  height: auto;
-  min-height: 100%;
-  overflow-y: auto;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    overflow-x: hidden;
 }
 
-.search-header {
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+
+p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300px;
+}
+
+.banner-container {
   display: flex;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid #eaeaea;
-  position: relative;
-  gap: 10px;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
 }
 
-.back-btn {
-  font-size: 24px;
-  color: #292526;
+.title-banner {
+  display: flex !important; /* force flex layout */
+  flex-direction: row !important; /* force row direction */
+  background: #004BFE;
+  border-radius: 10px;
+  overflow: hidden;
   text-decoration: none;
-  margin-right: 15px;
+  color: inherit;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  align-items: center; /* vertical center */
+  padding: 10px;
+  gap: 15px;
 }
 
-.search-header input {
-  flex: 1;
-  padding: 10px 15px;
-  border: 1px solid #eaeaea;
-  border-radius: 20px;
-  font-size: 16px;
-  background-color: #f5f5f5;
-  color: #292526;
-  cursor: default; /* readonly input */
+.text-content {
+  flex: 0.9;
+  font-weight: bold;
+  font-size: 20px;
+  padding-left: 15px; /* keep or reduce if you want */
+  color: white;
 }
 
-.clear-btn {
-  position: absolute;
-  right: 30px;
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #999;
-  cursor: pointer;
-}
-
-.empty-button {
-  position: absolute;
-  right: 30px;
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #999;
-  cursor: pointer;
+.title-banner img {
+  width: 65px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  /* optional: move image a bit closer */
+  margin-left: -5px; /* small negative margin to bring it closer */
 }
 
 .filter-bar {
   display: flex;
   padding: 10px 15px;
-  border-bottom: 1px solid #eaeaea;
   overflow-x: auto;
   white-space: nowrap;
-  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .filter-bar button {
@@ -73,31 +100,10 @@ html, body {
   border: 1px solid #eaeaea;
   border-radius: 15px;
   padding: 8px 15px;
+  margin-right: 10px;
   font-size: 14px;
   color: #333;
   cursor: pointer;
-  flex-shrink: 0; /* keep button size in scroll */
-}
-
-.section-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.see-all {
-  font-size: 14px;
-  font-weight: normal;
-  color: #666;
-  text-decoration: none;
-}
-
-.section-title .see-all {
-  color: #004BFE;
-  text-decoration: none;
 }
 
 .product-container {
@@ -111,12 +117,6 @@ html, body {
   margin: 0 auto;
 }
 
-body.results-page::after {
-  content: "";
-  display: block;
-  height: 100px; /* match nav height */
-}
-
 .product-card {
   position: relative;
   border-radius: 8px;
@@ -124,6 +124,8 @@ body.results-page::after {
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Updated box shadow */
   padding-bottom: 10px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .product-card img {
@@ -156,11 +158,6 @@ body.results-page::after {
   margin: 5px 10px 0 10px;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .navigation-bar-container {
     display: flex;
     justify-content:space-around;
@@ -190,3 +187,4 @@ a {
 .navigation-bar-container span {
     margin-top: 6px;           /* small gap under the icon */
 }
+

@@ -1,0 +1,266 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+
+p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300px;
+}
+
+.searchbar-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.searchbar-container form {
+    width: 100%;
+    max-width: 100%; /* Remove the hard 360px limit for full responsiveness */
+    position: relative;
+}
+
+
+.searchbar-container input[type="text"] {
+    width: 100%;
+    height: 40px;
+    background-color: #f8f8f8;
+    border: 1px solid #f8f8f8;
+    border-radius: 60px;
+    font-size: 12px;
+    font-family: 'Nunito Sans', sans-serif;
+    padding-left: 40px;
+    box-sizing: border-box;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23B3B3B3' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+}
+
+.searchbar-container input[type="text"]::placeholder {
+    color: #B3B3B3;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px; /* Adjust as needed */
+    color: black; /* Match placeholder color */
+    z-index: 2;
+    pointer-events: none; /* Allows clicks to pass through to input */
+}
+
+.no-results {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+    padding: 20px;
+}
+
+.results-message {
+    display: flex;
+    margin-top: 8px; 
+    font-weight: bold;
+}
+
+.results-list {
+    list-style-type: none; 
+    padding-left: 0; 
+    max-height: 200px; 
+    overflow-y: auto;
+}
+
+#resultsList {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  position: absolute;
+  width: 100%;
+  z-index: 999;
+}
+
+#resultsList li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+#resultsList li:last-child {
+  border-bottom: none;
+}
+
+#resultsList li:hover {
+  background-color: #f0f4ff;
+}
+
+
+input[type="text"] {
+    padding-left: 36px; /* Space for icon */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='grey' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    width: 100%;
+    height: 40px;
+    background-color: #f8f8f8;
+    border: 1px solid #f8f8f8;
+    border-radius: 60px;
+    font-size: 12px;
+    box-sizing: border-box;
+    margin-top: -10px;
+  }
+
+input::placeholder {
+    color: #B3B3B3;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* two columns */
+    gap: 10px;
+    max-width: 720px;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-top: 13px;
+}
+
+.categories {
+    padding-bottom: 80px; /* Adjust depending on navbar height */
+}
+.category-box {
+    max-width: 174px; /* fixed box width */
+    height: 130px;     /* fixed box height */
+    background: #F0F1F2;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    transition: transform 0.2s ease;
+}
+
+.category-box:hover {
+    background: #C2CBFF;
+}
+
+.image-wrapper {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.category-box img {
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Normal image (default) */
+.normal-image {
+    width: 75px;
+    height: 75px;
+}
+
+/* Smaller image (for oversized ones like gadgets/instruments) */
+.small-image {
+    width: 60px;
+    height: 60px;
+}
+
+.category-box span {
+    font-size: 12px;
+    color: #333;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+}
+
+.categories a {
+    text-decoration: none;
+    color: inherit; /* Keeps the text color consistent with surrounding elements */
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
+
+

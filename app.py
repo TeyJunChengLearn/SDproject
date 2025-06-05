@@ -212,6 +212,10 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
+@app.route("/homepage")
+def homepage():
+    return render_template('homepage.html')
+
 dummy_products = {
     1: {
         "name": "Blouse Besaty White Blue Beau",
@@ -288,9 +292,47 @@ related_products = [
     {"name": "Black Cotton Shirt", "seller_name": "Zara", "price": 35, "is_new": False, "is_liked": True}
 ]
 
-@app.route("/homepage")
-def homepage():
-    return render_template('homepage.html')
+categories = [
+    {"name": "Women's Closet", "image": "women.png"},
+    {"name": "Men's Wardrobe", "image": "men.png"},
+    {"name": "Books & Magazines", "image": "books.png"},
+    {"name": "Gadgets & Gear", "image": "gadgets.png"},
+    {"name": "Musical Instruments", "image": "instrument.png"},
+    {"name": "Beauty & Wellness", "image": "beauty.png"},
+    {"name": "Accessories", "image": "gadgets.png"},
+]
+
+products = {
+    "Women's Closet": [
+        {"brand": "H&M", "name": "Blouse Besaty White", "original_price": "Rm35", "discounted_price": "Rm28", "image": "beau.png"},
+        {"brand": "Barbara", "name": "Sleeveless Rock", "original_price": "Rm28", "image": "women.png"}
+    ],
+    "Men's Wardrobe": [
+        {"brand": "Zara", "name": "Zara Classic Black Shirt", "original_price": "Rm38", "discounted_price": "Rm28", "image": "men.png"},
+        {"brand": "H&M", "name": "Zara Classic White Shirt", "original_price": "Rm28", "image": "shirt.png"}
+    ],
+    "Books & Magazines": [
+        {"brand": "Reader's Digest", "name": "Health & Wellness 2023", "original_price": "Rm20", "discounted_price": "Rm15", "image": "books.png"},
+        {"brand": "Penguin", "name": "Classic Novels Set", "original_price": "Rm45", "image": "books.png"}
+    ],
+    "Gadgets & Gear": [
+        {"brand": "Samsung", "name": "Wireless Earbuds", "original_price": "Rm150", "discounted_price": "Rm120", "image": "gadgets.png"},
+        {"brand": "Logitech", "name": "Bluetooth Mouse", "original_price": "Rm60", "image": "gadgets.png"}
+    ],
+    "Musical Instruments": [
+        {"brand": "Yamaha", "name": "Acoustic Guitar", "original_price": "Rm300", "discounted_price": "Rm280", "image": "instrument.png"},
+        {"brand": "Casio", "name": "Keyboard Piano", "original_price": "Rm350", "image": "instrument.png"}
+    ],
+    "Beauty & Wellness": [
+        {"brand": "The Body Shop", "name": "Aloe Vera Skincare Set", "original_price": "Rm88", "image": "beauty.png"},
+        {"brand": "L'Oreal", "name": "Hair Color Kit", "original_price": "Rm45", "discounted_price": "Rm38", "image": "beauty.png"}
+    ],
+    "Accessories": [
+        {"brand": "Zara", "name": "Leather Handbag", "original_price": "Rm120", "discounted_price": "Rm99", "image": "marita.png"},
+        {"brand": "H&M", "name": "Gold Earrings", "original_price": "Rm28", "image": "shirt.png"},
+        {"brand": "Zara", "name": "Leather Handbag", "original_price": "Rm120", "discounted_price": "Rm99", "image": "marita.png"}
+    ]
+}
 
 @app.route('/search')
 def search():
@@ -304,7 +346,8 @@ def search():
 
     if not query:
         # Show typing state with suggestions
-        return render_template('search.html', suggestions=search_suggestions)
+        search_suggestions = list({p['name'] for p in dummy_products.values()})
+        return render_template('search_typing.html', suggestions=search_suggestions)
     
     # Filter products based on query
     filtered_products = []
@@ -330,8 +373,6 @@ def search():
                          most_viewed=most_viewed,
                          other_results=other_results,
                          total_results=len(filtered_products))
-
-    
 
 @app.route('/api/like/<int:product_id>', methods=['POST'])
 def toggle_like(product_id):
@@ -364,6 +405,21 @@ def product_page(product_id):
 
     return render_template('productpage.html', product=product_copy)
 
+@app.route('/categories')
+def categories_page():
+    return render_template('categories.html', categories=categories)
+
+@app.route('/category/<category_name>')
+def category_products(category_name):
+    category_items = products.get(category_name, [])
+    return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
+
+@app.route('/myaccount')
+def myaccount():
+    return render_template('myaccount.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 if __name__ == "__main__":
     with app.app_context():
