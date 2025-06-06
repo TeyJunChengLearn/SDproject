@@ -418,8 +418,62 @@ def category_products(category_name):
 def myaccount():
     return render_template('myaccount.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/myprofile')
+def myprofile():
+    # Dummy user data
+    user = {
+        'name': 'Lucia Smith',
+        'email': 'luciasmith@example.com',
+        'phone': '+1 234 567 890',
+        'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050'
+    }
+    return render_template('myprofile.html', user=user)
+
+notifications = [
+    {
+        'title': 'How do you feel about your recent order?',
+        'desc': "You've successfully completed your order for the new Converse [Model Name]. We'd love to hear your feedback!",
+        'link': 'Submit Your Review',
+        'time': '2 minutes ago',
+        'read': False,
+        'color': 'black'
+    },
+    {
+        'title': 'Great News: Your Order Payment Was Successful!',
+        'desc': "Your payment has been processed successfully! Check out the latest Converse collection before they're gone.",
+        'link': None,
+        'time': 'Just now',
+        'read': False,
+        'color': 'blue'
+    },
+    {
+        'title': 'Great News: Your Order Has Been Shipped!',
+        'desc': "Your order is on its way! Check out the latest Converse styles while you wait.",
+        'link': None,
+        'time': 'Just now',
+        'read': False,
+        'color': 'blue'
+    }
+]
+
+@app.route('/notification')
+def notification():
+    return render_template('notification.html', notifications=notifications)
+
+@app.route('/mark_all_read', methods=['POST'])
+def mark_all_read():
+    for note in notifications:
+        note['read'] = True
+        note['color'] = 'black'
+    return jsonify({'status': 'success'})
+
+@app.route('/notification/<int:index>')
+def notification_detail(index):
+    if 0 <= index < len(notifications):
+        notifications[index]['read'] = True
+        notifications[index]['color'] = 'black'
+        return render_template('notification_detail.html', note=notifications[index])
+    return "Notification not found", 404
 
 if __name__ == "__main__":
     with app.app_context():

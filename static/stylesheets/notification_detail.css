@@ -32,11 +32,6 @@ body {
     height: 24px;
 }
 
-.text-container {
-    margin-top: 20px;
-    margin-left: 20px;
-}
-
 h1 {
     margin: 0;
     font-family: 'Raleway', sans-serif;
@@ -49,68 +44,38 @@ p {
     font-weight: 300px;
 }
 
-.profile {
-    margin: 20px auto;
+.notification-detail {
+  padding: 20px;
 }
 
-.profile img {
-    width: 77px;
-    height: 77px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
+.notification-detail h1 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-family: 'Raleway', sans-serif;
 }
 
-.menu-container {
-  max-width: 400px;
-  margin: 30px 5px auto;
-  border-radius: 8px;
-  overflow: hidden;
+.notification-detail p {
+  font-size: 14px;
+  margin-bottom: 12px;
 }
 
-.menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 0.5px solid #eee;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.menu-item:hover {
-  background-color: #f9f9f9;
-}
-
-.menu-item i {
-  color: black;
-}
-
-.menu-item span {
-  flex: 1;
-  margin-left: 15px;
+.notification-detail .time {
   font-size: 12px;
-  color: black;
+  color: gray;
 }
 
-.arrow {
-  color: #888;
+.review-link {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #007bff;
+  text-decoration: none;
+  margin-top: 8px;
 }
 
-.logout-btn {
-    background-color: Black;
-    color: white;
-    border: none;
-    border-radius: 60px;
-    padding: 15px;
-    font-size: 14px;
-    font-family: "Prompt", sans-serif;
-    cursor: pointer;
-    margin-left: 20px;
-    margin: 20px;
-    width: 100%;
-    max-width: 320px;
+.review-link:hover {
+  text-decoration: underline;
 }
 
 .navigation-bar-container {
@@ -132,7 +97,7 @@ p {
     align-items: center;      /* center icon & text */
     font-size: 12px;
     font-family: "Prompt", sans-serif;
-    color: #333;
+    color: black;
 }
 
 .navigation-bar-container i {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myaccount.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/notification_detail.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,50 +20,21 @@
         <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
-        <div class="header-text">My Account</div>
+        <div class="header-text">Notification Detail</div>
         <div class="icon">
             <div class="cart">
                 <i class="bi bi-cart3"></i>
             </div>
         </div>
     </div>
-
-    <div class="title-container">
-        <div class="profile">
-            <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
-        </div>
-    </div>
-
-    <div class="menu-container">
-        <div class="menu-item" onclick="window.location.href='{{ url_for('myprofile') }}'">
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Order History</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item" onclick="window.location.href='/notification'">
-            <i class="fas fa-bell"></i>
-            <span>Notifications</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item">
-            <i class="fas fa-heart"></i>
-            <span>My Wishlist</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-    </div>
-
-    <div class="logout-btn-wrapper">
-        <button type="button" class="logout-btn" onclick="window.location.assign('{{ url_for('index') }}')">Log Out</button>
+    
+    <div class="notification-detail">
+        <h1>{{ note.title }}</h1>
+        <p>{{ note.desc }}</p>
+        {% if note.link %}
+            <a href="#" class="review-link">{{ note.link }} <i class="bi bi-arrow-right"></i></a>
+        {% endif %}
+        <p class="time">{{ note.time }}</p>
     </div>
 
     <div class="navigation-bar-container">

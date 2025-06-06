@@ -42,32 +42,29 @@
   </div>
 
     <div class="product-container">
-  {% for product in related_products %}
-<a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
-    <!-- Product image -->
-    <img src="{{ url_for('static', filename=product.image_path|default('placeholder.png')) }}"
-         alt="{{ product.name|default('Product') }}">
-    <!-- Seller name -->
-    <div class="seller-name">{{ product.seller_name|default('Unknown Seller') }}</div>
-    <!-- Product title -->
-    <div class="product-title">{{ product.name|default('Unnamed Product') }}</div>
-    <!-- Price -->
-    <div class="price">
-      {% if product.discounted_price is defined and product.discounted_price is not none %}
-        <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>
-        <span class="discounted-price">Rm{{ product.discounted_price }}</span>
-      {% else %}
-        <span class="price-only">Rm{{ product.original_price|default('0') }}</span>
-      {% endif %}
+    {% for product in related_products %}
+    <a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
+        <!-- Product image -->
+        <img src="{{ url_for('static', filename=product.image_path|default('placeholder.png')) }}"
+            alt="{{ product.name|default('Product') }}">
+        <!-- Seller name -->
+        <div class="seller-name">{{ product.seller_name|default('Unknown Seller') }}</div>
+        <!-- Product title -->
+        <div class="product-title">{{ product.name|default('Unnamed Product') }}</div>
+        <!-- Price -->
+        <div class="price">
+          {% if product.discounted_price is defined and product.discounted_price is not none %}
+            <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>
+            <span class="discounted-price">Rm{{ product.discounted_price }}</span>
+          {% else %}
+            <span class="price-only">Rm{{ product.original_price|default('0') }}</span>
+          {% endif %}
+        </div>
+    </a>
+    {% else %}
+    <p>No products found.</p>
+    {% endfor %}
     </div>
-</a>
-{% else %}
-<p>No products found.</p>
-{% endfor %}
-
-</div>
-
-
 
     <div class="navigation-bar-container">
         <div class="home-icon">
@@ -78,15 +75,16 @@
             <i class="bi bi-search"></i>
             <span class="explore-text">Explore</span>
         </div>
-        <div class="favourite-icon">
-            <i class="bi bi-heart-fill"></i>
-            <span class="favourite-text">Favourites</span>
+        <div class="order-icon">
+            <i class="bi bi-bag-fill"></i>
+            <span class="order-text">My Orders</span>
         </div>
         <div class="account-icon" onclick="window.location.href='/myaccount'">
             <i class="bi bi-person-fill"></i>
             <span class="account-text">Account</span>
         </div>
     </div>
+
 
     <script src="{{ url_for('static', filename='js/search_noresults.js') }}"></script>
 </body>
