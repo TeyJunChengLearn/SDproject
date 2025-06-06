@@ -418,8 +418,16 @@ def category_products(category_name):
 def myaccount():
     return render_template('myaccount.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/myprofile')
+def myprofile():
+    # Dummy user data
+    user = {
+        'name': 'Lucia Smith',
+        'email': 'luciasmith@example.com',
+        'phone': '+1 234 567 890',
+        'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050'
+    }
+    return render_template('myprofile.html', user=user)
 
 if __name__ == "__main__":
     with app.app_context():
