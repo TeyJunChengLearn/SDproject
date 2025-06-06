@@ -1,0 +1,172 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+
+p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300px;
+}
+
+.mark-all {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: black;
+  border-bottom: 1px solid white;
+}
+
+.notifications {
+  padding: 10px 15px 80px;
+}
+
+.notification-card {
+  display: flex;
+  background: #f9f9f9;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 12px;
+  margin-top: 6px;
+}
+
+.black { background: #000; }
+.blue { background: #004BFE; }
+
+.notification-content .title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.notification-content .blue-text {
+  color: #004BFE;
+}
+
+.notification-content .desc {
+  font-size: 13px;
+  color: black;
+  margin-bottom: 6px;
+}
+
+.review-link {
+  display: inline-block;
+  font-size: 13px;
+  color: #004BFE;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.review-link i {
+  font-size: 12px;
+}
+
+.notification-content .time {
+  font-size: 11px;
+  color: #787676;
+}
+
+.notification-card.unread {
+  background: #f9f9f9;
+}
+
+.notification-card:not(.unread) {
+  background: #f9f9f9;
+  opacity: 0.6;
+}
+
+.notification-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: 4px;
+}
+
+.dot.black {
+    background-color: black;
+}
+
+.dot.blue {
+    background-color: #004BFE;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: black;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
