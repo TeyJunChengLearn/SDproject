@@ -1,0 +1,252 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Prompt', sans-serif;
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 12px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+    text-decoration: none;
+    color: #8B8B8B;
+}
+
+p {
+    font-size: 12px;
+}
+
+.order-detail {
+    padding: 20px;
+}
+
+.order-id {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.order-number {
+    color: #4384f8;
+    font-weight: 600;
+}
+
+.status {
+    background-color: #4384f8;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.items .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.items .item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.items .item div {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.item-name-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+.item-name-price h2 {
+    font-size: 12px;
+    margin: 0;
+    flex: 1;              /* Allows name to take remaining space */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.item-name-price h3 {
+    margin: 0;
+    font-size: 14px;
+    white-space: nowrap;  /* Prevents price from wrapping */
+    color: #004BFE;
+}
+
+.shipping, .payment, .delivery-options, .summary {
+    margin-top: 20px;
+}
+
+.payment-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    padding: 2px;
+}
+
+.paypal-logo {
+    height: 50px;
+    width: 100px;
+}
+
+.delivery-box {
+    align-items: center;
+    gap: 10px;
+    padding: 2px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.delivery-box p {
+    color: #004BFE;
+    margin-left: 15px;
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.summary h3.total {
+    display: flex;
+    justify-content: flex-start;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;  /* Change label text to black */
+}
+
+.summary p {
+    display: flex;
+    justify-content: flex-start; /* align left */
+    font-size: 14px;
+    margin: 8px 0; /* slightly more vertical spacing */
+    color: #8B8B8B;
+}
+
+.summary p span {
+    margin-left: auto; /* pushes price to far right */
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Add space after label using padding-right */
+.summary p::before {
+    content: attr(data-label);
+    padding-right: 80px; /* increase this value to widen space */
+    white-space: nowrap;
+    font-weight: normal;
+    color: #8B8B8B;
+    flex-shrink: 0;
+}
+
+/* Hide original label text inside p */
+.summary p {
+    position: relative;
+    color: transparent; /* hide original text */
+}
+
+.summary h3.total span {
+    margin-left: auto;
+    color: #004BFE;  /* Keep the price blue */
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
+
+.order-detail {
+    padding: 20px;
+    padding-bottom: 80px; /* matches or slightly exceeds nav height */
+}
+

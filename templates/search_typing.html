@@ -1,45 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/search_typing.css') }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>ShareBear</title>
+</head>
 {% extends "homepage.html" %}
 
 {% block title %}Search - Typing{% endblock %}
 
 {% block content %}
 <div class="search-page">
-    <div class="header-container">
-        <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
-        <div class="search-input-container">
-            <form action="{{ url_for('search') }}" method="GET" id="searchForm">
-                <input type="text" name="q" id="searchInput" placeholder="Search products..." 
-                       value="{{ request.args.get('q', '') }}" autocomplete="off">
-                {% if request.args.get('q') %}
-                    <i class="fas fa-times-circle clear-btn" onclick="clearSearch()"></i>
-                {% else %}
-                    <i class="fas fa-search search-icon"></i>
-                {% endif %}
-            </form>
-        </div>
+  <div class="header-container">
+    <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
+    <div class="search-input-container">
+      <form action="{{ url_for('search') }}" method="GET" id="searchForm" autocomplete="off">
+        <input type="text" name="q" id="searchInput" placeholder="Search products..." value="{{ request.args.get('q', '') }}">
+        {% if request.args.get('q') %}
+          <i class="fas fa-times-circle clear-btn" onclick="clearSearch()"></i>
+        {% else %}
+          <i class="fas fa-search search-icon"></i>
+        {% endif %}
+      </form>
     </div>
+  </div>
 
-    <div class="suggestions-container">
-        {% for suggestion in suggestions %}
-        <div class="suggestion-item" onclick="selectSuggestion('{{ suggestion }}')">
-            <i class="fas fa-search suggestion-icon"></i>
-            <span><strong>{{ request.args.get('q') }}</strong>{{ suggestion[len(request.args.get('q')):] }}</span>
-        </div>
-        {% endfor %}
-    </div>
+  <div class="suggestions-container" id="suggestionsContainer">
+    {% for suggestion in suggestions %}
+      <div class="suggestion-item" onclick="selectSuggestion('{{ suggestion }}')">
+        <i class="fas fa-search suggestion-icon"></i>
+        <span>
+          {% if request.args.get('q') %}
+            <strong>{{ request.args.get('q') }}</strong>{{ suggestion[len(request.args.get('q')):] }}
+          {% else %}
+            {{ suggestion }}
+          {% endif %}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function clearSearch() {
-        document.getElementById('searchInput').value = '';
-        document.getElementById('searchForm').submit();
-    }
+  const searchInput = document.getElementById('searchInput');
+  const suggestionsContainer = document.getElementById('suggestionsContainer');
 
-    function selectSuggestion(value) {
-        document.getElementById('searchInput').value = value;
-        document.getElementById('searchForm').submit();
+  function clearSearch() {
+    searchInput.value = '';
+    suggestionsContainer.innerHTML = '';  // Clear suggestions too
+    document.getElementById('searchForm').submit();
+  }
+
+  function selectSuggestion(value) {
+    searchInput.value = value;
+    document.getElementById('searchForm').submit();
+  }
+
+  async function fetchSuggestions(query) {
+    if (!query) {
+      suggestionsContainer.innerHTML = '';  // Clear suggestions if input empty
+      return;
     }
+    try {
+      const response = await fetch('/search_typing?input=' + encodeURIComponent(query));
+      const data = await response.json();
+      displaySuggestions(data.suggestions, query);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  }
+
+  function displaySuggestions(suggestions, query) {
+    if (suggestions.length === 0) {
+      suggestionsContainer.innerHTML = '<div class="no-suggestions">No suggestions found</div>';
+      return;
+    }
+    suggestionsContainer.innerHTML = '';
+    suggestions.forEach(suggestion => {
+      const suggestionDiv = document.createElement('div');
+      suggestionDiv.classList.add('suggestion-item');
+      suggestionDiv.onclick = () => selectSuggestion(suggestion);
+
+      // Highlight the typed part
+      const strongPart = `<strong>${query}</strong>`;
+      const restPart = suggestion.slice(query.length);
+
+      suggestionDiv.innerHTML = `
+        <i class="fas fa-search suggestion-icon"></i>
+        <span>${strongPart}${restPart}</span>
+      `;
+      suggestionsContainer.appendChild(suggestionDiv);
+    });
+  }
+
+  // Listen for typing events
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    fetchSuggestions(query);
+  });
+
+  // On page load, fetch suggestions for existing query (optional)
+  document.addEventListener('DOMContentLoaded', () => {
+    const initialQuery = searchInput.value.trim().toLowerCase();
+    if (initialQuery) {
+      fetchSuggestions(initialQuery);
+    }
+  });
 </script>
 {% endblock %}

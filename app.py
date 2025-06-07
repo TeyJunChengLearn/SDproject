@@ -374,11 +374,18 @@ def search():
                          other_results=other_results,
                          total_results=len(filtered_products))
 
-@app.route('/api/like/<int:product_id>', methods=['POST'])
-def toggle_like(product_id):
-    # In a real app, you'd save this to a database
-    # For now, just return success
-    return jsonify({'success': True, 'liked': True})
+@app.route('/search_typing', methods=['GET'])
+def search_typing():
+    search_input = flask_request.args.get('input', '').lower()
+    suggestions = []
+    if search_input:
+        suggestions = [
+            product['name'] for product in dummy_products
+            if search_input in product['name'].lower()
+        ][:5]
+    return jsonify({'suggestions': suggestions})
+
+
 
 @app.route("/sellitem/<int:step>")
 def sellitem(step):
@@ -474,6 +481,39 @@ def notification_detail(index):
         notifications[index]['color'] = 'black'
         return render_template('notification_detail.html', note=notifications[index])
     return "Notification not found", 404
+
+@app.route('/myorders')
+def my_orders():
+    sample_orders = [
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Completed', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'marita.png'},
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'In Process', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'beau.png'},
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Canceled', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'shirt.png'}
+    ]
+    return render_template('myorders.html', orders=sample_orders)
+
+@app.route('/order/<order_id>')
+def order_detail(order_id):
+    order = {
+        'id': order_id,
+        'status': 'In Process',
+        'items': [
+            {'name': 'Zara Classic White Shirt – White', 'quantity': 1, 'price': '28', 'image': 'marita.png'},
+            {'name': 'Zara Classic White Shirt – White', 'quantity': 1, 'price': '28', 'image': 'beau.png'}
+        ],
+        'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050',
+        'delivery_option': 'Home Delivery',
+        'total': '28',
+        'discount': '1.50',
+        'delivery_fee': '0.50',
+        'tax': '0.80',
+        'final_total': '29'
+    }
+    order['payment_image'] = url_for('static', filename='paypal.png')
+    return render_template('order_detail.html', order=order)
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
 
 if __name__ == "__main__":
     with app.app_context():
