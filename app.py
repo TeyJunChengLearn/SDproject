@@ -494,7 +494,6 @@ def order_detail(order_id):
             {'name': 'Zara Classic White Shirt – White', 'quantity': 1, 'price': '28', 'image': 'beau.png'}
         ],
         'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050',
-        'payment': 'PayPal',
         'delivery_option': 'Home Delivery',
         'total': '28',
         'discount': '1.50',
@@ -502,6 +501,7 @@ def order_detail(order_id):
         'tax': '0.80',
         'final_total': '29'
     }
+    order['payment_image'] = url_for('static', filename='paypal.png')
     return render_template('order_detail.html', order=order)
 
 if __name__ == "__main__":
