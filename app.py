@@ -475,6 +475,35 @@ def notification_detail(index):
         return render_template('notification_detail.html', note=notifications[index])
     return "Notification not found", 404
 
+@app.route('/myorders')
+def my_orders():
+    sample_orders = [
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Completed', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'marita.png'},
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'In Process', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'beau.png'},
+        {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Canceled', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'shirt.png'}
+    ]
+    return render_template('myorders.html', orders=sample_orders)
+
+@app.route('/order/<order_id>')
+def order_detail(order_id):
+    order = {
+        'id': order_id,
+        'status': 'In Process',
+        'items': [
+            {'name': 'Zara Classic White Shirt – White', 'quantity': 1, 'price': '28', 'image': 'marita.png'},
+            {'name': 'Zara Classic White Shirt – White', 'quantity': 1, 'price': '28', 'image': 'beau.png'}
+        ],
+        'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050',
+        'payment': 'PayPal',
+        'delivery_option': 'Home Delivery',
+        'total': '28',
+        'discount': '1.50',
+        'delivery_fee': '0.50',
+        'tax': '0.80',
+        'final_total': '29'
+    }
+    return render_template('order_detail.html', order=order)
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
