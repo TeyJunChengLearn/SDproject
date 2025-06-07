@@ -86,23 +86,23 @@
   {% endif %}
 
   <div class="navigation-bar-container">
-    <div class="home-icon">
-      <i class="fa fa-home" aria-hidden="true"></i>
-      <span class="home-text">Home</span>
+        <div class="home-icon" onclick="window.location.href='/homepage'">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <span class="home-text">Home</span>
+        </div>
+        <div class="explore-icon" onclick="window.location.href='#'">
+            <i class="bi bi-search"></i>
+            <span class="explore-text">Explore</span>
+        </div>
+        <div class="order-icon" onclick="window.location.href='/myorders'">
+            <i class="bi bi-bag-fill"></i>
+            <span class="order-text">My Orders</span>
+        </div>
+        <div class="account-icon" onclick="window.location.href='/myaccount'">
+            <i class="bi bi-person-fill"></i>
+            <span class="account-text">Account</span>
+        </div>
     </div>
-    <div class="explore-icon">
-      <i class="bi bi-search"></i>
-      <span class="explore-text">Explore</span>
-    </div>
-    <div class="order-icon">
-        <i class="bi bi-bag-fill"></i>
-        <span class="order-text">My Orders</span>
-    </div>
-    <div class="account-icon" onclick="window.location.href='/myaccount'">
-      <i class="bi bi-person-fill"></i>
-      <span class="account-text">Account</span>
-    </div>
-  </div>
 
 
 <script src="{{ url_for('static', filename='js/search_results.js') }}"></script>

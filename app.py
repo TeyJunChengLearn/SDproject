@@ -374,11 +374,18 @@ def search():
                          other_results=other_results,
                          total_results=len(filtered_products))
 
-@app.route('/api/like/<int:product_id>', methods=['POST'])
-def toggle_like(product_id):
-    # In a real app, you'd save this to a database
-    # For now, just return success
-    return jsonify({'success': True, 'liked': True})
+@app.route('/search_typing', methods=['GET'])
+def search_typing():
+    search_input = flask_request.args.get('input', '').lower()
+    suggestions = []
+    if search_input:
+        suggestions = [
+            product['name'] for product in dummy_products
+            if search_input in product['name'].lower()
+        ][:5]
+    return jsonify({'suggestions': suggestions})
+
+
 
 @app.route("/sellitem/<int:step>")
 def sellitem(step):
@@ -503,6 +510,10 @@ def order_detail(order_id):
     }
     order['payment_image'] = url_for('static', filename='paypal.png')
     return render_template('order_detail.html', order=order)
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
 
 if __name__ == "__main__":
     with app.app_context():

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myprofile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myaccount.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,43 +18,36 @@
 <body>
     <div class="top-bar-container">
         <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
-        <i class="bi bi-arrow-left"></i>
-    </div>
-        <div class="header-text">My Account</div>
+            <i class="bi bi-arrow-left"></i>
+        </div>
+        <div class="header-text">Cart</div>
         <div class="icon">
-            <div class="cart" onclick="window.location.href='/cart'">
-                <i class="bi bi-cart3"></i>
+            <div class="notify" onclick="window.location.href='/notification'">
+                <i class="bi bi-bell"></i>
             </div>
         </div>
     </div>
 
-    <div class="title-container">
-        <div class="profile">
-            <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
-            <div class="edit-profile">
-                <a href="#">Edit Profile →</a>
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <span>Order <a href="{{ url_for('order_detail', order_id=order.id) }}">#{{ order.id }}</a></span>
+                <span class="status {{ order.status | lower | replace(' ', '-') }}">{{ order.status }}</span>
+            </div>
+            <div class="order-body">
+                <img src="{{ url_for('static', filename=order.image) }}" alt="{{ order.name }}">
+                <div>
+                    <p>{{ order.name }}</p>
+                    <p>Total: <strong>Rm{{ order.total }}</strong></p>
+                    <p>
+                        {{ 'Delivered on' if order.status == 'Completed' else ('Canceled on' if order.status == 'Canceled' else 'Estimated Delivery') }}: 
+                        <span class="date">{{ order.date }}</span>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="profile-info-container">
-        <h1>Profile Information</h1>
-        <p>Hi, USER! Here's where you can keep your profile up to date.</p>
-
-        <div class="info-box"><i class="bi bi-person-fill"></i> {{ user.name }}</div>
-        <div class="info-box"><i class="bi bi-envelope-fill"></i> {{ user.email }}</div>
-        <div class="info-box"><i class="bi bi-telephone-fill"></i> {{ user.phone }}</div>
-        <div class="info-box"><i class="bi bi-geo-alt-fill"></i> {{ user.address }}</div>
-
-        <div class="link-box">
-        <span>Order History</span><a href="#">View Orders →</a>
-        </div>
-        <div class="link-box">
-        <span>Wishlist</span><a href="#">Go to Wishlist →</a>
-        </div>
-        <div class="link-box">
-        <span>Logout</span><a href="/" class="logout-link">Logout →</a>
-        </div>
+        {% endfor %}
     </div>
 
     <div class="navigation-bar-container">
