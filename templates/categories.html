@@ -32,14 +32,14 @@
     </div>
 
     <div class="searchbar-container">
-        <form action="{{ url_for('search') }}" method="get">
+        <form action="{{ url_for('xuanxuan_routes.search') }}" method="get">
         <input type="text" class="search-input" id="searchInput" name="q" placeholder="Search for products, brands or categories..." autocomplete="off">
         </form>
     </div>
     
     <div class="categories">
         {% for cat in categories %}
-        <a href="{{ url_for('category_products', category_name=cat.name) }}">
+        <a href="{{ url_for('xuanxuan_routes.category_products', category_name=cat.name) }}">
             <div class="category-box">
                 <div class="image-wrapper">
                     <img 

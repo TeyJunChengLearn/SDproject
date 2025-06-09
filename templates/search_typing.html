@@ -24,7 +24,7 @@
   <div class="header-container">
     <i class="fas fa-arrow-left back-btn" onclick="history.back()"></i>
     <div class="search-input-container">
-      <form action="{{ url_for('search') }}" method="GET" id="searchForm" autocomplete="off">
+      <form action="{{ url_for('xuanxuan_routes.search') }}" method="GET" id="searchForm" autocomplete="off">
         <input type="text" name="q" id="searchInput" placeholder="Search products..." value="{{ request.args.get('q', '') }}">
         {% if request.args.get('q') %}
           <i class="fas fa-times-circle clear-btn" onclick="clearSearch()"></i>
