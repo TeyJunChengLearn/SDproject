@@ -44,29 +44,22 @@
         {% endfor %}
     </div>
 
-    <div class="filter-bar">
-        <button>Filter</button>
-        <button>Sort</button>
-        <button>Price</button>
-        <button>Deal Option</button>
-    </div>
-
     <div class="product-container">
-    {% for product in products %}
-    <div class="product-card">
-        <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
-        <h3 class="seller-name">{{ product.brand }}</h3>
-        <p class="product-title">{{ product.name }}</p>
-        <div class="price">
-        {% if product.discounted_price %}
-            <span class="original-price" style="text-decoration: line-through; color: grey;">{{ product.original_price }}</span>
-            <span class="discounted-price">{{ product.discounted_price }}</span>
-        {% else %}
-            <span class="original-price">{{ product.original_price }}</span>
-        {% endif %}
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+            <h3 class="seller-name">{{ product.brand }}</h3>
+            <p class="product-title">{{ product.name }}</p>
+            <div class="price">
+            {% if product.discounted_price %}
+                <span class="original-price" style="text-decoration: line-through; color: grey;">{{ product.original_price }}</span>
+                <span class="discounted-price">{{ product.discounted_price }}</span>
+            {% else %}
+                <span class="original-price">{{ product.original_price }}</span>
+            {% endif %}
+            </div>
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 
     <div class="navigation-bar-container">

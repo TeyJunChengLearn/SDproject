@@ -61,22 +61,15 @@
           <div class="seller-details">
               <p class="seller-name">{{ product.seller_name }}</p>
           </div>
-          <div class="contact-action" onclick="window.location.href='#'">
+          <div class="contact-action" onclick="window.location.href='#'"> <!--Insert WA link-->
               <span>Contact seller</span>
               <i class="bi bi-arrow-right"></i>
           </div>
       </div>
   </div>
-
-  <p class="location-title">Location</p>
-  <div class="location-box">
-      <div class="map-container">
-          <img src="{{ url_for('static', filename=product.location_image) }}" alt="Map" />
-      </div>
-  </div>
-
+  
   <div class="itempage-btn">
-      <button type="button" class="back-btn" onclick="alert('Feature not implemented yet')">Trade</button>
+      <button type="button" class="back-btn" onclick="alert('Feature not implemented yet')" disabled>Trade</button>
       <button type="button" class="details-btn" onclick="alert('Feature not implemented yet')">Buy Now</button>
   </div>
 </body>
