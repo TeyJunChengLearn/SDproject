@@ -46,7 +46,8 @@ body.no-results-page {
   padding: 20px 15px;
   text-align: center;
   font-size: 16px;
-  color: #666;
+  color: #888F93;
+  border-bottom: 0.5px solid #ddd;
 }
 
 .filter-bar {
