@@ -1,4 +1,3 @@
-from app import *;
 from flask import Blueprint,render_template;
 
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
