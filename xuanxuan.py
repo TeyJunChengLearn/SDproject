@@ -3,19 +3,19 @@ from flask import Blueprint,render_template,session, redirect, url_for, request 
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 
 
-@xuanxuan_routes.route("/")
+@xuanxuan_routes.route("/",endpoint='index')
 def index():
     return render_template('index.html')
 
-@xuanxuan_routes.route("/login")
+@xuanxuan_routes.route("/login",endpoint='login')
 def login():
     return render_template('login.html')
 
-@xuanxuan_routes.route("/createacc")
+@xuanxuan_routes.route("/createacc",endpoint='createacc')
 def createacc():
     return render_template('createaccount.html')
 
-@xuanxuan_routes.route("/insertpassword")
+@xuanxuan_routes.route("/insertpassword",endpoint='insertpassword')
 def password():
     return render_template('insertpassword.html')
 
@@ -141,7 +141,7 @@ products = {
     ]
 }
 
-@xuanxuan_routes.route('/search')
+@xuanxuan_routes.route('/search',endpoint='search')
 def search():
     query = flask_request.args.get('q', '').strip()
     
@@ -181,7 +181,7 @@ def search():
                          other_results=other_results,
                          total_results=len(filtered_products))
 
-@xuanxuan_routes.route('/search_typing', methods=['GET'])
+@xuanxuan_routes.route('/search_typing', methods=['GET'],endpoint='search_typing')
 def search_typing():
     search_input = flask_request.args.get('input', '').lower()
     suggestions = []
@@ -194,18 +194,18 @@ def search_typing():
 
 
 
-@xuanxuan_routes.route("/sellitem/<int:step>")
+@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem/<int:step>')
 def sellitem(step):
     if step == 1:
         return render_template("sellitem.html")
     else:
         return render_template(f"sellitem{step}.html")
 
-@xuanxuan_routes.route("/itemsuccess")
+@xuanxuan_routes.route("/itemsuccess",endpoint='itemsuccess')
 def itemsuccess():
     return render_template('itemsuccess.html')
 
-@xuanxuan_routes.route('/product/<int:product_id>')
+@xuanxuan_routes.route('/product/<int:product_id>',endpoint='product/<int:product_id>')
 def product_page(product_id):
     product = dummy_products.get(product_id)
     if not product:
@@ -219,20 +219,20 @@ def product_page(product_id):
 
     return render_template('productpage.html', product=product_copy)
 
-@xuanxuan_routes.route('/categories')
+@xuanxuan_routes.route('/categories',endpoint='categories')
 def categories_page():
     return render_template('categories.html', categories=categories)
 
-@xuanxuan_routes.route('/category/<category_name>')
+@xuanxuan_routes.route('/category/<category_name>',endpoint='category/<category_name>')
 def category_products(category_name):
     category_items = products.get(category_name, [])
     return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
 
-@xuanxuan_routes.route('/myaccount')
+@xuanxuan_routes.route('/myaccount',endpoint='myaccount')
 def myaccount():
     return render_template('myaccount.html')
 
-@xuanxuan_routes.route('/myprofile')
+@xuanxuan_routes.route('/myprofile',endpoint='myprofile')
 def myprofile():
     # Dummy user data
     user = {
@@ -270,18 +270,18 @@ notifications = [
     }
 ]
 
-@xuanxuan_routes.route('/notification')
+@xuanxuan_routes.route('/notification',endpoint='notification')
 def notification():
     return render_template('notification.html', notifications=notifications)
 
-@xuanxuan_routes.route('/mark_all_read', methods=['POST'])
+@xuanxuan_routes.route('/mark_all_read', methods=['POST'],endpoint='mark_all_read')
 def mark_all_read():
     for note in notifications:
         note['read'] = True
         note['color'] = 'black'
     return jsonify({'status': 'success'})
 
-@xuanxuan_routes.route('/notification/<int:index>')
+@xuanxuan_routes.route('/notification/<int:index>',endpoint='notification_detail')
 def notification_detail(index):
     if 0 <= index < len(notifications):
         notifications[index]['read'] = True
@@ -289,7 +289,7 @@ def notification_detail(index):
         return render_template('notification_detail.html', note=notifications[index])
     return "Notification not found", 404
 
-@xuanxuan_routes.route('/myorders')
+@xuanxuan_routes.route('/myorders',endpoint='myorders')
 def my_orders():
     sample_orders = [
         {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Completed', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'marita.png'},
@@ -298,7 +298,7 @@ def my_orders():
     ]
     return render_template('myorders.html', orders=sample_orders)
 
-@xuanxuan_routes.route('/order/<order_id>')
+@xuanxuan_routes.route('/order/<order_id>',endpoint='order')
 def order_detail(order_id):
     order = {
         'id': order_id,
@@ -318,6 +318,6 @@ def order_detail(order_id):
     order['payment_image'] = url_for('static', filename='paypal.png')
     return render_template('order_detail.html', order=order)
 
-@xuanxuan_routes.route('/cart')
+@xuanxuan_routes.route('/cart',endpoint='cart')
 def cart():
     return render_template('cart.html')

@@ -35,7 +35,7 @@
 
   <div class="product-container">
     {% for product in most_viewed %}
-      <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product.id) }}" class="product-card">
+      <a href="{{ url_for('product_page', product_id=product.id) }}" class="product-card">
         <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}" />
         <div class="seller-name">{{ product.seller_name }}</div>
         <div class="product-title">{{ product.name }}</div>
@@ -57,7 +57,7 @@
     <div class="section-title">Other Results</div>
     <div class="product-container">
       {% for product in other_results %}
-        <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product.id) }}" class="product-card">
+        <a href="{{ url_for('product_page', product_id=product.id) }}" class="product-card">
           <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}" />
           <div class="seller-name">{{ product.seller_name }}</div>
           <div class="product-title">{{ product.name }}</div>

@@ -36,7 +36,7 @@
     <!-- Notifications List -->
     <div class="notifications">
     {% for note in notifications %}
-        <a href="{{ url_for('xuanxuan_routes.notification_detail', index=loop.index0) }}" class="notification-link">
+        <a href="{{ url_for('notification_detail', index=loop.index0) }}" class="notification-link">
         <div class="notification-card {% if not note.read %}unread{% endif %}">
             <div class="dot {{ note.color }}"></div>
             <div class="notification-content">

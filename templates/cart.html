@@ -32,7 +32,7 @@
         {% for order in orders %}
         <div class="order-card">
             <div class="order-header">
-                <span>Order <a href="{{ url_for('xuanxuan_routes.order_detail', order_id=order.id) }}">#{{ order.id }}</a></span>
+                <span>Order <a href="{{ url_for('order_detail', order_id=order.id) }}">#{{ order.id }}</a></span>
                 <span class="status {{ order.status | lower | replace(' ', '-') }}">{{ order.status }}</span>
             </div>
             <div class="order-body">
