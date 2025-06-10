@@ -29,11 +29,11 @@
     <div class="header">
     <h1>Create</h1>
     <h1>Account</h1>
-    <div class="uploadprofile" onclick="document.getElementById('fileInput').click();">
-        <i class="bi bi-camera"></i>
-    </div>
-    <input type="file" id="fileInput" accept="image/*" style="display: none;">
       <form action="/login" method="POST" id="signupForm">
+        <div class="uploadprofile" onclick="document.getElementById('fileInput').click();">
+            <i class="bi bi-camera"></i>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
         <input type="email" id="email" name="email" placeholder="Email" required />
         <div class="password-container">
             <input type="password" id="password" name="password" placeholder="Password in 8 characters" minlength="8" maxlength="8" pattern=".{8}"required />

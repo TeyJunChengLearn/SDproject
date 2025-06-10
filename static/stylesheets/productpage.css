@@ -63,7 +63,7 @@ p {
 
 .description-box {
     margin-left: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .itempage-btn {
@@ -126,29 +126,6 @@ p {
 
 .contact-action i {
     font-size: 10px;
-}
-
-.location-box {
-    border: 1px solid black; /* Black border */
-    border-radius: 12px;
-    padding: 15px;
-    background-color: #fff;
-    margin: 20px auto;
-    max-width: 300px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.location-title {
-    font-size: 12px;
-    margin-left: 20px;
-    margin-bottom: 10px;
-    font-family: "Prompt", sans-serif;
-}
-
-.map-container img {
-    width: 100%;
-    border-radius: 10px;
-    display: block;
 }
 
 .details-btn {

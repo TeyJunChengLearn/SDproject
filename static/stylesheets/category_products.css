@@ -54,6 +54,7 @@ p {
   flex-direction: column;
   gap: 15px;
   padding: 10px;
+  margin-bottom: 20px;
 }
 
 .title-banner {
