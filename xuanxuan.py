@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template;
+from flask import Blueprint,render_template,session, redirect, url_for, request as flask_request;
 
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 
@@ -19,7 +19,7 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
-@xuanxuan_routes.route("/homepage")
+@xuanxuan_routes.route("/homepage",endpoint='homepage')
 def homepage():
     return render_template('homepage.html')
 
