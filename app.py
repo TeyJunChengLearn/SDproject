@@ -43,6 +43,7 @@ class Listing(db.Model):
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    offered_listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))  # listing being given
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     offered_listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -125,6 +126,22 @@ class Report(db.Model):
     generated_by = db.Column(db.Integer, db.ForeignKey('admin.id'))
     data = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='cart')
+    items = db.relationship('CartItem', backref='cart', lazy=True, cascade='all, delete-orphan')
+
+
+class CartItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+
+    listing = db.relationship('Listing')
 
 # =========================== DESIGN PATTERNS ===========================
 
