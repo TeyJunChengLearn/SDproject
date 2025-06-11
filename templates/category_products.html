@@ -34,7 +34,7 @@
     <div class="banner-container">
         {% for category in categories %}
             {% if category.name == category_name %}
-            <a href="{{ url_for('category_products', category_name=category.name) }}" class="title-banner">
+            <a href="{{ url_for('xuanxuan_routes.category_products', category_name=category.name) }}" class="title-banner">
                 <div class="text-content">
                     <span class="trade-text">{{ category.name }}</span>
                 </div>

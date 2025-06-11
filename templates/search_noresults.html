@@ -36,7 +36,7 @@
 
     <div class="product-container">
     {% for product in related_products %}
-    <a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
+    <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product['id']) }}" class="product-card">
         <!-- Product image -->
         <img src="{{ url_for('static', filename=product.image_path|default('placeholder.png')) }}"
             alt="{{ product.name|default('Product') }}">
