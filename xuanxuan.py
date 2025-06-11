@@ -19,7 +19,7 @@ def createacc():
 def password():
     return render_template('insertpassword.html')
 
-@xuanxuan_routes.route("/homepage",endpoint='homepage')
+@xuanxuan_routes.route("/homepage",methods=['GET', 'POST'],endpoint='homepage')
 def homepage():
     return render_template('homepage.html')
 
