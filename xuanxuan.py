@@ -15,11 +15,11 @@ def login():
 def createacc():
     return render_template('createaccount.html')
 
-@xuanxuan_routes.route("/insertpassword",endpoint='insertpassword')
+@xuanxuan_routes.route("/insertpassword",endpoint='password')
 def password():
     return render_template('insertpassword.html')
 
-@xuanxuan_routes.route("/homepage",endpoint='homepage')
+@xuanxuan_routes.route("/homepage",methods=['GET', 'POST'],endpoint='homepage')
 def homepage():
     return render_template('homepage.html')
 
@@ -194,7 +194,7 @@ def search_typing():
 
 
 
-@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem/<int:step>')
+@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem')
 def sellitem(step):
     if step == 1:
         return render_template("sellitem.html")
@@ -205,7 +205,7 @@ def sellitem(step):
 def itemsuccess():
     return render_template('itemsuccess.html')
 
-@xuanxuan_routes.route('/product/<int:product_id>',endpoint='product/<int:product_id>')
+@xuanxuan_routes.route('/product/<int:product_id>',endpoint='product_page')
 def product_page(product_id):
     product = dummy_products.get(product_id)
     if not product:
@@ -219,11 +219,11 @@ def product_page(product_id):
 
     return render_template('productpage.html', product=product_copy)
 
-@xuanxuan_routes.route('/categories',endpoint='categories')
+@xuanxuan_routes.route('/categories',endpoint='categories_page')
 def categories_page():
     return render_template('categories.html', categories=categories)
 
-@xuanxuan_routes.route('/category/<category_name>',endpoint='category/<category_name>')
+@xuanxuan_routes.route('/category/<category_name>',endpoint='category_products')
 def category_products(category_name):
     category_items = products.get(category_name, [])
     return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
@@ -289,7 +289,7 @@ def notification_detail(index):
         return render_template('notification_detail.html', note=notifications[index])
     return "Notification not found", 404
 
-@xuanxuan_routes.route('/myorders',endpoint='myorders')
+@xuanxuan_routes.route('/myorders',endpoint='my_orders')
 def my_orders():
     sample_orders = [
         {'id': '879234', 'name': '1x Floral Summer Dress', 'status': 'Completed', 'total': '120.00', 'date': 'February 20, 2024', 'image': 'marita.png'},
@@ -298,7 +298,7 @@ def my_orders():
     ]
     return render_template('myorders.html', orders=sample_orders)
 
-@xuanxuan_routes.route('/order/<order_id>',endpoint='order')
+@xuanxuan_routes.route('/order/<order_id>',endpoint='order_detail')
 def order_detail(order_id):
     order = {
         'id': order_id,
