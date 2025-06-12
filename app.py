@@ -21,6 +21,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
     requests = db.relationship('Request', backref='requester', lazy=True)
+    status = db.Column(db.String(20), nullable=False, default='active')
     transactions = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
 
 class Admin(User):
