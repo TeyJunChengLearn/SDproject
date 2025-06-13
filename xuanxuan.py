@@ -124,12 +124,7 @@ products = {
         {"brand": "Zara", "name": "Leather Handbag", "original_price": "Rm120", "discounted_price": "Rm99", "image": "marita.png"}
     ]
 }
-@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem')
-def sellitem(step):
-    if step == 1:
-        return render_template("sellitem.html")
-    else:
-        return render_template(f"sellitem{step}.html")
+
 @xuanxuan_routes.route('/search',endpoint='search')
 def search():
     query = flask_request.args.get('q', '').strip()

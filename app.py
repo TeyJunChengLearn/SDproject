@@ -334,6 +334,19 @@ def homepage():
     session.pop('listing_draft', None)
     return render_template('homepage.html')
 
+@app.route('/sell_item', methods=['GET', 'POST'])
+def sell_item():
+    return render_template('sell_item.html')
+
+
+@app.route('/preview', methods=['POST'])
+def preview_sellitem():
+    data = flask_request.form
+    files = flask_request.files.getlist('photos')
+    # You can process/store images here
+    return render_template('preview_sellitem.html', data=data, images=files)
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()

@@ -1,0 +1,85 @@
+{% extends 'selling_layout.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sell_item.css') }}">
+{% endblock %}
+
+{% block header %}Sell Your Item{% endblock %}
+
+{% block content %}
+<div class="form-container">
+  <form id="FullItemForm" method="POST" action="{{ url_for('preview_sellitem') }}" enctype="multipart/form-data">
+    
+    <!-- Step 1: Item Details -->
+    <div class="form-step" id="step1">
+      <div class="text-container">
+        <h1>Describe Your Item</h1>
+        <p>Complete these details to make your item stand out to buyers.</p>
+      </div>
+      <input type="text" name="itemname" placeholder="Item Title" required />
+      <select name="category" required>
+        <option value="" disabled selected hidden>Category</option>
+        <option value="Women's Closet">Women's Closet</option>
+        <option value="Men's Wardrobe">Men's Wardrobe</option>
+        <option value="Books & Magazines">Books & Magazines</option>
+        <option value="Beauty & Wellness">Beauty & Wellness</option>
+        <option value="Musical Instruments">Musical Instruments</option>
+        <option value="Accessories">Accessories</option>
+      </select>
+      <input type="text" name="condition" placeholder="Condition" required />
+      <textarea name="description" placeholder="Description" required></textarea>
+      <input type="text" name="brand" placeholder="Brand" />
+      <input type="text" name="size" placeholder="Dimensions/Size" />
+      <input type="text" name="color" placeholder="Color" />
+
+      <button type="button" class="details-btn" onclick="nextStep(2)">Next</button>
+    </div>
+
+    <!-- Step 2: Pricing & Shipping -->
+    <div class="form-step" id="step2">
+      <div class="text-container">
+        <h1>Set Your Price & Delivery Options</h1>
+        <p>Price your item and choose how you'd like to deliver it to buyers.</p>
+      </div>
+      <input type="text" name="itemprice" placeholder="Item Price" required />
+      <select name="shipping" required>
+        <option value="" disabled selected hidden>Shipping Options</option>
+        <option value="doorstep-delivery">Doorstep Delivery</option>
+        <option value="cod">Cash on Delivery</option>
+      </select>
+      <div class="itempage-btn">
+        <button type="button" class="back-btn" onclick="nextStep(1)">Back</button>
+        <button type="button" class="details-btn" onclick="nextStep(3)">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Photo Upload -->
+    <div class="form-step" id="step3">
+      <div class="text-container">
+        <h1>Add Photos</h1>
+        <p>Great photos help your item sell faster! Upload images from different angles.</p>
+      </div>
+      <div class="upload-box" id="uploadBox">
+        <div class="upload-icon">📤</div>
+        <p><strong>Choose a file or drag & drop it here</strong></p>
+        <p class="subtext">JPEG, PNG formats, up to 50MB</p>
+        <label class="browse-button">
+          Browse File
+          <input type="file" name="photos" id="fileInput" accept="image/*" style="display: none;">
+        </label>
+      </div>
+
+      <div id="previewContainer"></div>
+
+      <div class="itempage-btn">
+        <button type="button" class="back-btn" onclick="nextStep(2)">Back</button>
+        <button type="submit" class="details-btn">Preview</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+    <script src="{{ url_for('static', filename='js/sell_item.js') }}"></script>
+{% endblock %}

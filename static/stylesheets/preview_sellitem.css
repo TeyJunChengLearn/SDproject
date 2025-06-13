@@ -1,0 +1,211 @@
+/* General Reset */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+/* Navigation and Header */
+.navigation-bar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  margin-top: 30px;
+}
+
+.header-text {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.icon {
+  display: flex;
+  gap: 5px;
+}
+
+.cart, .notify {
+  width: 24px;
+  height: 24px;
+}
+
+h1 {
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+}
+
+p {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.preview-wrapper {
+  padding: 20px;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+
+.preview-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+}
+
+.preview-image img {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.core-info {
+  padding-top: 0;
+}
+
+.top-tags {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.category {
+  font-weight: 600;
+  color: #004BFE;
+  text-transform: none;
+}
+
+.condition {
+  background-color: #eee;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.item-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.item-price {
+  color: #004BFE;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 6px 0;
+}
+
+.item-description {
+  font-size: 13px;
+  color: #444;
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.extra-info p {
+  font-size: 12px;
+  color: #555;
+  margin: 4px 0;
+}
+
+.contact-seller-box {
+    border: 1px solid #EFEFEF;
+    background: #fff;
+    border-radius: 12px;
+    padding: 5px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+    max-width: 320px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.contact-seller-information {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-img img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.seller-details {
+    flex-grow: 1;
+    margin-left: 12px;
+}
+
+.seller-name {
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0;
+}
+
+.contact-action {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    color: #333;
+}
+
+.contact-action i {
+    font-size: 10px;
+}
+
+/* Buttons */
+.details-btn,
+.back-btn {
+  background-color: #004BFE;
+  color: white;
+  border: none;
+  border-radius: 60px;
+  padding: 15px;
+  font-size: 14px;
+  font-family: "Prompt", sans-serif;
+  cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 10px;
+}
+
+.back-btn {
+  background-color: transparent;
+  color: #004BFE;
+  border-radius: 60px;
+  padding: 15px;
+  font-size: 14px;
+  font-family: "Prompt", sans-serif;
+  cursor: pointer;
+  width: 100%;
+  max-width: 336px;
+}
+
+/* Step Navigation */
+.itempage-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between; /* distribute buttons side by side */
+  align-items: center;
+  gap: 10px; /* spacing between buttons */
+  padding: 20px;
+  background-color: white; /* optional: to keep it visible */
+  z-index: 999; /* ensures it's above other elements */
+}
+
