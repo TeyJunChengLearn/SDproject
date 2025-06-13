@@ -30,7 +30,7 @@
 
     <div class="title-container">
         <div class="profile">
-            <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+            <img src="{{ url_for('static', filename='uploads/' ~ user.avatar_filename) if user.avatar_filename else url_for('static', filename='default-avatar.png') }}" alt="Profile" />
         </div>
     </div>
 
@@ -63,7 +63,9 @@
     </div>
 
     <div class="logout-btn-wrapper">
-        <button type="button" class="logout-btn" onclick="window.location.assign('{{ url_for('xuanxuan_routes.index') }}')">Log Out</button>
+        <a href="{{url_for('logout')}}">
+            <button type="button" class="logout-btn" >Log Out</button>
+        </a>
     </div>
 
     <div class="navigation-bar-container">

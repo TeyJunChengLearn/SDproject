@@ -1,32 +1,32 @@
 {% extends 'selling_layout.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem.css') }}">
 {% endblock %}
 {% block header %}Item Details Page{% endblock %}
 {% block content %}
-    <div class="text-container">
-        <h1>Describe Your Item</h1>
-        <p>Complete these details to make your item stand out to buyers.</p>
-    </div>
-    <div class="form-container">
+<div class="text-container">
+  <h1>Describe Your Item</h1>
+  <p>Complete these details to make your item stand out to buyers.</p>
+</div>
+<div class="form-container">
         <form action="/" method="POST" id="ItemDetailsForm">
           <input type="text" name="itemname" placeholder="Item Title" />
-          <select name="category" required>
-            <option value="" disabled selected hidden>Category</option>
-            <option value="women">Women's Closet</option>
-            <option value="men">Men's Wardrobe</option>
-            <option value="books">Books & Magazines</option>
-            <option value="beauty">Beauty & Wellness</option>
-            <option value="instruments">Musical Instruments</option>
-            <option value="accessories">Accessories</option>
-          </select>
+    <select name="category" required>
+      <option value="" disabled selected hidden>Category</option>
+      <option value="women">Women's Closet</option>
+      <option value="men">Men's Wardrobe</option>
+      <option value="books">Books & Magazines</option>
+      <option value="beauty">Beauty & Wellness</option>
+      <option value="instruments">Musical Instruments</option>
+      <option value="accessories">Accessories</option>
+    </select>
           <input type="text" name="condition" placeholder="Condition" />
           <textarea name="description" placeholder="Description"></textarea>
-          <input type="text" name="brand" placeholder="Brand" />
-          <input type="text" name="size" placeholder="Dimensions/Size" />
-          <input type="text" name="color" placeholder="Color" />
+    <input type="text" name="brand" placeholder="Brand" />
+    <input type="text" name="size" placeholder="Dimensions/Size" />
+    <input type="text" name="color" placeholder="Color" />
 
           <button type="button" class="details-btn" onclick="window.location.href='/sellitem/2'">Next</button>
-        </form>
-    </div>
+  </form>
+</div>
 {% endblock %}

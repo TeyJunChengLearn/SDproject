@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Character limit enforcement
     password.addEventListener('input', function() {
-      if (this.value.length > 8) {
+      if (this.value.length > 4) {
         this.value = this.value.slice(0, 8);
       }
     });
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Password validation
       if (password.value.length !== 8) {
         e.preventDefault();
-        password.setCustomValidity('Password must be exactly 8 characters');
+        password.setCustomValidity('Password must be exactly 4 characters');
         password.reportValidity();
         password.focus();
       } else {

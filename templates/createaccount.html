@@ -29,21 +29,31 @@
     <div class="header">
     <h1>Create</h1>
     <h1>Account</h1>
-      <form action="/login" method="POST" id="signupForm">
+      <form action="{{url_for('createacc')}}" method="POST" id="signupForm" enctype="multipart/form-data">
         <div class="uploadprofile" onclick="document.getElementById('fileInput').click();">
             <i class="bi bi-camera"></i>
         </div>
-        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <input type="file" id="fileInput" name="avatar" accept="image/*" style="display: none;">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         <input type="email" id="email" name="email" placeholder="Email" required />
         <div class="password-container">
-            <input type="password" id="password" name="password" placeholder="Password in 8 characters" minlength="8" maxlength="8" pattern=".{8}"required />
+            <input type="password" id="password" name="password" placeholder="Password in 4 characters" minlength="8" maxlength="8" required />
             <i class="bi bi-eye-slash" id="togglePassword"></i>
         </div>
         <div class="phone-container">
           <input type="tel" id="phone" name="phone" placeholder="Phone Number" pattern="[0-9]{6,15}" required />
         </div>
         <div class="button">
-          <button type="submit" class="done-btn" onclick="window.location.href='/homepage'">Done</button>
+          <button type="submit" class="done-btn" >Done</button>
           <button type="button" class="cancel-btn" onclick="window.location.href='/'">Cancel</button>
         </div>
       </form>

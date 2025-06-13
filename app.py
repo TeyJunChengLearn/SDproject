@@ -1,10 +1,12 @@
-from flask import Flask, render_template, session, redirect, url_for, request as flask_request
+from flask import Flask, render_template, session, redirect, url_for, request as flask_request,flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from flask import jsonify
 from xuanxuan import xuanxuan_routes
 from jc import jc_routes
 from jamie import jamie_routes
+from werkzeug.utils import secure_filename
+import os
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'super_secret_key'
@@ -16,10 +18,10 @@ app.register_blueprint(jamie_routes)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
+    avatar_filename = db.Column(db.String(255), nullable=True)
     requests = db.relationship('Request', backref='requester', lazy=True)
     status = db.Column(db.String(20), nullable=False, default='active')
     transactions = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
@@ -36,17 +38,22 @@ class Listing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    condition = db.Column(db.Text, nullable=True)
+    brand = db.Column(db.Text, nullable=True)
+    dimensionSize = db.Column(db.Text, nullable=True)
+    color = db.Column(db.Text, nullable=True)
+    shippingOptions = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     image_filename = db.Column(db.String(255), nullable=True)
     category = db.Column(db.String(100), nullable=True)
+    price = db.Column(db.Float, nullable=False)
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
     offered_listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))  # listing being given
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    offered_listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     type = db.Column(db.String(50), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -89,13 +96,6 @@ class SupportTicket(db.Model):
     user = db.relationship('User', backref='support_tickets')
 
 
-class PurchaseRequest(Request):
-    __tablename__ = 'purchase_request'
-    id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
-    proposed_price = db.Column(db.Float)
-    __mapper_args__ = {
-        'polymorphic_identity': 'purchase_request'
-    }
 
 class BorrowRequest(Request):
     __tablename__ = 'borrow_request'
@@ -184,13 +184,6 @@ class RequestStrategy:
     def reject(self, request):
         raise NotImplementedError
 
-class PurchaseStrategy(RequestStrategy):
-    def approve(self, request):
-        request.status = "approved"
-
-    def reject(self, request):
-        request.status = "rejected"
-
 class BorrowStrategy(RequestStrategy):
     def approve(self, request):
         request.status = "approved"
@@ -217,8 +210,129 @@ class ReportGenerator:
     def generate_report(self, admin_id):
         return Report(generated_by=admin_id, data="System Report", created_at=datetime.utcnow())
 
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 # =========================== ROUTES ===========================
 
+@app.route("/createacc",methods=['GET','POST'],endpoint='createacc')
+def createacc():
+    if 'user_id' in session:
+        return redirect(url_for('homepage'))
+
+    if flask_request.method == 'POST':
+        email = flask_request.form.get("email")
+        password = flask_request.form.get("password")
+        phone = flask_request.form.get("phone")
+
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash("Email already registered. Please log in.", "error")
+            return redirect(url_for('createacc'))
+
+        # ✅ FIXED THIS LINE
+        avatar_file = flask_request.files.get('avatar')
+        avatar_filename = None
+
+        if avatar_file and avatar_file.filename != '':
+            ext = avatar_file.filename.rsplit('.', 1)[1].lower()
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+            filename = secure_filename(f"user_{timestamp}.{ext}")
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+            # ✅ make sure directory exists
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+            avatar_file.save(save_path)
+            avatar_filename = filename
+        else:
+            flash("No image selected or image invalid.", "error")
+            return redirect(url_for('createacc'))
+
+        new_user = User(
+            email=email,
+            password=password,
+            phone_number=phone,
+            status='active',
+            avatar_filename=avatar_filename
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['user_id'] = new_user.id
+        session['user_email'] = new_user.email
+
+        return redirect(url_for('homepage'))
+
+    return render_template('createaccount.html')
+
+@app.route('/myaccount',endpoint='myaccount')
+def myaccount():
+    if 'user_id' not in session:
+        return redirect(url_for('xuanxuan_routes.index'))
+    else:
+        user=User.query.get(session.get('user_id'))
+        return render_template('myaccount.html',user=user)
+
+@app.route("/login", methods=['GET', 'POST'], endpoint='login')
+def login():
+    if 'user_id' in session:
+        return redirect(url_for('homepage'))
+
+    if flask_request.method == "POST":
+        user = User.query.filter_by(email=flask_request.form.get('email')).first()
+
+        if not user:
+            flash("Email not found. Please register first.", "error")
+            return redirect(url_for('login'))
+
+        session['email'] = user.email
+
+        return redirect(url_for('password'))
+
+    return render_template('login.html')  # This will handle GET correctly
+
+@app.route("/insertpassword", methods=['GET', 'POST'], endpoint='password')
+def password():
+    # Redirect if user is NOT logged in
+    if 'email' not in session:
+        return redirect(url_for('xuanxuan_routes.index'))
+
+    # Optionally skip if password is already set or user is fully logged in
+    if 'user_id' in session:
+        return redirect(url_for('homepage'))
+
+    email = session.get('email')
+
+    # If it's POST, you can handle password verification here
+    if flask_request.method == 'POST':
+        password_input = flask_request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+
+        if not user or user.password != password_input:
+            flash("Incorrect password.", "error")
+            return redirect(url_for('password'))
+
+        # Log in the user fully
+        session['user_id'] = user.id
+        return redirect(url_for('homepage'))
+
+    return render_template('insertpassword.html', email=email)
+
+
+@app.route("/logout",endpoint='logout')
+def logout():
+    session.clear()
+    return redirect(url_for('xuanxuan_routes.index'))
+
+
+    
+@app.route("/homepage",methods=['GET', 'POST'],endpoint='homepage')
+def homepage():
+    if 'user_id' not in session:
+        return redirect(url_for('xuanxuan_routes.index'))
+    session.pop('listing_draft', None)
+    return render_template('homepage.html')
 
 if __name__ == "__main__":
     with app.app_context():

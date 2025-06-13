@@ -1,45 +1,45 @@
 {% extends 'selling_layout.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem4.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem4.css') }}">
 {% endblock %}
 
 {% block header %}Review & Publish{% endblock %}
 {% block content %}
-    <div class="text-container">
-        <h1>Review & Publish Your Listing</h1>
-        <p>Here’s a preview of how your listing will appear to potential buyers.</p>
-    </div>
-    <div class="upload-box" id="uploadBox">
+<div class="text-container">
+  <h1>Review & Publish Your Listing</h1>
+  <p>Here’s a preview of how your listing will appear to potential buyers.</p>
+</div>
+<div class="upload-box" id="uploadBox">
         <p><strong>Picture </strong></p>
-    </div>
-    <div class="description-box">
+</div>
+<div class="description-box">
         <h3>Galaxy S20 in Gray</h3>
         <p><del>Rm699</del> <span style="color:blue; font-weight:bold;">Rm499</span></p>
         <p>
         Experience the power of the Galaxy S20, featuring a brilliant AMOLED display, pro-grade camera system,
         and ultra-fast performance for smooth multitasking.
         </p>
-    </div>
+</div>
 
-    <div class="contact-seller-box">
-        <div class="contact-seller-information">
-            <div class="profile-img">
-                <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
-            </div>
-            <div class="seller-details">
+<div class="contact-seller-box">
+  <div class="contact-seller-information">
+    <div class="profile-img">
+        <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+    </div>
+    <div class="seller-details">
                 <p class="seller-name">Sarah Lee</p>
             </div>
             <div class="contact-action" onclick="window.location.href='#'">
                 <span>Contact seller</span>
             <i class="bi bi-arrow-right"></i>
-            </div>
-        </div>
     </div>
+  </div>
+</div>
 
-    <div class="itempage-btn">
+<div class="itempage-btn">
         <button type="button" class="back-btn" onclick="window.location.href='/sellitem/3'">Back</button>
         <button type="button" class="details-btn" onclick="window.location.href='/itemsuccess'">Next</button>
-    </div>
+</div>
     
     <script src="{{ url_for('static', filename='js/sellitem3.js') }}"></script>
 </body>

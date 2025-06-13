@@ -1,5 +1,4 @@
-from flask import Blueprint,render_template,session, redirect, url_for, request as flask_request;
-
+from flask import Blueprint,render_template,session, redirect, url_for, request as flask_request,jsonify;
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 
 
@@ -7,21 +6,6 @@ xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 def index():
     return render_template('index.html')
 
-@xuanxuan_routes.route("/login",endpoint='login')
-def login():
-    return render_template('login.html')
-
-@xuanxuan_routes.route("/createacc",endpoint='createacc')
-def createacc():
-    return render_template('createaccount.html')
-
-@xuanxuan_routes.route("/insertpassword",endpoint='password')
-def password():
-    return render_template('insertpassword.html')
-
-@xuanxuan_routes.route("/homepage",methods=['GET', 'POST'],endpoint='homepage')
-def homepage():
-    return render_template('homepage.html')
 
 dummy_products = {
     1: {
@@ -140,7 +124,12 @@ products = {
         {"brand": "Zara", "name": "Leather Handbag", "original_price": "Rm120", "discounted_price": "Rm99", "image": "marita.png"}
     ]
 }
-
+@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem')
+def sellitem(step):
+    if step == 1:
+        return render_template("sellitem.html")
+    else:
+        return render_template(f"sellitem{step}.html")
 @xuanxuan_routes.route('/search',endpoint='search')
 def search():
     query = flask_request.args.get('q', '').strip()
@@ -192,15 +181,6 @@ def search_typing():
         ][:5]
     return jsonify({'suggestions': suggestions})
 
-
-
-@xuanxuan_routes.route("/sellitem/<int:step>" ,endpoint='sellitem')
-def sellitem(step):
-    if step == 1:
-        return render_template("sellitem.html")
-    else:
-        return render_template(f"sellitem{step}.html")
-
 @xuanxuan_routes.route("/itemsuccess",endpoint='itemsuccess')
 def itemsuccess():
     return render_template('itemsuccess.html')
@@ -228,9 +208,6 @@ def category_products(category_name):
     category_items = products.get(category_name, [])
     return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
 
-@xuanxuan_routes.route('/myaccount',endpoint='myaccount')
-def myaccount():
-    return render_template('myaccount.html')
 
 @xuanxuan_routes.route('/myprofile',endpoint='myprofile')
 def myprofile():

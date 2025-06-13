@@ -1,27 +1,27 @@
 {% extends 'selling_layout.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem2.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem2.css') }}">
 {% endblock %}
 
 {% block header %}Pricing & Shipping Page{% endblock %}
 {% block content %}
-    <div class="text-container">
-        <h1>Set Your Price & Delivery Options</h1>
-        <p>Price your item and choose how you'd like to deliver it to buyers.</p>
-    </div>
-    <div class="form-container">
+<div class="text-container">
+  <h1>Set Your Price & Delivery Options</h1>
+  <p>Price your item and choose how you'd like to deliver it to buyers.</p>
+</div>
+<div class="form-container">
         <form action="/" method="POST" id="ItemDetailsForm">
           <input type="text" name="itemprice" placeholder="Item Price" />
-          <select name="shipping" required>
-            <option value="" disabled selected hidden>Shipping Options</option>
-            <option value="doorstep-delivery">Doorstep Delivery</option>
-            <option value="cod">Cash on Delivery</option>
-          </select>
+    <select name="shipping" required>
+      <option value="" disabled selected hidden>Shipping Options</option>
+      <option value="doorstep-delivery">Doorstep Delivery</option>
+      <option value="cod">Cash on Delivery</option>
+    </select>
 
-        <div class="itempage-btn">
+    <div class="itempage-btn">
             <button type="button" class="back-btn" onclick="window.location.href='/sellitem/1'">Back</button>
             <button type="button" class="details-btn" onclick="window.location.href='/sellitem/3'">Next</button>
-        </div>
-        </form>
     </div>
+  </form>
+</div>
 {% endblock %}

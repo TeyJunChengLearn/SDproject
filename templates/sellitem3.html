@@ -1,33 +1,33 @@
 {% extends 'selling_layout.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem3.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/sellitem3.css') }}">
 {% endblock %}
 
 {% block header %}Photos{% endblock %}
 {% block content %}
     <form class="photos">
-        <div class="text-container">
-            <h1>Add Photos</h1>
-            <p>Great photos help your item sell faster! Upload images from different angles.</p>
-        </div>
-        <div class="upload-box" id="uploadBox">
-        <div class="upload-icon">📤</div>
-            <p><strong>Choose a file or drag & drop it here</strong></p>
+  <div class="text-container">
+    <h1>Add Photos</h1>
+    <p>Great photos help your item sell faster! Upload images from different angles.</p>
+  </div>
+  <div class="upload-box" id="uploadBox">
+    <div class="upload-icon">📤</div>
+    <p><strong>Choose a file or drag & drop it here</strong></p>
             <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
-            <label class="browse-button">
-                Browse File
+    <label class="browse-button">
+      Browse File
                 <input type="file" id="fileInput" hidden accept="image/*">
-            </label>
-        </div>
+    </label>
+  </div>
 
         <!-- Image Preview Section -->
-        <div id="previewContainer"></div>
+  <div id="previewContainer"></div>
 
-        <div class="itempage-btn">
+  <div class="itempage-btn">
             <button type="button" class="back-btn" onclick="window.location.href='/sellitem/2'">Back</button>
             <button type="button" class="details-btn" onclick="window.location.href='/sellitem/4'">Next</button>
-        </div>
-    </form>
-    
-    <script src="{{ url_for('static', filename='js/sellitem3.js') }}"></script>
+  </div>
+</form>
+
+<script src="{{ url_for('static', filename='js/sellitem3.js') }}"></script>
 {% endblock %}

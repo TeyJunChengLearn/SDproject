@@ -20,10 +20,10 @@
   <div class="header">
     <h1>Login</h1>
     <p>Good to see you back! ❤</p>
-    <form action="/login" method="POST">
+    <form action="{{url_for('login')}}" method="POST">
       <input type="email" id="email" name="email" placeholder="Email" required />
       <div class="button">
-        <button type="button" class="next-btn" onclick="window.location.href='/insertpassword'">Next</button>
+        <button type="submit" class="next-btn" >Next</button>
         <button type="button" class="cancel-btn" onclick="window.location.href='/'">Cancel</button>
       </div>
     </form>
