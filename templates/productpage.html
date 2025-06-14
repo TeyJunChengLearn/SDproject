@@ -33,22 +33,15 @@
   </div>
 
   <div class="upload-box" id="uploadBox">
-      <img src="{{ url_for('static', filename=product.image_path) }}" alt="Product Image" style="width:100%; max-width:300px; height:auto;">
+      <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="Product Image" style="width:100%; max-width:300px; height:auto;">
   </div>
 
   <div class="description-box">
-    <h3>{{ product.name }}</h3>
+    <h3>{{ product.get_title() }}</h3>
 
-    {% if product.discounted_price < product.original_price %}
-      <!-- Show original price struck through and discounted price -->
-      <h2>
-          <del style="color: #999;">RM{{ product.original_price }}</del>
-          <span style="color: #004BFE; font-weight: bold;">RM{{ product.discounted_price }}</span>
-      </h2>
-    {% else %}
+
       <!-- No discount, show only original price -->
-      <h2 style="font-weight: bold; color: #004BFE;">RM{{ product.original_price }}</h2>
-    {% endif %}
+      <h2 style="font-weight: bold; color: #004BFE;">RM{{ product.price }}</h2>
 
     <p>{{ product.description }}</p>
 </div>
@@ -56,12 +49,12 @@
   <div class="contact-seller-box">
       <div class="contact-seller-information">
           <div class="profile-img">
-              <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+              <img src="{{ url_for('static', filename='uploads/' ~ product.owner.avatar_filename) }}" alt="Profile" />
           </div>
           <div class="seller-details">
-              <p class="seller-name">{{ product.seller_name }}</p>
+              <p class="seller-name">{{product.owner.email}}</p>
           </div>
-          <div class="contact-action" onclick="window.location.href='#'"> <!--Insert WA link-->
+          <div class="contact-action" onclick="window.location.href='https://wa.me/{{product.owner.email}}'"> <!--Insert WA link-->
               <span>Contact seller</span>
               <i class="bi bi-arrow-right"></i>
           </div>

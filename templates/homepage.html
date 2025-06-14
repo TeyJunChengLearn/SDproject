@@ -31,7 +31,7 @@
     </div>
 
     <div class="searchbar-container">
-        <form action="{{ url_for('xuanxuan_routes.search') }}" method="get">
+        <form action="{{ url_for('search') }}" method="get">
         <input type="text" class="search-input" id="searchInput" name="q" placeholder="Search for products, brands or categories..." autocomplete="off">
         </form>
     </div>
@@ -52,7 +52,7 @@
     <div class="categories-container">
         <div class="category-text">
             <h1>Shop by category</h1>
-            <a href="{{ url_for('xuanxuan_routes.categories_page') }}" class="see-all-link">See all</a>
+            <a href="{{ url_for('categories_page') }}" class="see-all-link">See all</a>
         </div>
         <div class="category">
             <div class="men-wardrobe-container">
@@ -87,7 +87,7 @@
             <p>See all</p>
         </div>
         <div class="recommend-product">
-            <a href="/product/1"  class="product-container">
+            <!-- <a href="/product/1"  class="product-container">
                 <div class="product-image">
                     <img src="static/beau.png" alt="Beau" />
                 </div>
@@ -136,7 +136,17 @@
                 <span class="sellers">H&M</span>
                 <span class="product-name">Zara Classic White Shirt - White - M</span>
                 <span class="price">Rm28</span>
+            </a> -->
+            {% for listing in listings %}
+                <a href="/product/{{listing.id}}" div class="product-container">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='uploads/' ~ listing.image_filename) }}" alt="Shirt" />
+                </div>
+                <span class="sellers">{{listing.owner.email}}</span>
+                <span class="product-name">{{listing.get_title()}}</span>
+                <span class="price">Rm{{listing.price}}</span>
             </a>
+            {% endfor %}
         </div>
     </div>
 

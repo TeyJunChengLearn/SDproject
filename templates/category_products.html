@@ -34,7 +34,7 @@
     <div class="banner-container">
         {% for category in categories %}
             {% if category.name == category_name %}
-            <a href="{{ url_for('xuanxuan_routes.category_products', category_name=category.name) }}" class="title-banner">
+            <a href="{{ url_for('category_products', category_name=category.name) }}" class="title-banner">
                 <div class="text-content">
                     <span class="trade-text">{{ category.name }}</span>
                 </div>
@@ -46,19 +46,17 @@
 
     <div class="product-container">
         {% for product in products %}
-        <div class="product-card">
-            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}">
+        <a href="{{ url_for('product_page', product_id=product['id']) }}">
+            <div class="product-card">
+            <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="{{ product.name }}">
             <h3 class="seller-name">{{ product.brand }}</h3>
-            <p class="product-title">{{ product.name }}</p>
+            <p class="product-title">{{ product.get_title() }}</p>
             <div class="price">
-            {% if product.discounted_price %}
-                <span class="original-price" style="text-decoration: line-through; color: grey;">{{ product.original_price }}</span>
-                <span class="discounted-price">{{ product.discounted_price }}</span>
-            {% else %}
-                <span class="original-price">{{ product.original_price }}</span>
-            {% endif %}
+                <span class="original-price">RM {{ product.price }}</span>
             </div>
         </div>
+        </a>
+        
         {% endfor %}
     </div>
 

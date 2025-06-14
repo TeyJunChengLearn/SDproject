@@ -2,11 +2,6 @@ from flask import Blueprint,render_template,session, redirect, url_for, request 
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 
 
-@xuanxuan_routes.route("/",endpoint='index')
-def index():
-    return render_template('index.html')
-
-
 dummy_products = {
     1: {
         "name": "Blouse Besaty White Blue Beau",
@@ -83,15 +78,6 @@ related_products = [
     {"name": "Black Cotton Shirt", "seller_name": "Zara", "price": 35, "is_new": False, "is_liked": True}
 ]
 
-categories = [
-    {"name": "Women's Closet", "image": "women.png"},
-    {"name": "Men's Wardrobe", "image": "men.png"},
-    {"name": "Books & Magazines", "image": "books.png"},
-    {"name": "Gadgets & Gear", "image": "gadgets.png"},
-    {"name": "Musical Instruments", "image": "instrument.png"},
-    {"name": "Beauty & Wellness", "image": "beauty.png"},
-    {"name": "Accessories", "image": "gadgets.png"},
-]
 
 products = {
     "Women's Closet": [
@@ -125,95 +111,17 @@ products = {
     ]
 }
 
-@xuanxuan_routes.route('/search',endpoint='search')
-def search():
-    query = flask_request.args.get('q', '').strip()
-    
-    related_products = []
-    for pid, pdata in dummy_products.items():
-        product_copy = pdata.copy()
-        product_copy['id'] = pid
-        related_products.append(product_copy)
 
-    if not query:
-        # Show typing state with suggestions
-        search_suggestions = list({p['name'] for p in dummy_products.values()})
-        return render_template('search_typing.html', suggestions=search_suggestions)
-    
-    # Filter products based on query
-    filtered_products = []
-    for product_id, product in dummy_products.items():
-        if (query.lower() in product['name'].lower() or 
-            query.lower() in product['seller_name'].lower()):
-            product_copy = product.copy()
-            product_copy['id'] = product_id
-            filtered_products.append(product_copy)
-    
-    if not filtered_products:
-        # Show no results state
-        return render_template('search_noresults.html', 
-                             query=query, 
-                             related_products=related_products)
-    
-    # Show results state
-    most_viewed = filtered_products[:4]  # First 4 as most viewed
-    other_results = filtered_products[4:]  # Rest as other results
-    
-    return render_template('search_results.html', 
-                         query=query,
-                         most_viewed=most_viewed,
-                         other_results=other_results,
-                         total_results=len(filtered_products))
-
-@xuanxuan_routes.route('/search_typing', methods=['GET'],endpoint='search_typing')
-def search_typing():
-    search_input = flask_request.args.get('input', '').lower()
-    suggestions = []
-    if search_input:
-        suggestions = [
-            product['name'] for product in dummy_products
-            if search_input in product['name'].lower()
-        ][:5]
-    return jsonify({'suggestions': suggestions})
-
-@xuanxuan_routes.route("/itemsuccess",endpoint='itemsuccess')
-def itemsuccess():
-    return render_template('itemsuccess.html')
-
-@xuanxuan_routes.route('/product/<int:product_id>',endpoint='product_page')
-def product_page(product_id):
-    product = dummy_products.get(product_id)
-    if not product:
-        return "Product not found", 404
-
-    product_copy = product.copy()
-    product_copy['id'] = product_id  # add id here
-
-    if product_copy['discounted_price'] is None or product_copy['discounted_price'] >= product_copy['original_price']:
-        product_copy['discounted_price'] = product_copy['original_price']
-
-    return render_template('productpage.html', product=product_copy)
-
-@xuanxuan_routes.route('/categories',endpoint='categories_page')
-def categories_page():
-    return render_template('categories.html', categories=categories)
-
-@xuanxuan_routes.route('/category/<category_name>',endpoint='category_products')
-def category_products(category_name):
-    category_items = products.get(category_name, [])
-    return render_template('category_products.html', category_name=category_name, products=category_items, categories=categories)
-
-
-@xuanxuan_routes.route('/myprofile',endpoint='myprofile')
-def myprofile():
-    # Dummy user data
-    user = {
-        'name': 'Lucia Smith',
-        'email': 'luciasmith@example.com',
-        'phone': '+1 234 567 890',
-        'address': '123-45 Gangnam-daero, Gangnam-gu, Seoul, South Korea, 06050'
-    }
-    return render_template('myprofile.html', user=user)
+# @xuanxuan_routes.route('/search_typing', methods=['GET'],endpoint='search_typing')
+# def search_typing():
+#     search_input = flask_request.args.get('input', '').lower()
+#     suggestions = []
+#     if search_input:
+#         suggestions = [
+#             product['name'] for product in dummy_products
+#             if search_input in product['name'].lower()
+#         ][:5]
+#     return jsonify({'suggestions': suggestions})
 
 notifications = [
     {
@@ -242,24 +150,6 @@ notifications = [
     }
 ]
 
-@xuanxuan_routes.route('/notification',endpoint='notification')
-def notification():
-    return render_template('notification.html', notifications=notifications)
-
-@xuanxuan_routes.route('/mark_all_read', methods=['POST'],endpoint='mark_all_read')
-def mark_all_read():
-    for note in notifications:
-        note['read'] = True
-        note['color'] = 'black'
-    return jsonify({'status': 'success'})
-
-@xuanxuan_routes.route('/notification/<int:index>',endpoint='notification_detail')
-def notification_detail(index):
-    if 0 <= index < len(notifications):
-        notifications[index]['read'] = True
-        notifications[index]['color'] = 'black'
-        return render_template('notification_detail.html', note=notifications[index])
-    return "Notification not found", 404
 
 @xuanxuan_routes.route('/myorders',endpoint='my_orders')
 def my_orders():

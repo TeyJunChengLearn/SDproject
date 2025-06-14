@@ -36,22 +36,17 @@
 
     <div class="product-container">
     {% for product in related_products %}
-    <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product['id']) }}" class="product-card">
+    <a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
         <!-- Product image -->
-        <img src="{{ url_for('static', filename=product.image_path|default('placeholder.png')) }}"
+        <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename| default('placeholder.png')) }}"
             alt="{{ product.name|default('Product') }}">
         <!-- Seller name -->
-        <div class="seller-name">{{ product.seller_name|default('Unknown Seller') }}</div>
+        <div class="seller-name">{{ product.owner.email|default('Unknown Seller') }}</div>
         <!-- Product title -->
-        <div class="product-title">{{ product.name|default('Unnamed Product') }}</div>
+        <div class="product-title">{{ product.title|default('Unnamed Product') }}</div>
         <!-- Price -->
         <div class="price">
-          {% if product.discounted_price is defined and product.discounted_price is not none %}
-            <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>
-            <span class="discounted-price">Rm{{ product.discounted_price }}</span>
-          {% else %}
-            <span class="price-only">Rm{{ product.original_price|default('0') }}</span>
-          {% endif %}
+            <span class="price-only">Rm{{ product.price|default('0') }}</span>
         </div>
     </a>
     {% else %}

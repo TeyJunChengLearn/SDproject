@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="top-bar-container">
-        <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
+        <div class="leftarrowicon" onclick="window.location.href='{{url_for('notification')}}'" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
         <div class="header-text">Notification Detail</div>
@@ -29,12 +29,8 @@
     </div>
     
     <div class="notification-detail">
-        <h1>{{ note.title }}</h1>
-        <p>{{ note.desc }}</p>
-        {% if note.link %}
-            <a href="#" class="review-link">{{ note.link }} <i class="bi bi-arrow-right"></i></a>
-        {% endif %}
-        <p class="time">{{ note.time }}</p>
+        <h1>{{ note.message }}</h1>
+        <p class="time">{{ note.created_at }}</p>
     </div>
 
     <div class="navigation-bar-container">

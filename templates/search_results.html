@@ -34,22 +34,22 @@
   </div>
 
   <div class="product-container">
-    {% for product in most_viewed %}
-      <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product.id) }}" class="product-card">
-        <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}" />
-        <div class="seller-name">{{ product.seller_name }}</div>
-        <div class="product-title">{{ product.name }}</div>
+    {% for product in products %}
+    <a href="{{ url_for('product_page', product_id=product['id']) }}" class="product-card">
+        <!-- Product image -->
+        <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename| default('placeholder.png')) }}"
+            alt="{{ product.name|default('Product') }}">
+        <!-- Seller name -->
+        <div class="seller-name">{{ product.owner.email|default('Unknown Seller') }}</div>
+        <!-- Product title -->
+        <div class="product-title">{{ product.title|default('Unnamed Product') }}</div>
+        <!-- Price -->
         <div class="price">
-          {% if product.discounted_price %}
-            <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>
-            <span class="discounted-price">Rm{{ product.discounted_price }}</span>
-            
-          {% else %}
-            <span class="original-price">Rm{{ product.original_price }}</span>
-          {% endif %}
-      </div>
-
-      </a>
+            <span class="price-only">Rm{{ product.price|default('0') }}</span>
+        </div>
+    </a>
+    {% else %}
+    <p>No products found.</p>
     {% endfor %}
   </div>
 

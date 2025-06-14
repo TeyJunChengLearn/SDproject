@@ -14,8 +14,8 @@
   <div class="preview-card">
     <!-- Image -->
     <div class="preview-image">
-      {% if images %}
-        <img src="{{ url_for('static', filename='uploads/' + images[0].filename) }}" alt="Item image">
+      {% if image %}
+        <img src="{{ url_for('static', filename='uploads/' ~ image) }}" alt="Item image">
       {% endif %}
     </div>
 
@@ -25,8 +25,14 @@
         <span class="category">{{ data.category }}</span>
         <span class="condition">{{ data.condition }}</span>
       </div>
-
-      <h2 class="item-title">{{ data.itemname }}</h2>
+       
+      <h2 class="item-title">{% if data.status == 'featured' %}
+          [FEATURED] 
+      {% elif  data.status == 'urgent' %}
+          [URGENT] 
+      {% elif  data.status == 'verified' %}
+          [VERIFIED] 
+      {% endif %}{{ data.itemname }}</h2>
       <p class="item-price">RM{{ data.itemprice }}</p>
 
       <p class="item-description">{{ data.description }}</p>
@@ -42,21 +48,33 @@
     <div class="contact-seller-box">
         <div class="contact-seller-information">
             <div class="profile-img">
-                <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+                <img src="{{ url_for('static', filename='uploads/' ~ user.avatar_filename) }}" alt="Profile" />
             </div>
             <div class="seller-details">
-                <p class="seller-name">{{ seller_name }}</p>
+                <p class="seller-name">{{ user.email }}</p>
             </div>
-            <div class="contact-action" onclick="window.location.href='#'"> <!--Insert WA link-->
+            <div class="contact-action" onclick="window.location.href='https://wa.me/{{user.phone_number}}'"> <!--Insert WA link-->
                 <span>Contact seller</span>
                 <i class="bi bi-arrow-right"></i>
             </div>
         </div>
     </div>
 
-    <div class="itempage-btn">
+    <form class="itempage-btn" method="POST" action="{{url_for('saveListing')}}">
         <button type="button" class="back-btn" onclick="history.back()">Back</button>
-        <button type="submit" class="details-btn">Preview</button>
-    </div>
+        <input type="text" name="image" value="{{image}}" hidden/>
+        <input type="text" name="status" value="{{data.status}}" hidden>
+        <input type="text" name="category" value="{{data.category}}" hidden/>
+        <input type="text" name="condition" value="{{data.condition}}" hidden/>
+        <input type="text" name="itemname" value="{{data.itemname}}" hidden/>
+        <input type="text" name="itemprice" value="{{data.itemprice}}" hidden/>
+        <input type="text" name="description" value="{{data.description}}" hidden/>
+        <input type="text" name="brand" value="{{data.brand}}" hidden/>
+        <input type="text" name="size" value="{{data.size}}" hidden/>
+        <input type="text" name="color" value="{{data.color}}" hidden/>
+        <input type="text" name="shipping" value="{{data.shipping}}" hidden/>
+        
+        <button type="submit" class="details-btn">confirm</button>
+    </form>
 </div>
 {% endblock %}

@@ -7,6 +7,8 @@ from jc import jc_routes
 from jamie import jamie_routes
 from werkzeug.utils import secure_filename
 import os
+from flask_mail import Mail, Message
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'super_secret_key'
@@ -14,6 +16,15 @@ db = SQLAlchemy(app)
 app.register_blueprint(xuanxuan_routes)
 app.register_blueprint(jc_routes)
 app.register_blueprint(jamie_routes)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'junelson2002@gmail.com'
+app.config['MAIL_PASSWORD'] = 'nkfmhtcnmnqhcvnc'
+
+mail = Mail(app)
+
+
 # =========================== MODELS ===========================
 
 class User(db.Model):
@@ -48,6 +59,7 @@ class Listing(db.Model):
     image_filename = db.Column(db.String(255), nullable=True)
     category = db.Column(db.String(100), nullable=True)
     price = db.Column(db.Float, nullable=False)
+    owner = db.relationship('User', backref='listings')
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -144,7 +156,30 @@ class CartItem(db.Model):
 
     listing = db.relationship('Listing')
 
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.String(255), nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='notifications')
+
+
 # =========================== DESIGN PATTERNS ===========================
+class ListingNotifier:
+    def __init__(self):
+        self._observers = []
+
+    def register(self, observer):
+        self._observers.append(observer)
+
+    def __getattr__(self, name):
+        return getattr(self.wrapped, name)
+    
+    def notify(self, listing):
+        for observer in self._observers:
+            observer.update(listing)
 
 class ListingFactory:
     @staticmethod
@@ -155,6 +190,28 @@ class ItemObserver:
     def update(self, listing):
         raise NotImplementedError
 
+class AdminLogger(ItemObserver):
+    def update(self, listing):
+        print(f"[ADMIN LOG] Listing '{listing.title}' was posted by user ID {listing.owner_id}")
+
+class EmailNotifier(ItemObserver):
+    def update(self, listing):
+        user = listing.owner  # assumes .owner relationship is loaded
+        msg = Message(
+            subject="🎉 Your item has been listed!",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[user.email]  # send to listing owner's email
+        )
+        msg.body = f"""
+Hi {user.email},
+
+Your item "{listing.title}" has just been listed on ShareBear!
+
+Thanks for using our platform 😊
+"""
+        mail.send(msg)
+
+
 class ListingDecorator:
     def __init__(self, wrapped):
         self.wrapped = wrapped
@@ -162,6 +219,9 @@ class ListingDecorator:
     def get_title(self):
         return self.wrapped.title
 
+    def __getattr__(self, name):
+        return getattr(self.wrapped, name)
+    
     def get_description(self):
         return self.wrapped.description
 
@@ -210,9 +270,21 @@ class ReportGenerator:
     def generate_report(self, admin_id):
         return Report(generated_by=admin_id, data="System Report", created_at=datetime.utcnow())
 
+class NotificationLogger(ItemObserver):
+    def update(self, listing):
+        user = listing.owner
+        message = f"Your listing '{listing.title}' has been successfully posted."
+
+        notification = Notification(user_id=user.id, message=message)
+        db.session.add(notification)
+        db.session.commit()
+        
+
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 # =========================== ROUTES ===========================
 
 @app.route("/createacc",methods=['GET','POST'],endpoint='createacc')
@@ -269,7 +341,7 @@ def createacc():
 @app.route('/myaccount',endpoint='myaccount')
 def myaccount():
     if 'user_id' not in session:
-        return redirect(url_for('xuanxuan_routes.index'))
+        return redirect(url_for('index'))
     else:
         user=User.query.get(session.get('user_id'))
         return render_template('myaccount.html',user=user)
@@ -296,7 +368,7 @@ def login():
 def password():
     # Redirect if user is NOT logged in
     if 'email' not in session:
-        return redirect(url_for('xuanxuan_routes.index'))
+        return redirect(url_for('index'))
 
     # Optionally skip if password is already set or user is fully logged in
     if 'user_id' in session:
@@ -323,29 +395,256 @@ def password():
 @app.route("/logout",endpoint='logout')
 def logout():
     session.clear()
-    return redirect(url_for('xuanxuan_routes.index'))
+    return redirect(url_for('index'))
 
 
     
 @app.route("/homepage",methods=['GET', 'POST'],endpoint='homepage')
 def homepage():
     if 'user_id' not in session:
-        return redirect(url_for('xuanxuan_routes.index'))
+        return redirect(url_for('index'))
+    latest_listings = Listing.query.order_by(Listing.id.desc()).limit(30).all()
+    decorated_listings = []
+    for l in latest_listings:
+        if l.status == 'featured':
+            decorated_listings.append(FeaturedListing(l))
+        elif l.status == 'urgent':
+            decorated_listings.append(UrgentListing(l))
+        elif l.status == 'verified':
+            decorated_listings.append(VerifiedListing(l))
+        else:
+            decorated_listings.append(l)
     session.pop('listing_draft', None)
-    return render_template('homepage.html')
+    return render_template('homepage.html',listings=decorated_listings)
 
 @app.route('/sell_item', methods=['GET', 'POST'])
 def sell_item():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     return render_template('sell_item.html')
 
 
 @app.route('/preview', methods=['POST'])
 def preview_sellitem():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
     data = flask_request.form
-    files = flask_request.files.getlist('photos')
-    # You can process/store images here
-    return render_template('preview_sellitem.html', data=data, images=files)
+    file = flask_request.files.get('photos')  # just one file
 
+    saved_filename = None
+
+    if file and file.filename != '':
+        if not os.path.exists(UPLOAD_FOLDER):
+            os.makedirs(UPLOAD_FOLDER)
+
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        ext = os.path.splitext(file.filename)[1]
+        base_name = secure_filename(data.get('itemname', 'listing'))
+        saved_filename = f"{base_name}_{timestamp}{ext}"
+
+        file_path = os.path.join(UPLOAD_FOLDER, saved_filename)
+        file.save(file_path)
+
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))  # or handle gracefully
+    user = User.query.get(user_id)
+
+    return render_template(
+        'preview_sellitem.html',
+        data=data,
+        image=saved_filename,
+        user=user
+    )
+
+@app.route('/saveListing', methods=['POST'])
+def saveListing():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    form_data = {
+        'title': flask_request.form.get('itemname'),
+        'description': flask_request.form.get('description'),
+        'condition': flask_request.form.get('condition'),
+        'brand': flask_request.form.get('brand'),
+        'dimensionSize': flask_request.form.get('size'),
+        'color': flask_request.form.get('color'),
+        'shippingOptions': flask_request.form.get('shipping'),
+        'status': flask_request.form.get('status'),
+        'owner_id': user_id,
+        'image_filename': flask_request.form.get('image'),
+        'category': flask_request.form.get('category'),
+        'price': float(flask_request.form.get('itemprice')),
+    }
+
+    listing = ListingFactory.create_listing("default", form_data)
+    db.session.add(listing)
+    db.session.commit()
+
+    # ✅ Notify observers
+    notifier = ListingNotifier()
+    notifier.register(AdminLogger())
+    notifier.register(EmailNotifier())
+    notifier.register(NotificationLogger())
+    notifier.notify(listing)
+
+    return redirect(url_for('itemsuccess'))
+
+    
+@app.route("/",endpoint='index')
+def index():
+    if 'user_id' in session:
+        return redirect(url_for('homepage'))
+    return render_template('index.html')
+
+@app.route("/itemsuccess",endpoint='itemsuccess')
+def itemsuccess():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    return render_template('itemsuccess.html')
+
+@app.route('/product/<int:product_id>',endpoint='product_page')
+def product_page(product_id):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    product = Listing.query.get(product_id)
+    if not product:
+        return "Product not found", 404
+
+    if product.status == 'featured':
+        product = FeaturedListing(product)
+    elif product.status == 'urgent':
+        product = UrgentListing(product)
+    elif product.status == 'verified':
+        product = VerifiedListing(product)
+
+    return render_template('productpage.html', product=product)
+    
+@app.route('/search', endpoint='search')
+def search():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    query = flask_request.args.get('q', '').strip()
+
+    # If no query yet (user is typing), show suggestions
+    if not query:
+        suggestions = [listing.title for listing in Listing.query.limit(10).all()]
+        return render_template('search_typing.html', suggestions=suggestions)
+
+    # Perform search: title, category, or seller email
+    listings = Listing.query.join(User).filter(
+        (Listing.title.ilike(f"%{query}%")) |
+        (Listing.category.ilike(f"%{query}%")) |
+        (User.email.ilike(f"%{query}%"))
+    ).all()
+
+    if not listings:
+        related_products = Listing.query.order_by(Listing.id.desc()).limit(8).all()
+        return render_template('search_noresults.html',
+                               query=query,
+                               related_products=related_products)
+
+    return render_template('search_results.html',
+                           query=query,
+                           products=listings,
+                           total_results=len(listings))
+
+
+categories = [
+    {"name": "Women's Closet", "image": "women.png"},
+    {"name": "Men's Wardrobe", "image": "men.png"},
+    {"name": "Books & Magazines", "image": "books.png"},
+    {"name": "Gadgets & Gear", "image": "gadgets.png"},
+    {"name": "Musical Instruments", "image": "instrument.png"},
+    {"name": "Beauty & Wellness", "image": "beauty.png"},
+    {"name": "Accessories", "image": "gadgets.png"},
+]
+
+
+@app.route('/categories',endpoint='categories_page')
+def categories_page():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    return render_template('categories.html', categories=categories)
+
+@app.route('/category/<category_name>',endpoint='category_products')
+def category_products(category_name):
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    # Proper query using filter_by
+    category_items = Listing.query.filter_by(category=category_name).all()
+
+    # Optionally decorate listings (if using decorator pattern)
+    decorated_items = []
+    for l in category_items:
+        if l.status == 'featured':
+            decorated_items.append(FeaturedListing(l))
+        elif l.status == 'urgent':
+            decorated_items.append(UrgentListing(l))
+        elif l.status == 'verified':
+            decorated_items.append(VerifiedListing(l))
+        else:
+            decorated_items.append(l)
+
+    return render_template(
+        'category_products.html',
+        category_name=category_name,
+        products=decorated_items,
+        categories=categories  # for sidebar/category menu
+    )
+
+@app.route('/notification',endpoint='notification')
+def notification():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    user_id = session.get('user_id')
+
+    # Fetch notifications from DB
+    notifications = Notification.query.filter_by(user_id=user_id, is_read=False) \
+                                  .order_by(Notification.created_at.desc()) \
+                                  .all()
+    return render_template('notification.html', notifications=notifications)
+
+@app.route('/notification/<int:index>', endpoint='notification_detail')
+def notification_detail(index):
+    # Check if user is logged in
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    # Fetch the notification
+    note = Notification.query.get(index)
+
+    # ✅ Only allow if it exists and belongs to current user
+    if not note or note.user_id != user_id:
+        return "Notification not found or access denied", 404
+
+    # Mark as read
+    if not note.is_read:
+        note.is_read = True
+        db.session.commit()
+
+    return render_template('notification_detail.html', note=note)
+
+@app.route('/mark_all_read', methods=['POST'],endpoint='mark_all_read')
+def mark_all_read():
+    user_id=session.get('user_id')
+    notifications = Notification.query.filter_by(user_id=user_id, is_read=False) \
+                                  .order_by(Notification.created_at.desc()) \
+                                  .all()
+    for note in notifications:
+        note.is_read = True
+        db.session.commit()
+    
+    return redirect(flask_request.referrer)
+
+@app.route('/myprofile',endpoint='myprofile')
+def myprofile():
+    user_id=session.get('user_id')
+    user = User.query.get(user_id)
+    
+    return render_template('myprofile.html', user=user)
 
 if __name__ == "__main__":
     with app.app_context():

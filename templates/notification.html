@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="top-bar-container">
-        <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
+        <div class="leftarrowicon" onclick="window.location.href='{{url_for('homepage')}}'" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
         <div class="header-text">Notifications</div>
@@ -36,19 +36,17 @@
     <!-- Notifications List -->
     <div class="notifications">
     {% for note in notifications %}
-        <a href="{{ url_for('xuanxuan_routes.notification_detail', index=loop.index0) }}" class="notification-link">
+        <a href="{{ url_for('notification_detail', index=note.id) }}" class="notification-link">
         <div class="notification-card {% if not note.read %}unread{% endif %}">
-            <div class="dot {{ note.color }}"></div>
             <div class="notification-content">
-                <div class="title {% if note.color == 'blue' %}blue-text{% endif %}">{{ note.title }}</div>
-                <div class="desc">{{ note.desc }}</div>
-                {% if note.link %}
-                    <span class="review-link">{{ note.link }} <i class="bi bi-arrow-right"></i></span>
-                {% endif %}
-                <div class="time">{{ note.time }}</div>
+                <div class="title {% if note.color == 'blue' %}blue-text{% endif %}">{{ note.message }}</div>
+                <div class="time">{{ note.created_at }}</div>
             </div>
         </div>
         </a>
+        {% else %}
+
+        There is no notification
     {% endfor %}
     </div>
 
