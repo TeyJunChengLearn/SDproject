@@ -10,18 +10,18 @@
   <p>Price your item and choose how you'd like to deliver it to buyers.</p>
 </div>
 <div class="form-container">
-        <form action="/" method="POST" id="ItemDetailsForm">
-          <input type="text" name="itemprice" placeholder="Item Price" />
-    <select name="shipping" required>
-      <option value="" disabled selected hidden>Shipping Options</option>
-      <option value="doorstep-delivery">Doorstep Delivery</option>
-      <option value="cod">Cash on Delivery</option>
-    </select>
+    <form action="/" method="POST" id="ItemDetailsForm">
+      <input type="text" name="itemprice" placeholder="Item Price" />
+      <select name="shipping" required>
+        <option value="" disabled selected hidden>Shipping Options</option>
+        <option value="doorstep-delivery">Doorstep Delivery</option>
+        <option value="cod">Cash on Delivery</option>
+      </select>
 
-    <div class="itempage-btn">
-            <button type="button" class="back-btn" onclick="window.location.href='/sellitem/1'">Back</button>
-            <button type="button" class="details-btn" onclick="window.location.href='/sellitem/3'">Next</button>
-    </div>
-  </form>
+      <div class="itempage-btn">
+              <button type="button" class="back-btn" onclick="window.location.href='/sellitem/1'">Back</button>
+              <button type="button" class="details-btn" onclick="window.location.href='/sellitem/3'">Next</button>
+      </div>
+    </form>
 </div>
 {% endblock %}

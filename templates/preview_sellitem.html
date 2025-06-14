@@ -1,0 +1,62 @@
+{% extends 'selling_layout.html' %}
+
+{% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/preview_sellitem.css') }}">
+{% endblock %}
+
+{% block header %}Review & Publish{% endblock %}
+
+{% block content %}
+<div class="preview-wrapper">
+  <h1 class="page-title">Preview Your Item</h1>
+  <p class="page-subtitle">Here’s how your listing will appear to buyers.</p>
+
+  <div class="preview-card">
+    <!-- Image -->
+    <div class="preview-image">
+      {% if images %}
+        <img src="{{ url_for('static', filename='uploads/' + images[0].filename) }}" alt="Item image">
+      {% endif %}
+    </div>
+
+    <!-- Core Info -->
+    <div class="core-info">
+      <div class="top-tags">
+        <span class="category">{{ data.category }}</span>
+        <span class="condition">{{ data.condition }}</span>
+      </div>
+
+      <h2 class="item-title">{{ data.itemname }}</h2>
+      <p class="item-price">RM{{ data.itemprice }}</p>
+
+      <p class="item-description">{{ data.description }}</p>
+
+      <div class="extra-info">
+        <p><strong>Brand:</strong> {{ data.brand }}</p>
+        <p><strong>Size:</strong> {{ data.size }}</p>
+        <p><strong>Color:</strong> {{ data.color }}</p>
+        <p><strong>Shipping:</strong> {{ data.shipping }}</p>
+      </div>
+    </div>
+
+    <div class="contact-seller-box">
+        <div class="contact-seller-information">
+            <div class="profile-img">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile" />
+            </div>
+            <div class="seller-details">
+                <p class="seller-name">{{ seller_name }}</p>
+            </div>
+            <div class="contact-action" onclick="window.location.href='#'"> <!--Insert WA link-->
+                <span>Contact seller</span>
+                <i class="bi bi-arrow-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="itempage-btn">
+        <button type="button" class="back-btn" onclick="history.back()">Back</button>
+        <button type="submit" class="details-btn">Preview</button>
+    </div>
+</div>
+{% endblock %}

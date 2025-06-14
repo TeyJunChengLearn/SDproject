@@ -5,20 +5,21 @@
 
 {% block header %}Photos{% endblock %}
 {% block content %}
-    <form class="photos">
-  <div class="text-container">
-    <h1>Add Photos</h1>
-    <p>Great photos help your item sell faster! Upload images from different angles.</p>
-  </div>
-  <div class="upload-box" id="uploadBox">
-    <div class="upload-icon">📤</div>
-    <p><strong>Choose a file or drag & drop it here</strong></p>
-            <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
-    <label class="browse-button">
-      Browse File
-                <input type="file" id="fileInput" hidden accept="image/*">
-    </label>
-  </div>
+<div class="form-container">
+    <form class="photos" id="ItemDetailsForm">
+    <div class="text-container">
+      <h1>Add Photos</h1>
+      <p>Great photos help your item sell faster! Upload images from different angles.</p>
+    </div>
+    <div class="upload-box" id="uploadBox">
+      <div class="upload-icon">📤</div>
+      <p><strong>Choose a file or drag & drop it here</strong></p>
+              <p class="subtext">JPEG, PNG, PDF formats, up to 50MB</p>
+      <label class="browse-button">
+        Browse File
+                  <input type="file" id="fileInput" hidden accept="image/*">
+      </label>
+    </div>
 
         <!-- Image Preview Section -->
   <div id="previewContainer"></div>
