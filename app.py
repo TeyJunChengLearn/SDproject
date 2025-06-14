@@ -62,13 +62,32 @@ class Listing(db.Model):
     owner = db.relationship('User', backref='listings')
 
 class Transaction(db.Model):
+    __tablename__ = 'transaction'
+
     id = db.Column(db.Integer, primary_key=True)
-    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
-    offered_listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'))  # listing being given
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    type = db.Column(db.String(50), nullable=False)
+    type = db.Column(db.String(50), nullable=False)  # 'purchase', 'borrow', 'trade', 'donation'
+    status = db.Column(db.String(50), default="pending")  # e.g. 'pending', 'approved', 'completed'
     date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    buyer = db.relationship('User', foreign_keys=[buyer_id], backref='purchases')
+    seller = db.relationship('User', foreign_keys=[seller_id], backref='sales')
+    items = db.relationship('TransactionItem', backref='transaction', lazy=True)
+
+    def get_listings(self):
+        return [item.listing for item in self.items]
+
+
+class TransactionItem(db.Model):
+    __tablename__ = 'transaction_item'
+
+    id = db.Column(db.Integer, primary_key=True)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+
+    listing = db.relationship('Listing', backref='transaction_items')
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
