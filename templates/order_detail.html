@@ -42,48 +42,48 @@
 
        <div class="items">
             <h1>Your items</h1>
-            {% for item in order['items'] %}
+            {% for item in order.items %}
             <div class="item">
-                <img src="{{ url_for('static', filename='' ~ item.image) }}" alt="{{ item.name }}">
+                <img src="{{ url_for('static', filename='uploads/' ~ item.listing.image_filename) }}" alt="{{ item.name }}">
                 
                 <div class="item-details">
                     <div class="item-name-price">
-                        <h2>{{ item.name }}</h2>
-                        <h3>Rm{{ item.price }}</h3>
+                        <h2>{{ item.listing.title }}</h2>
+                        <h3>Rm{{ item.listing.price }}</h3>
                     </div>
-                    <h4>Qty: {{ item.quantity }}</h4>
+                    <h4>Qty: 1</h4>
                 </div>
             </div>
             {% endfor %}
         </div>
 
-        <div class="shipping">
+        <!-- <div class="shipping">
             <h1>Shipping to</h1>
             <p>{{ order.address }}</p>
-        </div>
+        </div> -->
 
-        <div class="payment">
+        <!-- <div class="payment">
             <h1>Payment Method</h1>
             <div class="payment-box">
             <img src="{{ order.payment_image }}" alt="{{ order.payment }}" class="paypal-logo">
             </div>
-        </div>
+        </div> -->
 
-        <div class="delivery-options">
+        <!-- <div class="delivery-options">
             <h1>Delivery Options</h1>
             <div class="delivery-box">
                 <p>{{ order.delivery_option }}</p>
             </div>
 
-        </div>
+        </div> -->
 
         <div class="summary">
             <h1>Order Summary</h1>
-            <p data-label="Items Total:"><span>Rm{{ order.total }}</span></p>
-    <p data-label="Discount:"><span>-Rm{{ order.discount }}</span></p>
-    <p data-label="Delivery Fee:"><span>Rm{{ order.delivery_fee }}</span></p>
-    <p data-label="Tax:"><span>Rm{{ order.tax }}</span></p>
-            <h3 class="total">Total: <span>Rm{{ order.final_total }}</span></h3>
+            <p data-label="Items Total:"><span>Rm 0</span></p>
+    <p data-label="Discount:"><span>-Rm 0</span></p>
+    <p data-label="Delivery Fee:"><span>Rm 0</span></p>
+    <p data-label="Tax:"><span>Rm 0</span></p>
+            <h3 class="total">Total: <span>Rm{{ total_price }}</span></h3>
         </div>
     </div>
 

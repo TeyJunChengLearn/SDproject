@@ -29,25 +29,29 @@
     </div>
 
     <div class="orders-list">
-        {% for order in orders %}
-        <div class="order-card">
-            <div class="order-header">
-                <span>Order <a href="{{ url_for('xuanxuan_routes.order_detail', order_id=order.id) }}">#{{ order.id }}</a></span>
-                <span class="status {{ order.status | lower | replace(' ', '-') }}">{{ order.status }}</span>
-            </div>
-            <div class="order-body">
-                <img src="{{ url_for('static', filename=order.image) }}" alt="{{ order.name }}">
-                <div>
-                    <p>{{ order.name }}</p>
-                    <p>Total: <strong>Rm{{ order.total }}</strong></p>
-                    <p>
-                        {{ 'Delivered on' if order.status == 'Completed' else ('Canceled on' if order.status == 'Canceled' else 'Estimated Delivery') }}: 
-                        <span class="date">{{ order.date }}</span>
-                    </p>
-                </div>
+        {% for transaction in orders %}
+    {% for item in transaction.items %}
+    <div class="order-card">
+        <div class="order-header">
+            <span>Order <a href="{{ url_for('order_detail', order_id=transaction.id) }}">#{{ transaction.id }}</a></span>
+            <span class="status {{ transaction.status | lower | replace(' ', '-') }}">{{ transaction.status }}</span>
+        </div>
+        <div class="order-body">
+            <img src="{{ url_for('static', filename='uploads/' ~ item.listing.image_filename) }}" alt="{{ item.listing.title }}">
+            <div>
+                <p>{{ item.listing.title }}</p>
+                <p>Price: <strong>RM{{ item.listing.price }}</strong></p>
+                <p>
+                    {{ 'Delivered on' if transaction.status == 'completed' else 'Estimated Delivery' }}: 
+                    <span class="date">{{ transaction.date.strftime('%Y-%m-%d') }}</span>
+                </p>
             </div>
         </div>
-        {% endfor %}
+    </div>
+    {% endfor %}
+{% endfor %}
+
+
     </div>
 
     <div class="navigation-bar-container">

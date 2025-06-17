@@ -8,7 +8,7 @@ from jamie import jamie_routes
 from werkzeug.utils import secure_filename
 import os
 from flask_mail import Mail, Message
-
+from sqlalchemy import or_, and_
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'super_secret_key'
@@ -70,7 +70,8 @@ class Transaction(db.Model):
     type = db.Column(db.String(50), nullable=False)  # 'purchase', 'borrow', 'trade', 'donation'
     status = db.Column(db.String(50), default="pending")  # e.g. 'pending', 'approved', 'completed'
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=True)
+    items = db.relationship('TransactionItem', backref='transaction', lazy=True)
     def get_listings(self):
         return [item.listing for item in self.items]
 
@@ -256,6 +257,10 @@ class VerifiedListing(ListingDecorator):
     def get_title(self):
         return "[VERIFIED] " + super().get_title()
 
+class SoldListing(ListingDecorator):
+    def get_title(self):
+        return "[SOLD] "+super().get_title()
+
 class RequestStrategy:
     def approve(self, request):
         raise NotImplementedError
@@ -422,7 +427,9 @@ def logout():
 def homepage():
     if 'user_id' not in session:
         return redirect(url_for('index'))
-    latest_listings = Listing.query.order_by(Listing.id.desc()).limit(30).all()
+    latest_listings = Listing.query.order_by(Listing.id.desc()).filter(
+        Listing.status.in_(['featured', 'urgent', 'verified'])  # Only these 3
+    ).limit(30).all()
     decorated_listings = []
     for l in latest_listings:
         if l.status == 'featured':
@@ -431,6 +438,8 @@ def homepage():
             decorated_listings.append(UrgentListing(l))
         elif l.status == 'verified':
             decorated_listings.append(VerifiedListing(l))
+        elif l.status == 'sold':
+            decorated_listings.append(SoldListing(l))
         else:
             decorated_listings.append(l)
     session.pop('listing_draft', None)
@@ -537,6 +546,8 @@ def product_page(product_id):
         product = UrgentListing(product)
     elif product.status == 'verified':
         product = VerifiedListing(product)
+    elif product.status == 'sold':
+        product = SoldListing(product)
 
     return render_template('productpage.html', product=product)
     
@@ -553,20 +564,49 @@ def search():
 
     # Perform search: title, category, or seller email
     listings = Listing.query.join(User).filter(
-        (Listing.title.ilike(f"%{query}%")) |
-        (Listing.category.ilike(f"%{query}%")) |
-        (User.email.ilike(f"%{query}%"))
-    ).all()
+    and_(
+        or_(
+            Listing.title.ilike(f"%{query}%"),
+            Listing.category.ilike(f"%{query}%"),
+            User.email.ilike(f"%{query}%")
+        ),
+        Listing.status.in_(['featured', 'urgent', 'verified'])
+    )).all()
 
     if not listings:
-        related_products = Listing.query.order_by(Listing.id.desc()).limit(8).all()
+        related_products = Listing.query.order_by(Listing.id.desc()).filter(
+            Listing.status.in_(['featured', 'urgent', 'verified'])
+        ).limit(8).all()
+        decorated_listings=[]
+        for l in related_products:
+            if l.status == 'featured':
+                decorated_listings.append(FeaturedListing(l))
+            elif l.status == 'urgent':
+                decorated_listings.append(UrgentListing(l))
+            elif l.status == 'verified':
+                decorated_listings.append(VerifiedListing(l))
+            elif l.status == 'sold':
+                decorated_listings.append(SoldListing(l))
+            else:
+                decorated_listings.append(l)
         return render_template('search_noresults.html',
                                query=query,
-                               related_products=related_products)
-
+                               related_products=decorated_listings)
+    decorated_listings=[]
+    for l in listings:
+        if l.status == 'featured':
+            decorated_listings.append(FeaturedListing(l))
+        elif l.status == 'urgent':
+            decorated_listings.append(UrgentListing(l))
+        elif l.status == 'verified':
+            decorated_listings.append(VerifiedListing(l))
+        elif l.status == 'sold':
+            decorated_listings.append(SoldListing(l))
+        else:
+            decorated_listings.append(l)
     return render_template('search_results.html',
                            query=query,
-                           products=listings,
+                           products=decorated_listings,
                            total_results=len(listings))
 
 
@@ -592,7 +632,10 @@ def category_products(category_name):
     if 'user_id' not in session:
         return redirect(url_for('index'))
     # Proper query using filter_by
-    category_items = Listing.query.filter_by(category=category_name).all()
+    category_items = Listing.query.filter(
+        Listing.category == category_name,
+        Listing.status.in_(['featured', 'urgent', 'verified'])  # Only these 3
+    ).all()
 
     # Optionally decorate listings (if using decorator pattern)
     decorated_items = []
@@ -664,6 +707,150 @@ def myprofile():
     user = User.query.get(user_id)
     
     return render_template('myprofile.html', user=user)
+
+@app.route('/checkout_page')
+def checkout_page():
+    user_id = session.get('user_id')
+    cart = Cart.query.filter_by(user_id=user_id).first()
+    if not cart:
+        flash("No cart found.", "error")
+        return redirect(url_for('homepage'))
+
+    if not cart.items:
+        flash("Your cart is empty. Add items before checking out.", "warning")
+        return redirect(url_for('cart'))
+
+    total_price = sum(item.listing.price for item in cart.items)
+    return render_template('checkout.html', cart=cart, total_price=total_price)
+
+
+@app.route('/checkout', methods=['GET'])
+def checkout():
+    user_id = session.get('user_id')
+    cart = Cart.query.filter_by(user_id=user_id).first()
+    if not cart or not cart.items:
+        flash("Your cart is empty.", "error")
+        return redirect(url_for('homepage'))
+
+    items_by_seller = {}
+    for item in cart.items:
+        seller_id = item.listing.owner_id
+        if seller_id not in items_by_seller:
+            items_by_seller[seller_id] = []
+        items_by_seller[seller_id].append(item)
+
+    for seller_id, items in items_by_seller.items():
+        transaction = Transaction(
+            buyer_id=user_id,
+            seller_id=seller_id,
+            type="purchase",
+            status="complete"
+        )
+        db.session.add(transaction)
+        db.session.flush()  # Get transaction.id before full commit
+
+        for item in items:
+            # Add transaction item
+            trans_item = TransactionItem(
+                transaction_id=transaction.id,
+                listing_id=item.listing.id,
+                role="received"
+            )
+            db.session.add(trans_item)
+
+            # Mark as sold
+            item.listing.status = "sold"
+
+            # 🔔 Notification to seller
+            db.session.add(Notification(
+                user_id=seller_id,
+                message=f"Your item '{item.listing.title}' was purchased.",
+                is_read=False
+            ))
+
+        # 🔔 Notification to buyer (only once per transaction)
+        db.session.add(Notification(
+            user_id=user_id,
+            message=f"Transaction created for purchase from seller {seller_id}.",
+            is_read=False
+        ))
+
+    db.session.delete(cart)
+    db.session.commit()
+
+    flash("Purchase complete! Transactions created.", "success")
+    return redirect(url_for('homepage'))
+
+
+
+@app.route('/cart', endpoint='cart')
+def cart():
+    user_id = session.get('user_id')
+    cart = Cart.query.filter_by(user_id=user_id).first()
+    if not cart:
+        flash("No cart found.", "error")
+        return redirect(url_for('homepage'))
+
+    if not cart.items:
+        flash("Your cart is empty.", "info")
+
+    total_price = sum(item.listing.price for item in cart.items)
+    return render_template('cart.html', cart=cart, total_price=total_price)
+
+
+
+@app.route("/buy/<int:listing_id>", methods=["GET"])
+def buy_item(listing_id):
+    if 'user_id' not in session:
+        flash("You must be logged in to add to cart.", "error")
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    listing = Listing.query.get(listing_id)
+
+    if not listing:
+        flash("Item not found.", "error")
+        return redirect(url_for('homepage'))
+
+    # ✅ Only allow specific listing types
+    if listing.status not in ['featured', 'urgent', 'verified']:
+        flash("This item is not eligible for purchase.", "warning")
+        return redirect(url_for('product_page', product_id=listing.id))
+
+    # ✅ Check or create the user's cart
+    cart = Cart.query.filter_by(user_id=user_id).first()
+    if not cart:
+        cart = Cart(user_id=user_id)
+        db.session.add(cart)
+        db.session.commit()
+
+    # ✅ Prevent duplicate entries
+    already_exists = CartItem.query.filter_by(cart_id=cart.id, listing_id=listing.id).first()
+    if already_exists:
+        flash("Item already in your cart.", "info")
+        return redirect(url_for('cart'))
+
+    # ✅ Add to cart
+    new_item = CartItem(cart_id=cart.id, listing_id=listing.id)
+    db.session.add(new_item)
+    db.session.commit()
+    flash("Item added to cart.", "success")
+
+    return redirect(url_for('cart'))
+
+@app.route('/myorders',endpoint='my_orders')
+def my_orders():
+    transactions=Transaction.query.filter_by(buyer_id=session.get('user_id')).all()
+    return render_template('myorders.html', orders=transactions)
+
+
+@app.route('/order/<order_id>',endpoint='order_detail')
+def order_detail(order_id):
+    order=Transaction.query.get(order_id)
+    total_price=0
+    for item in order.items:
+        total_price=total_price+item.listing.price
+    return render_template('order_detail.html', order=order,total_price=total_price)
 
 if __name__ == "__main__":
     with app.app_context():

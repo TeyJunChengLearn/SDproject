@@ -45,7 +45,7 @@
         <div class="info-box"><i class="bi bi-telephone-fill"></i> {{ user.phone_number }}</div>
 
         <div class="link-box">
-        <span>Order History</span><a href="#">View Orders →</a>
+        <span>Order History</span><a href="{{url_for('my_orders')}}">View Orders →</a>
         </div>
         <div class="link-box">
         <span>Logout</span><a href="{{url_for('logout')}}" class="logout-link">Logout →</a>
