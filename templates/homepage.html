@@ -84,7 +84,6 @@
     <div class="recommend-container">
         <div class="recommend-text">
             <h1>Recommended For You</h1>
-            <p>See all</p>
         </div>
         <div class="recommend-product">
             <!-- <a href="/product/1"  class="product-container">
@@ -142,7 +141,6 @@
                 <div class="product-image">
                     <img src="{{ url_for('static', filename='uploads/' ~ listing.image_filename) }}" alt="Shirt" />
                 </div>
-                <span class="sellers">{{listing.owner.email}}</span>
                 <span class="product-name">{{listing.get_title()}}</span>
                 <span class="price">Rm{{listing.price}}</span>
             </a>
