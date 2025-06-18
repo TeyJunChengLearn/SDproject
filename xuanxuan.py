@@ -2,6 +2,7 @@ from flask import Blueprint,render_template,session, redirect, url_for, request 
 
 xuanxuan_routes = Blueprint('xuanxuan_routes', __name__)
 
+'''
 @xuanxuan_routes.route('/charity', endpoint='charity')
 def charity():
     dummy_charities = [
@@ -33,3 +34,4 @@ def charity_donate():
 @xuanxuan_routes.route('/charity/confirmation')
 def charity_confirmation():
     return render_template('charity_confirmation.html')
+'''
