@@ -43,7 +43,7 @@
         <!-- Seller name -->
         <div class="seller-name">{{ product.owner.email|default('Unknown Seller') }}</div>
         <!-- Product title -->
-        <div class="product-title">{{ product.title|default('Unnamed Product') }}</div>
+        <div class="product-title">{{ product.get_title()|default('Unnamed Product') }}</div>
         <!-- Price -->
         <div class="price">
             <span class="price-only">Rm{{ product.price|default('0') }}</span>

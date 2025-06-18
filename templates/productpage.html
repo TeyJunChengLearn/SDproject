@@ -62,8 +62,9 @@
   </div>
   
   <div class="itempage-btn">
-      <button type="button" class="back-btn" onclick="alert('Feature not implemented yet')" disabled>Trade</button>
-      <button type="button" class="details-btn" onclick="alert('Feature not implemented yet')">Buy Now</button>
+      <button type="button" class="back-btn" {% if product.status in ['featured', 'urgent', 'verified'] %}disable{% endif %}>Trade</button>
+        <button type="button" class="details-btn" {% if product.status in ['featured', 'urgent', 'verified'] %}onclick="window.location.href='{{url_for('buy_item',listing_id=product.id)}}'"{% else %}disable {% endif %}>Buy Now</button>
+      </a>
   </div>
 </body>
 </html>

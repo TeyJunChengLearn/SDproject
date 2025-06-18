@@ -42,7 +42,7 @@
         <!-- Seller name -->
         <div class="seller-name">{{ product.owner.email|default('Unknown Seller') }}</div>
         <!-- Product title -->
-        <div class="product-title">{{ product.title|default('Unnamed Product') }}</div>
+        <div class="product-title">{{ product.get_title()|default('Unnamed Product') }}</div>
         <!-- Price -->
         <div class="price">
             <span class="price-only">Rm{{ product.price|default('0') }}</span>
@@ -60,7 +60,7 @@
         <a href="{{ url_for('xuanxuan_routes.product_page', product_id=product.id) }}" class="product-card">
           <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}" />
           <div class="seller-name">{{ product.seller_name }}</div>
-          <div class="product-title">{{ product.name }}</div>
+          <div class="product-title">{{ product.get_title() }}</div>
           <div class="price">
             {% if product.discounted_price %}
               <span class="original-price" style="text-decoration: line-through; color: grey;">Rm{{ product.original_price }}</span>

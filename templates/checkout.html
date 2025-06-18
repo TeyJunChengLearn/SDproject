@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/checkout.css') }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>ShareBear</title>
+</head>
+<body>    
+  <div class="top-navigation-bar-container">
+      <div class="leftarrowicon" onclick="window.location.href='/homepage'" style="cursor: pointer;">
+          <i class="bi bi-arrow-left"></i>
+      </div>
+      <div class="header-text">Checkout</div>
+      <div class="icon">
+          <div class="notify">
+              <i class="bi bi-bell"></i>
+          </div>
+      </div>
+  </div>
+
+  <div class="delivery-option-container">
+    <button class="delivery-option active" id="codBtn">Cash on Delivery</button>
+    <button class="delivery-option" id="onlineBtn">Online Payment</button>
+  </div>
+
+  <div class="address-container">
+      <div class="address-header">
+          <span>Delivery Address</span>
+          <a href="" class="edit-address-link">Edit</a>
+      </div>
+      <div class="address-details">
+          <p>John Doe</p>
+          <p>123 Main Street, Kuala Lumpur, Malaysia</p>
+          <p>Phone: +60123456789</p>
+      </div>
+
+  </div>
+
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <span>Your Items</span>
+        </div>
+        {% for item in cart.items %}
+        <div class="checkout-item">
+            <div class="item-image">
+                <img src="{{ url_for('static', filename='uploads/' ~ item.listing.image_filename) }}" alt="Zara Classic White Shirt">
+            </div>
+            <div class="item-details">
+                <h3 class="item-name">{{item.listing.title}}</h3>
+                <div class="item-bottom-row">
+                    <span class="item-price">RM{{item.listing.price}}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- Single cart item -->
+        <!-- <div class="checkout-item">
+            <div class="item-image">
+                <img src="{{ url_for('static', filename='images/item1.jpg') }}" alt="Zara Classic White Shirt">
+            </div>
+            <div class="item-details">
+                <h3 class="item-name">Zara Classic White Shirt - White - M</h3>
+                <div class="item-bottom-row">
+                    <span class="item-price">RM28</span>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-item">
+            <div class="item-image">
+                <img src="{{ url_for('static', filename='images/item1.jpg') }}" alt="Zara Classic White Shirt">
+            </div>
+            <div class="item-details">
+                <h3 class="item-name">Zara Classic White Shirt - White - M</h3>
+                <div class="item-bottom-row">
+                    <span class="item-price">RM28</span>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-item">
+            <div class="item-image">
+                <img src="{{ url_for('static', filename='images/item1.jpg') }}" alt="Zara Classic White Shirt">
+            </div>
+            <div class="item-details">
+                <h3 class="item-name">Zara Classic White Shirt - White - M</h3>
+                <div class="item-bottom-row">
+                    <span class="item-price">RM28</span>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="payment-method-container" id="paymentMethodSection">
+    <div class="payment-method-header">
+        <span>Select Payment Method</span>
+    </div>
+
+    <div class="payment-option-container">
+        <button class="payment-option active" id="creditBtn">Credit Card</button>
+        <button class="payment-option" id="walletBtn">Wallet</button>
+    </div>
+
+    <!-- Credit Card Options -->
+    <div class="payment-section" id="creditCardOptions">
+        <label class="wallet-option">
+        <div class="wallet-info">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" />
+            <span>VISA</span>
+        </div>
+        <input type="radio" name="credit" checked />
+        <span class="radio-check"></span>
+        </label>
+
+        <label class="wallet-option">
+        <div class="wallet-info">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" />
+            <span>MasterCard</span>
+        </div>
+        <input type="radio" name="credit" />
+        <span class="radio-check"></span>
+        </label>
+    </div>
+
+    <!-- Wallet Options -->
+    <div class="payment-section" id="walletOptions" style="display: none;">
+        <label class="wallet-option">
+        <div class="wallet-info">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" />
+            <span>PayPal</span>
+        </div>
+        <input type="radio" name="wallet" />
+        <span class="radio-check"></span>
+        </label>
+
+        <label class="wallet-option">
+        <div class="wallet-info">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Pay_Logo.svg" alt="G Pay" />
+            <span>G Pay</span>
+        </div>
+        <input type="radio" name="wallet" />
+        <span class="radio-check"></span>
+        </label>
+
+        <label class="wallet-option">
+        <div class="wallet-info">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Pay" />
+            <span>Apple Pay</span>
+        </div>
+        <input type="radio" name="wallet" />
+        <span class="radio-check"></span>
+        </label>
+    </div>
+    </div>
+
+
+    </div>
+
+
+
+    
+
+
+    <div class="bottom-navigation-bar-container">
+        <span class="summary-text">Order Summary</span>
+        <div class="total-row">
+            <span class="label">Items Total</span>
+            <span class="amount">RM<span id="total-amount">{{total_price}}</span></span>
+        </div>
+        <div class="total-row">
+            <span class="label">Discount</span>
+            <span class="amount">RM<span id="total-amount">0</span>
+        </div>
+        <div class="total-row">
+            <span class="label">Tax</span>
+            <span class="amount">RM<span id="total-amount">0</span></span>
+        </div>
+        <div class="total-row">
+            <span class="total-label">Total</span>
+            <span class="total-amount">RM<span id="total-amount">{{total_price}}</span></span>
+        </div>
+        <a href="{{ url_for('checkout') }}">
+            <button class="checkout-button">Confirm and Pay</button>
+        </a>
+        <span class="small-text">We’ll finalize payment and delivery details via chat.</span>
+    </div>
+
+
+
+
+    <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+    <script>
+    const buttons = document.querySelectorAll('.delivery-option');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        });
+    });
+    </script>
+    <script>
+    const bttns = document.querySelectorAll('.payment-option');
+    bttns.forEach(btn => {
+        btn.addEventListener('click', () => {
+        bttns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        });
+    });
+    </script>
+    <script>
+  const creditBtn = document.getElementById("creditBtn");
+  const walletBtn = document.getElementById("walletBtn");
+  const creditSection = document.getElementById("creditCardOptions");
+  const walletSection = document.getElementById("walletOptions");
+
+  creditBtn.addEventListener("click", () => {
+    creditBtn.classList.add("active");
+    walletBtn.classList.remove("active");
+    creditSection.style.display = "block";
+    walletSection.style.display = "none";
+  });
+
+  walletBtn.addEventListener("click", () => {
+    walletBtn.classList.add("active");
+    creditBtn.classList.remove("active");
+    walletSection.style.display = "block";
+    creditSection.style.display = "none";
+  });
+</script>
+<script>
+  const codBtn = document.getElementById("codBtn");
+  const onlineBtn = document.getElementById("onlineBtn");
+  const paymentSection = document.getElementById("paymentMethodSection");
+
+  codBtn.addEventListener("click", () => {
+    codBtn.classList.add("active");
+    onlineBtn.classList.remove("active");
+    paymentSection.style.display = "none";
+  });
+
+  onlineBtn.addEventListener("click", () => {
+    onlineBtn.classList.add("active");
+    codBtn.classList.remove("active");
+    paymentSection.style.display = "block";
+  });
+</script>
+
+</body>
+</html>
