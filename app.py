@@ -865,6 +865,7 @@ def charity():
     charities=Charity.query.all()
     return render_template('charity.html', charities=charities)
 
+'''
 @app.route('/charity/donate/<charity_id>')
 def charity_donate(charity_id):
     # Dummy user products
@@ -885,6 +886,7 @@ def charity_donate(charity_id):
     # user_products = []
 
     return render_template('charity_donate.html', charity_id=charity_id, user_products=user_products)
+'''
 
 @app.route('/charity/confirmation')
 def charity_confirmation():
