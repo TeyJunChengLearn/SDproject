@@ -35,18 +35,220 @@ body {
 .text-container {
     margin-top: 20px;
     margin-left: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.title-container {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.title-container p{
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: black;
 }
 
 h1 {
     margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    color: #1A8FE3;
+}
+
+h2 {
     font-family: 'Raleway', sans-serif;
     font-size: 18px;
 }
 
 p {
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 12px;
     font-weight: 300px;
+    color: #9A9A9A;
+}
+
+.charity-card {
+    margin: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.charity-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.charity-info {
+    padding: 15px;
+    background-color: #fff;
+}
+
+.charity-info h2 {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.button-container {
+    text-align: right;
+}
+
+.charity-info button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* Upload Box */
+.upload-box {
+    align-items: center;
+    border: 2px dashed #ccc;
+    padding: 30px;
+    text-align: center;
+    margin: 10px auto; 
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.browse-button {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.browse-button:hover {
+    background-color: #f0f0f0;
+}
+
+.subtext {
+  font-size: 11px;
+  color: #666;
+}
+
+/* Image Preview */
+#previewContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+#previewContainer img {
+  width: 100%;
+  max-width: 300px; /* Limit width */
+  height: auto;
+  position: relative;
+  width: 300px;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.itempage-btn {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between; /* distribute buttons side by side */
+  align-items: center;
+  gap: 10px; /* spacing between buttons */
+  padding: 20px;
+  background-color: white; /* optional: to keep it visible */
+  z-index: 999; /* ensures it's above other elements */
+}
+
+.next-btn,
+.back-btn {
+  background-color: #004BFE;
+  color: white;
+  border: none;
+  border-radius: 60px;
+  padding: 15px;
+  font-size: 14px;
+  font-family: "Prompt", sans-serif;
+  cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 10px;
+}
+
+.container {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.illustration img {
+    width: 200px;
+    max-height: 188px;
+    object-fit: contain;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.message h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 20px 10px;
+}
+
+.message p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.confirm-button {
+    position: fixed;
+    bottom: 10px; /* add spacing above nav bar */
+    left: 0;
+    right: 0;
+    padding: 0 20px;
+    background-color: white;
+    z-index: 999;
+}
+
+.container button {
+    background-color: #1A8FE3;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .navigation-bar-container {
@@ -77,4 +279,8 @@ p {
   
 .navigation-bar-container span {
     margin-top: 6px;           /* small gap under the icon */
+}
+
+.charity-list, .upload-container, .confirmation-container{
+    padding-bottom: 80px; /* Or margin-bottom */
 }

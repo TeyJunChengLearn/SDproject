@@ -31,6 +31,26 @@
         </div>
     </div>
 
+    <div class="text-container">
+        <h1>Expand your kindness<br>to the world</h1>
+    </div>
+
+    <div class="charity-list">
+    {% for charity in charities %}
+    <div class="charity-card">
+        <img src="{{ charity.image }}" alt="Charity Image">
+        <div class="charity-info">
+            <h2>{{ charity.name }}</h2>
+            <p>{{ charity.address }}</p>
+            <p><span style="color:#1A8FE3;">{{ charity.donators }} Donators</span></p>
+            <div class="button-container">
+                <button onclick="window.location.href='/charity/donate'">Donate</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
     <div class="navigation-bar-container">
         <div class="home-icon" onclick="window.location.href='/homepage'">
             <i class="fa fa-home" aria-hidden="true"></i>
