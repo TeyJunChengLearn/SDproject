@@ -38,13 +38,11 @@
     <div class="charity-list">
     {% for charity in charities %}
     <div class="charity-card">
-        <img src="{{ charity.image }}" alt="Charity Image">
+        <img src="{{ url_for('static', filename='uploads/' ~ charity.user.avatar_filename) if charity.user.avatar_filename else url_for('static', filename='default-avatar.png') }}" alt="Charity Image">
         <div class="charity-info">
-            <h2>{{ charity.name }}</h2>
-            <p>{{ charity.address }}</p>
-            <p><span style="color:#1A8FE3;">{{ charity.donators }} Donators</span></p>
+            <h2>{{ charity.user.email }}</h2>
             <div class="button-container">
-                <button onclick="window.location.href='/charity/donate'">Donate</button>
+                <button onclick="window.location.href='{{url_for('charity_donate',charity_id=charity.id)}}'">Donate</button>
             </div>
         </div>
     </div>

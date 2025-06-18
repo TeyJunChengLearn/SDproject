@@ -36,14 +36,22 @@ class User(db.Model):
     requests = db.relationship('Request', backref='requester', lazy=True)
     status = db.Column(db.String(20), nullable=False, default='active')
     transactions = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
+    charity = db.relationship("Charity", back_populates="user", uselist=False)
+    admin = db.relationship("Admin", back_populates="user", uselist=False)
 
-class Admin(User):
-    __tablename__ = 'admin'
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+class Admin(db.Model):
+    __tablename__ = "admin"
 
-class Charity(User):
-    __tablename__ = 'charity'
-    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    user = db.relationship("User", back_populates="admin", uselist=False)
+
+
+class Charity(db.Model):
+    __tablename__ = "charity"
+
+    id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    user = db.relationship("User", back_populates="charity", uselist=False)
+
 
 class Listing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -852,41 +860,39 @@ def order_detail(order_id):
         total_price=total_price+item.listing.price
     return render_template('order_detail.html', order=order,total_price=total_price)
 
+@app.route('/charity', endpoint='charity')
+def charity():
+    charities=Charity.query.all()
+    return render_template('charity.html', charities=charities)
+
+@app.route('/charity/donate/<charity_id>')
+def charity_donate(charity_id):
+    return render_template('charity_donate.html',charity_id=charity_id)
+
+@app.route('/charity/confirmation')
+def charity_confirmation():
+    return render_template('charity_confirmation.html')
+
+@app.route('/charity/create', endpoint="createCharity")
+def createCharity():
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for('homepage'))
+
+    if user.charity:
+        flash("This user is already a charity.", "info")
+        return redirect(url_for('homepage'))
+
+    charity = Charity(id=user.id)
+    db.session.add(charity)
+    db.session.commit()
+    flash(f"User {user.email} is now a registered charity!", "success")
+    return redirect(url_for('homepage'))
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-'''
-@xuanxuan_routes.route('/charity', endpoint='charity')
-def charity():
-    dummy_charities = [
-        {
-            "name": "Yayasan Harapan Murni",
-            "address": "12, Jalan Damai, 43000 Kajang, Selangor",
-            "donators": 532,
-            "image": "static/charity.png"
-        },
-        {
-            "name": "Kasih Abadi Foundation",
-            "address": "Lot 45, Taman Sinaran, 11800 Gelugor, Pulau Pinang",
-            "donators": 289,
-            "image": "static/charity.png"
-        },
-        {
-            "name": "HopeBridge Relief",
-            "address": "29A, Jalan Rahmat, 81000 Kulai, Johor",
-            "donators": 745,
-            "image": "static/charity.png"
-        }
-    ]
-    return render_template('charity.html', charities=dummy_charities)
-
-@xuanxuan_routes.route('/charity/donate')
-def charity_donate():
-    return render_template('charity_donate.html')
-
-@xuanxuan_routes.route('/charity/confirmation')
-def charity_confirmation():
-    return render_template('charity_confirmation.html')
-    '''
