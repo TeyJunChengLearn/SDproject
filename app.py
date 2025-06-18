@@ -867,7 +867,24 @@ def charity():
 
 @app.route('/charity/donate/<charity_id>')
 def charity_donate(charity_id):
-    return render_template('charity_donate.html',charity_id=charity_id)
+    # Dummy user products
+    user_products = [
+        {
+            'id': 1,
+            'name': 'Zara Classic White Shirt - White',
+            'image': 'shirt.png'
+        },
+        {
+            'id': 2,
+            'name': 'Zara Classic White Shirt - White',
+            'image': 'marita.png'
+        }
+    ]
+
+    # Empty list to test no products case
+    # user_products = []
+
+    return render_template('charity_donate.html', charity_id=charity_id, user_products=user_products)
 
 @app.route('/charity/confirmation')
 def charity_confirmation():
