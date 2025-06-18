@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myorders.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/charity.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,41 +17,18 @@
 </head>
 <body>
     <div class="top-bar-container">
-        <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
-        <i class="bi bi-arrow-left"></i>
+        <div class="leftarrowicon" onclick="window.location.href='/homepage'" style="cursor: pointer;">
+            <i class="bi bi-arrow-left"></i>
         </div>
-        <div class="header-text">My Orders</div>
+        <div class="header-text">Charity</div>
         <div class="icon">
             <div class="notify" onclick="window.location.href='/notification'">
                 <i class="bi bi-bell"></i>
             </div>
-        </div>
-    </div>
-
-    <div class="orders-list">
-        {% for transaction in orders %}
-    {% for item in transaction.items %}
-    <div class="order-card">
-        <div class="order-header">
-            <span>Order <a href="{{ url_for('order_detail', order_id=transaction.id) }}">#{{ transaction.id }}</a></span>
-            <span class="status {{ transaction.status | lower | replace(' ', '-') }}">{{ transaction.status }}</span>
-        </div>
-        <div class="order-body">
-            <img src="{{ url_for('static', filename='uploads/' ~ item.listing.image_filename) }}" alt="{{ item.listing.title }}">
-            <div>
-                <p>{{ item.listing.title }}</p>
-                <p>Price: <strong>RM{{ item.listing.price }}</strong></p>
-                <p>
-                    {{ 'Delivered on' if transaction.status == 'completed' else 'Estimated Delivery' }}: 
-                    <span class="date">{{ transaction.date.strftime('%Y-%m-%d') }}</span>
-                </p>
+            <div class="cart" onclick="window.location.href='/cart'">
+                <i class="bi bi-cart3"></i>
             </div>
         </div>
-    </div>
-    {% endfor %}
-{% endfor %}
-
-
     </div>
 
     <div class="navigation-bar-container">
