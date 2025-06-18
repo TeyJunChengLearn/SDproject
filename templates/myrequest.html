@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myaccount.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/myrequest.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
         <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
-        <div class="header-text">My Account</div>
+        <div class="header-text">My Request</div>
         <div class="icon">
             <div class="cart" onclick="window.location.href='/cart'">
                 <i class="bi bi-cart3"></i>
@@ -28,55 +28,22 @@
         </div>
     </div>
 
-    <div class="title-container">
-        <div class="profile">
-            <img src="{{ url_for('static', filename='uploads/' ~ user.avatar_filename) if user.avatar_filename else url_for('static', filename='default-avatar.png') }}" alt="Profile" />
-        </div>
-    </div>
-
     <div class="menu-container">
-        <div class="menu-item" onclick="window.location.href='{{ url_for('myprofile') }}'">
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
+        <div class="menu-item" onclick="window.location.href='{{ url_for('trade_request') }}'">
+            <i class="fa fa-exchange"></i>
+            <span>Trade Request (0)</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item">
-            <i class="fas fa-shopping-bag"></i>
-            <span>Order History</span>
+        <div class="menu-item" onclick="window.location.href='{{ url_for('borrow_request') }}'">
+            <i class="fa fa-handshake"></i>
+            <span>Borrow Request (0)</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item" onclick="window.location.href='/notification'">
-            <i class="fas fa-bell"></i>
-            <span>Notifications</span>
+        <div class="menu-item" onclick="window.location.href='{{ url_for('donation_request') }}'">
+            <i class="fa fa-archive"></i>
+            <span>Donation Request (0)</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item" onclick="window.location.href='{{ url_for('myrequest') }}'">
-            <i class="fas fa-heart"></i>
-            <span>My Request (0)</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        <div class="menu-item">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        
-        {% if user.charity %}
-        {% else %}
-            <div class="menu-item" onclick="window.location.href='{{ url_for('createCharity') }}'">
-                <i class="bi bi-piggy-bank-fill" ></i>
-                <span>Register as Charity</span>
-                <i class="fas fa-chevron-right arrow"></i>
-            </div>
-            
-        {% endif %}
-
-    </div>
-
-    <div class="logout-btn-wrapper">
-        <a href="{{url_for('logout')}}">
-            <button type="button" class="logout-btn" >Log Out</button>
-        </a>
     </div>
 
     <div class="navigation-bar-container">

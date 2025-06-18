@@ -1,0 +1,163 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    font-size: 12px;
+}
+
+p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300px;
+}
+
+.request-card {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 330px;
+    margin: 20px auto;
+}
+
+.request-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #004BFE;
+    margin-bottom: 20px;
+}
+
+.request-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.request-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.request-icon {
+    font-size: 34px;
+    color: black;
+}
+
+.request-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.request-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.request-label {
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+}
+
+.request-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.request-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.accept-btn {
+    background-color: #5588C0;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #FF6260;
+    color: white;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}

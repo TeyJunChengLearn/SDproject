@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/notification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/donation_request.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
         <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
-        <div class="header-text">Notifications</div>
+        <div class="header-text">Donation Request</div>
         <div class="icon">
             <div class="cart" onclick="window.location.href='/cart'">
                 <i class="bi bi-cart3"></i>
@@ -28,26 +28,26 @@
         </div>
     </div>
 
-    <div class="mark-all">
-        <span class="all-text">All</span>
-        <span class="mark-read">Mark all as read</span>
-    </div>
+    <div class="request-card">
+        <h1 class="request-title">Donation Offer Received!</h1>
+        <div class="request-content">
+            <div class="request-column">
+                <p class="request-label">Item received:</p>
+                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            </div>
 
-    <!-- Notifications List -->
-    <div class="notifications">
-    {% for note in notifications %}
-        <a href="{{ url_for('notification_detail', index=note.id) }}" class="notification-link">
-        <div class="notification-card {% if not note.read %}unread{% endif %}">
-            <div class="notification-content">
-                <div class="title {% if note.color == 'blue' %}blue-text{% endif %}">{{ note.message }}</div>
-                <div class="time">{{ note.created_at }}</div>
+            <i class="fa fa-caret-right request-icon"></i>
+
+            <div class="request-column">
+                <p class="request-label">Charity:</p>
+                <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
+            </div>
+
+            <div class="request-actions">
+                <button class="request-btn accept-btn" onclick="alert('Accepted!')">Accept</button>
+                <button class="request-btn reject-btn" onclick="alert('Rejected!')">Reject</button>
             </div>
         </div>
-        </a>
-        {% else %}
-
-        There is no notification
-    {% endfor %}
     </div>
 
     <div class="navigation-bar-container">
@@ -68,8 +68,5 @@
             <span class="account-text">Account</span>
         </div>
     </div>
-
-
-    <script src="{{ url_for('static', filename='js/notification.js') }}"></script>
 </body>
 </html>

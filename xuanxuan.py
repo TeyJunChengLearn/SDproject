@@ -33,3 +33,4 @@ def charity_donate(charity_id):
 def charity_confirmation():
     return render_template('charity_confirmation.html')
 '''
+
