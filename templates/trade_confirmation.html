@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/charity.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/trade_button.css') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,19 +18,17 @@
 <body>
     <div class="container">
         <div class="illustration">
-            <img src="{{ url_for('static', filename='tick.png') }}" alt="Success" />
+            <img src="{{ url_for('static', filename='confirm.png') }}" alt="Success" />
         </div>
 
         <div class="message">
-        <h1>Donation Send.</h1>
+        <h1>Borrow Request Send !</h1>
         <p>
-            Thank you for being a part of the programme.<br/>
-            Let's make a better world with us.
-        </p>
+            Your borrow request will notify the item owner.</p>
         </div>
 
         <div class="confirm-button">
-            <button onclick="window.location.href='/charity'">Browse More</button>
+            <button onclick="window.location.href='/homepage'">Continue Shopping</button>
         </div>
   </div>
 </div>

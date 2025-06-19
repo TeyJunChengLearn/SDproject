@@ -905,7 +905,6 @@ def charity():
     charities=Charity.query.all()
     return render_template('charity.html', charities=charities)
 
-'''
 @app.route('/charity/donate/<charity_id>')
 def charity_donate(charity_id):
     # Dummy user products
@@ -926,7 +925,6 @@ def charity_donate(charity_id):
     # user_products = []
 
     return render_template('charity_donate.html', charity_id=charity_id, user_products=user_products)
-'''
 
 @app.route('/charity/confirmation')
 def charity_confirmation():
@@ -950,6 +948,41 @@ def createCharity():
     flash(f"User {user.email} is now a registered charity!", "success")
     return redirect(url_for('homepage'))
 
+@app.route('/trade-button')
+def trade_button():
+    trade_items = [
+        {
+            'id': 1,
+            'name': 'Zara Hoodie - Black',
+            'image': 'hoodie.png',
+            'status': 'available'
+        },
+        {
+            'id': 2,
+            'name': 'Nike Sneakers - White',
+            'image': 'sneakers.png',
+            'status': 'pending'
+        },
+        {
+            'id': 3,
+            'name': 'Vintage Bag - Brown',
+            'image': 'bag.png',
+            'status': 'traded'
+        }
+    ]
+    return render_template('trade_button.html', trade_items=trade_items)
+
+@app.route('/borrow-button', methods=['GET', 'POST'])
+def borrow_button():
+    if flask_request.method == 'POST':
+        # handle form data here
+        return redirect(url_for('borrow_confirmation'))
+    return render_template('borrow_button.html')
+
+
+@app.route('/borrow-confirmation')
+def borrow_confirmation():
+    return render_template('borrow_confirmation.html')
 
 if __name__ == "__main__":
     with app.app_context():
