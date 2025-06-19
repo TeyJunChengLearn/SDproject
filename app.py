@@ -1088,6 +1088,73 @@ def send_reply():
 
     return "Email sent successfully"
 
+@app.route('/charity/donations', endpoint='charity_all_donations')
+def admin_donations():
+    # Dummy listing data for donation items
+    listings = [
+        {
+            'id': 1,
+            'name': 'Donation 1',
+            'posted_date': '31st Feb, 2025',
+            'image': 'images/sample1.png'
+        },
+        {
+            'id': 2,
+            'name': 'Donation 2',
+            'posted_date': '30th Feb, 2025',
+            'image': 'images/sample2.png'
+        },
+        {
+            'id': 3,
+            'name': 'Donation 3',
+            'posted_date': '14th Feb, 2025',
+            'image': 'images/sample3.png'
+        },
+        {
+            'id': 4,
+            'name': 'Item Name',
+            'posted_date': '14th Feb, 2025',
+            'image': 'images/sample1.png'
+        },
+        {
+            'id': 5,
+            'name': 'Item Name',
+            'posted_date': '31st Feb, 2025',
+            'image': 'images/sample2.png'
+        },
+        {
+            'id': 6,
+            'name': 'Item Name',
+            'posted_date': '30th Feb, 2025',
+            'image': 'images/sample3.png'
+        },
+    ]
+
+    return render_template('charity_all_donations.html', listings=listings)
+
+@app.route('/charity/donation/<int:donation_id>', endpoint='charity_view_donation')
+def charity_view_donation(donation_id):
+    donation_items = [
+        {"name": "Cotton shirt Regular Fit", "size": "M", "quantity": 2, "image": "images/shirt.png", "accepted": True},
+        {"name": "Running Shoes", "size": "M", "quantity": 2, "image": "images/shoes.png", "accepted": False},
+        {"name": "Yellow Blouse", "size": "M", "quantity": 2, "image": "images/yellow.png", "accepted": True},
+        # Add more if needed
+    ]
+
+    browse_more = [
+        {"name": "Doantino 1", "posted_date": "31st Feb,2025", "image": "images/sample1.png"},
+        {"name": "Donation 2", "posted_date": "30th Feb,2025", "image": "images/sample2.png"},
+        {"name": "Donation 3", "posted_date": "14th Feb,2025", "image": "images/sample3.png"},
+    ]
+
+    return render_template(
+        'charity_view_donation.html',
+        donation_items=donation_items,
+        donation_user="USER",
+        posted_date="31st Feb,2025",
+        browse_more=browse_more
+    )
+
 
 if __name__ == "__main__":
     with app.app_context():
