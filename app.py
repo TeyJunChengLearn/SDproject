@@ -822,9 +822,14 @@ def approveTrade(request_id):
     request.set_strategy(TradeStrategy())
     request.approve()
 
-    # Example: mark both listings as traded
     request.listing.status = 'traded'
     request.offered_item.status = 'traded'
+
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your trade request for '{request.listing.title}' was approved!",
+        is_read=False
+    ))
 
     db.session.commit()
     flash("Trade approved successfully!", "success")
@@ -839,6 +844,12 @@ def rejectTrade(request_id):
 
     request.listing.status = 'verified'
     request.offered_item.status = 'verified'
+
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your trade request for '{request.listing.title}' was rejected.",
+        is_read=False
+    ))
 
     db.session.commit()
     flash("Trade rejected.", "info")
@@ -872,6 +883,12 @@ def approveBorrow(request_id):
 
     request.listing.status = 'borrowed'
 
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your borrow request for '{request.listing.title}' was approved!",
+        is_read=False
+    ))
+
     db.session.commit()
     flash("Borrow request approved.", "success")
     return redirect(flask_request.referrer)
@@ -884,6 +901,12 @@ def rejectBorrow(request_id):
     request.reject()
 
     request.listing.status = 'verified'
+
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your borrow request for '{request.listing.title}' was rejected.",
+        is_read=False
+    ))
 
     db.session.commit()
     flash("Borrow request rejected.", "info")
@@ -927,6 +950,12 @@ def approveDonation(request_id):
 
     request.listing.status = 'donated'
 
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your donation for '{request.listing.title}' has been accepted!",
+        is_read=False
+    ))
+
     db.session.commit()
     flash("Donation accepted!", "success")
     return redirect(flask_request.referrer)
@@ -939,6 +968,12 @@ def rejectDonation(request_id):
     request.reject()
 
     request.listing.status = 'verified'
+
+    db.session.add(Notification(
+        user_id=request.requester_id,
+        message=f"Your donation for '{request.listing.title}' was rejected.",
+        is_read=False
+    ))
 
     db.session.commit()
     flash("Donation rejected.", "info")
