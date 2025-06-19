@@ -50,6 +50,48 @@
         </div>
     </div>
 
+    <div class="request-card">
+        <h1 class="request-title">Trade Offer Received!</h1>
+        <div class="request-content">
+            <div class="request-column">
+                <p class="request-label">You received:</p>
+                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            </div>
+
+            <i class="fas fa-sync-alt request-icon"></i>
+
+            <div class="request-column">
+                <p class="request-label">User trade:</p>
+                <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
+            </div>
+        </div>
+
+        <div class="request-status rejected">
+            <i class="fas fa-times-circle"></i> You rejected this offer.
+        </div>
+    </div>
+
+    <div class="request-card">
+        <h1 class="request-title">Trade Offer Received!</h1>
+        <div class="request-content">
+            <div class="request-column">
+                <p class="request-label">You received:</p>
+                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            </div>
+
+            <i class="fas fa-sync-alt request-icon"></i>
+
+            <div class="request-column">
+                <p class="request-label">User trade:</p>
+                <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
+            </div>
+        </div>
+
+        <div class="request-status accepted">
+            <i class="fas fa-check-circle"></i> You accepted this offer.
+        </div>
+    </div>
+
     <div class="navigation-bar-container">
         <div class="home-icon" onclick="window.location.href='/homepage'">
             <i class="fa fa-home" aria-hidden="true"></i>

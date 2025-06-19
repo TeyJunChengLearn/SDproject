@@ -29,7 +29,7 @@
     </div>
 
     <div class="request-card">
-        <h1 class="request-title">Donation Offer Sent</h1>
+        <h1 class="request-title">Donation Offer Received!</h1>
         <div class="request-content">
             <div class="request-column">
                 <p class="request-label">Donate item:</p>
@@ -42,15 +42,16 @@
                 <p class="request-label">Charity:</p>
                 <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
             </div>
-        </div>
 
-        <div class="request-status pending">
-            <i class="fas fa-hourglass-half"></i> Waiting for charity to approve.
+            <div class="request-actions">
+                <button class="request-btn accept-btn" onclick="alert('Accepted!')">Accept</button>
+                <button class="request-btn reject-btn" onclick="alert('Rejected!')">Reject</button>
+            </div>
         </div>
     </div>
 
     <div class="request-card">
-        <h1 class="request-title">Donation Approved!</h1>
+        <h1 class="request-title">Donation Accepted</h1>
         <div class="request-content">
             <div class="request-column">
                 <p class="request-label">Donate item:</p>
@@ -66,7 +67,7 @@
         </div>
 
         <div class="request-status accepted">
-            <i class="fas fa-check-circle"></i> Charity accepted your donation!
+            <i class="fas fa-check-circle"></i> You accepted this donation.
         </div>
     </div>
 
@@ -87,7 +88,7 @@
         </div>
 
         <div class="request-status rejected">
-            <i class="fas fa-times-circle"></i> Charity rejected your donation.
+            <i class="fas fa-times-circle"></i> You rejected this donation.
         </div>
     </div>
 
