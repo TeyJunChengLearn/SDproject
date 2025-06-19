@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="top-bar-container">
-        <div class="leftarrowicon" onclick="window.location.href='{{url_for('homepage')}}'" style="cursor: pointer;">
+        <div class="leftarrowicon" onclick="history.back()" style="cursor: pointer;">
         <i class="bi bi-arrow-left"></i>
     </div>
         <div class="header-text">Notifications</div>
@@ -48,6 +48,34 @@
 
         There is no notification
     {% endfor %}
+    </div>
+
+    <div class="request-card">
+        <h3 class="request-title">Trade Offer Received!</h3>
+        <div class="request-content">
+            <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            <i class="fas fa-sync-alt request-icon"></i>
+            <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            <button class="request-btn" onclick="window.location.href='{{ url_for('trade_request') }}'">View</button>
+        </div>
+    </div>
+
+    <div class="request-card">
+        <h3 class="request-title">Borrow Offer Received!</h3>
+        <div class="request-content">
+            <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            <button class="request-btn" onclick="window.location.href='{{ url_for('borrow_request') }}'">View</button>
+        </div>
+    </div>
+
+    <div class="request-card">
+        <h3 class="request-title">Donation Offer Received!</h3>
+        <div class="request-content">
+            <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            <i class="fa fa-caret-right request-icon"></i>
+            <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
+            <button class="request-btn" onclick="window.location.href='{{ url_for('donation_request') }}'">View</button>
+        </div>
     </div>
 
     <div class="navigation-bar-container">

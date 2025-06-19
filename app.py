@@ -716,6 +716,46 @@ def myprofile():
     
     return render_template('myprofile.html', user=user)
 
+@app.route('/myrequest',endpoint='myrequest')
+def myrequest():
+    return render_template('myrequest.html')
+
+@app.route('/myrequest/trade')
+def trade_request():
+    requests = [
+        {
+            "type": "Trade",
+            "img1": "shirt.png",
+            "img2": "shirt.png",
+            "url": "/request/trade/1"
+        }
+    ]
+    return render_template('trade_request.html', requests=requests)
+
+@app.route('/myrequest/borrow')
+def borrow_request():
+    requests = [
+        {
+            "type": "Borrow",
+            "img1": "shirt.png",
+            "img2": "marita.png",
+            "url": "/request/borrow/1"
+        }
+    ]
+    return render_template('borrow_request.html', requests=requests)
+
+@app.route('/myrequest/donation')
+def donation_request():
+    requests = [
+        {
+            "type": "Donation",
+            "img1": "marita.png",
+            "img2": "shirt.png",
+            "url": "/request/donation/1"
+        }
+    ]
+    return render_template('donation_request.html', requests=requests)
+
 @app.route('/checkout_page')
 def checkout_page():
     user_id = session.get('user_id')
@@ -865,9 +905,28 @@ def charity():
     charities=Charity.query.all()
     return render_template('charity.html', charities=charities)
 
+'''
 @app.route('/charity/donate/<charity_id>')
 def charity_donate(charity_id):
-    return render_template('charity_donate.html',charity_id=charity_id)
+    # Dummy user products
+    user_products = [
+        {
+            'id': 1,
+            'name': 'Zara Classic White Shirt - White',
+            'image': 'shirt.png'
+        },
+        {
+            'id': 2,
+            'name': 'Zara Classic White Shirt - White',
+            'image': 'marita.png'
+        }
+    ]
+
+    # Empty list to test no products case
+    # user_products = []
+
+    return render_template('charity_donate.html', charity_id=charity_id, user_products=user_products)
+'''
 
 @app.route('/charity/confirmation')
 def charity_confirmation():
