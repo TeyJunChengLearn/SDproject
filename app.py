@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import os
 from flask_mail import Mail, Message
 from sqlalchemy import or_, and_
+from sqlalchemy.orm import joinedload
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'super_secret_key'
@@ -33,7 +34,6 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
     avatar_filename = db.Column(db.String(255), nullable=True)
-    requests = db.relationship('Request', backref='requester', lazy=True)
     status = db.Column(db.String(20), nullable=False, default='active')
     transactions = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
     charity = db.relationship("Charity", back_populates="user", uselist=False)
@@ -104,8 +104,13 @@ class Request(db.Model):
     status = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     decision_time = db.Column(db.DateTime)
+    
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
     requester_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    # ✅ FIXED backrefs to avoid naming conflicts
+    requester = db.relationship('User', backref='requests_made', lazy=True)
+    listing = db.relationship('Listing', backref='requests_received', lazy=True)
 
     strategy = None
 
@@ -124,6 +129,7 @@ class Request(db.Model):
 
     def set_strategy(self, strategy):
         self.strategy = strategy
+
 
 class SupportTicket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -150,6 +156,7 @@ class TradeRequest(Request):
     __tablename__ = 'trade_request'
     id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
     offered_item_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
+    offered_item = db.relationship('Listing', foreign_keys=[offered_item_id])
     __mapper_args__ = {
         'polymorphic_identity': 'trade_request'
     }
@@ -158,6 +165,9 @@ class DonationRequest(Request):
     __tablename__ = 'donation_request'
     id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
     reason = db.Column(db.String(255))
+    recipient_charity_id = db.Column(db.Integer, db.ForeignKey('charity.id'))
+    recipient_charity = db.relationship('Charity')
+
     __mapper_args__ = {
         'polymorphic_identity': 'donation_request'
     }
@@ -290,6 +300,13 @@ class TradeStrategy(RequestStrategy):
     def reject(self, request):
         request.status = "rejected"
 
+class DonationStrategy(RequestStrategy):
+    def approve(self, request):
+        request.status = "approved"
+
+    def reject(self, request):
+        request.status = "rejected"
+
 class ReportGenerator:
     _instance = None
 
@@ -370,13 +387,44 @@ def createacc():
 
     return render_template('createaccount.html')
 
-@app.route('/myaccount',endpoint='myaccount')
+@app.route('/myaccount', endpoint='myaccount')
 def myaccount():
     if 'user_id' not in session:
         return redirect(url_for('index'))
-    else:
-        user=User.query.get(session.get('user_id'))
-        return render_template('myaccount.html',user=user)
+
+    user =  User.query.get(session.get('user_id'))
+    if not user:
+        flash("User not found. Please log in again.", "error")
+        return redirect(url_for('logout'))
+
+    user_listing_ids = [listing.id for listing in user.listings]
+
+
+    # Count pending requests of all types for the user's listings
+    borrow_pending = BorrowRequest.query.filter(
+        BorrowRequest.status == 'pending',
+        BorrowRequest.listing_id.in_(user_listing_ids)
+    ).count()
+
+    trade_pending = TradeRequest.query.filter(
+        TradeRequest.status == 'pending',
+        TradeRequest.listing_id.in_(user_listing_ids)
+    ).count()
+
+    donation_pending = DonationRequest.query.filter(
+        DonationRequest.status == 'pending',
+        DonationRequest.listing_id.in_(user_listing_ids)
+    ).count()
+
+    # Combine all pending requests
+    pending_requests_count = borrow_pending + trade_pending + donation_pending
+
+    return render_template(
+        'myaccount.html',
+        user=user,
+        pending_requests_count=pending_requests_count
+    )
+
 
 @app.route("/login", methods=['GET', 'POST'], endpoint='login')
 def login():
@@ -716,45 +764,185 @@ def myprofile():
     
     return render_template('myprofile.html', user=user)
 
-@app.route('/myrequest',endpoint='myrequest')
+@app.route('/myrequest', endpoint='myrequest')
 def myrequest():
-    return render_template('myrequest.html')
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('index'))
+
+    # Get all listing IDs owned by this user
+    owned_listing_ids = [l.id for l in Listing.query.filter_by(owner_id=user_id).all()]
+
+    # Count only requests related to this user's listings that are pending
+    borrow_count = BorrowRequest.query.filter(
+        BorrowRequest.status == 'pending',
+        BorrowRequest.listing_id.in_(owned_listing_ids)
+    ).count()
+
+    trade_count = TradeRequest.query.filter(
+        TradeRequest.status == 'pending',
+        TradeRequest.listing_id.in_(owned_listing_ids)
+    ).count()
+
+    donation_count = DonationRequest.query.filter(
+        DonationRequest.status == 'pending',
+        DonationRequest.listing_id.in_(owned_listing_ids)
+    ).count()
+
+    return render_template(
+        'myrequest.html',
+        borrow_count=borrow_count or 0,
+        trade_count=trade_count or 0,
+        donation_count=donation_count or 0
+    )
+
+
 
 @app.route('/myrequest/trade')
 def trade_request():
-    requests = [
-        {
-            "type": "Trade",
-            "img1": "shirt.png",
-            "img2": "shirt.png",
-            "url": "/request/trade/1"
-        }
-    ]
+    user_id = session.get('user_id')
+
+    # Find all user listing IDs
+    user_listing_ids = [l.id for l in Listing.query.filter_by(owner_id=user_id).all()]
+
+    # Find trade requests where the offered OR target listing belongs to the user
+    requests = TradeRequest.query.filter(
+        or_(
+            TradeRequest.listing_id.in_(user_listing_ids),
+            TradeRequest.offered_item_id.in_(user_listing_ids)
+        )
+    ).all()
+
     return render_template('trade_request.html', requests=requests)
+
+
+@app.route('/myrequest/trade/approve/<int:request_id>')
+def approveTrade(request_id):
+    request = TradeRequest.query.get_or_404(request_id)
+    request.set_strategy(TradeStrategy())
+    request.approve()
+
+    # Example: mark both listings as traded
+    request.listing.status = 'traded'
+    request.offered_item.status = 'traded'
+
+    db.session.commit()
+    flash("Trade approved successfully!", "success")
+    return redirect(flask_request.referrer)
+
+
+@app.route('/myrequest/trade/reject/<int:request_id>')
+def rejectTrade(request_id):
+    request = TradeRequest.query.get_or_404(request_id)
+    request.set_strategy(TradeStrategy())
+    request.reject()
+
+    request.listing.status = 'verified'
+    request.offered_item.status = 'verified'
+
+    db.session.commit()
+    flash("Trade rejected.", "info")
+    return redirect(flask_request.referrer)
 
 @app.route('/myrequest/borrow')
 def borrow_request():
-    requests = [
-        {
-            "type": "Borrow",
-            "img1": "shirt.png",
-            "img2": "marita.png",
-            "url": "/request/borrow/1"
-        }
-    ]
+    user_id = session.get('user_id')
+
+    # Get all listings owned by user
+    user_listing_ids = [l.id for l in Listing.query.filter_by(owner_id=user_id).all()]
+
+    # Get borrow requests where the user is either requester or listing owner
+    requests = BorrowRequest.query.options(
+        joinedload(BorrowRequest.listing),
+        joinedload(BorrowRequest.requester)
+    ).filter(
+        or_(
+            BorrowRequest.requester_id == user_id,
+            BorrowRequest.listing_id.in_(user_listing_ids)
+        )
+    ).all()
+
     return render_template('borrow_request.html', requests=requests)
+
+@app.route('/myrequest/borrow/approve/<int:request_id>')
+def approveBorrow(request_id):
+    request = BorrowRequest.query.get_or_404(request_id)
+    request.set_strategy(BorrowStrategy())
+    request.approve()
+
+    request.listing.status = 'borrowed'
+
+    db.session.commit()
+    flash("Borrow request approved.", "success")
+    return redirect(flask_request.referrer)
+
+
+@app.route('/myrequest/borrow/reject/<int:request_id>')
+def rejectBorrow(request_id):
+    request = BorrowRequest.query.get_or_404(request_id)
+    request.set_strategy(BorrowStrategy())
+    request.reject()
+
+    request.listing.status = 'verified'
+
+    db.session.commit()
+    flash("Borrow request rejected.", "info")
+    return redirect(flask_request.referrer)
 
 @app.route('/myrequest/donation')
 def donation_request():
-    requests = [
-        {
-            "type": "Donation",
-            "img1": "marita.png",
-            "img2": "shirt.png",
-            "url": "/request/donation/1"
-        }
-    ]
+    user_id = session.get('user_id')
+    user = User.query.get(user_id)
+
+    user_listing_ids = [l.id for l in Listing.query.filter_by(owner_id=user_id).all()]
+
+    if user.charity:
+        # If the user is a charity, show donation requests addressed to their charity
+        requests = DonationRequest.query.options(
+            joinedload(DonationRequest.listing),
+            joinedload(DonationRequest.requester)
+        ).join(Listing).filter(
+            DonationRequest.status == 'pending',
+            Listing.status == 'sold',
+            DonationRequest.status == 'pending'
+        ).all()
+    else:
+        # Otherwise, show donation requests made for listings they own
+        requests = DonationRequest.query.options(
+            joinedload(DonationRequest.listing),
+            joinedload(DonationRequest.requester)
+        ).filter(
+            DonationRequest.listing_id.in_(user_listing_ids)
+        ).all()
+
     return render_template('donation_request.html', requests=requests)
+
+
+
+@app.route('/myrequest/donation/approve/<int:request_id>')
+def approveDonation(request_id):
+    request = DonationRequest.query.get_or_404(request_id)
+    request.set_strategy(DonationStrategy())
+    request.approve()
+
+    request.listing.status = 'donated'
+
+    db.session.commit()
+    flash("Donation accepted!", "success")
+    return redirect(flask_request.referrer)
+
+
+@app.route('/myrequest/donation/reject/<int:request_id>')
+def rejectDonation(request_id):
+    request = DonationRequest.query.get_or_404(request_id)
+    request.set_strategy(DonationStrategy())
+    request.reject()
+
+    request.listing.status = 'verified'
+
+    db.session.commit()
+    flash("Donation rejected.", "info")
+    return redirect(flask_request.referrer)
 
 @app.route('/checkout_page')
 def checkout_page():
@@ -935,6 +1123,7 @@ def submitDonation():
     donation_request = DonationRequest(
         listing_id=listing.id,
         requester_id=user_id,
+        recipient_charity_id=charity.id,
         status='pending'
     )
     donation_request.set_strategy(BorrowStrategy())  # You can create DonationStrategy if needed
@@ -993,7 +1182,7 @@ def tradeConfirmation():
 @app.route('/submit_trade', methods=['POST'], endpoint="submit_trade")
 def submit_trade():
     user_id = session.get('user_id')
-    target_id = flask_request.form.get('target_id')  # target = the item you want
+    target_id = flask_request.form.get('product_id')  # target = the item you want
     offered_id = flask_request.form.get('offered_id')  # offered = your item
 
     if not user_id or not target_id or not offered_id:

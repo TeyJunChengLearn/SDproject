@@ -47,7 +47,7 @@
         <h1>Set Your Price & Delivery Options</h1>
         <p>Price your item and choose how you'd like to deliver it to buyers.</p>
       </div>
-      <input type="text" name="itemprice" placeholder="Item Price" required />
+      <input type="number" step="0.01" min="0" name="itemprice" placeholder="Item Price" required />
       <select name="shipping" required>
         <option value="" disabled selected hidden>Shipping Options</option>
         <option value="doorstep-delivery">Doorstep Delivery</option>

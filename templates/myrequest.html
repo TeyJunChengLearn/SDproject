@@ -31,17 +31,17 @@
     <div class="menu-container">
         <div class="menu-item" onclick="window.location.href='{{ url_for('trade_request') }}'">
             <i class="fa fa-exchange"></i>
-            <span>Trade Request (0)</span>
+            <span>Trade Request ({{trade_count}})</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
         <div class="menu-item" onclick="window.location.href='{{ url_for('borrow_request') }}'">
             <i class="fa fa-handshake"></i>
-            <span>Borrow Request (0)</span>
+            <span>Borrow Request ({{borrow_count}})</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
         <div class="menu-item" onclick="window.location.href='{{ url_for('donation_request') }}'">
             <i class="fa fa-archive"></i>
-            <span>Donation Request (0)</span>
+            <span>Donation Request ({{donation_count}})</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
     </div>

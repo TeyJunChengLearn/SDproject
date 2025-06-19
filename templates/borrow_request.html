@@ -28,59 +28,47 @@
         </div>
     </div>
 
-    <div class="request-card">
-        <h1 class="request-title">Borrow Offer Received!</h1>
-        <div class="request-content">
-            <div class="request-column">
-                <p class="request-label">Item borrowed:</p>
-                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
-                <div class="borrow-dates">
-                    <p class="borrow-date"><strong>Start:</strong> 2024-07-01</p>
-                    <p class="borrow-date"><strong>Return:</strong> 2024-07-15</p>
-                </div>
+        {% for request in requests %}
+<div class="request-card">
+    <h1 class="request-title">Borrow Offer Received!</h1>
+    <div class="request-content">
+        <div class="request-column">
+            <p class="request-label">Item borrowed:</p>
+            <img src="{{ url_for('static', filename='uploads/' ~ request.listing.image_filename) }}" class="request-img">
+            <div class="borrow-dates">
+                <p class="borrow-date"><strong>Start:</strong> {{ request.borrow_start.strftime('%Y-%m-%d') }}</p>
+                <p class="borrow-date"><strong>Return:</strong> {{ request.borrow_end.strftime('%Y-%m-%d') }}</p>
             </div>
+        </div>
+
+        {% if request.status == 'pending' %}
+            {% if request.listing.owner_id == session['user_id'] %}
             <div class="request-actions">
-                <button class="request-btn accept-btn" onclick="alert('Accepted!')">Accept</button>
-                <button class="request-btn reject-btn" onclick="alert('Rejected!')">Reject</button>
+                <a href="{{ url_for('approveBorrow', request_id=request.id) }}">
+                    <button class="request-btn accept-btn">Accept</button>
+                </a>
+                <a href="{{ url_for('rejectBorrow', request_id=request.id) }}">
+                    <button class="request-btn reject-btn">Reject</button>
+                </a>
             </div>
-        </div>
-    </div>
-
-    <div class="request-card">
-        <h1 class="request-title">Borrow Offer Received!</h1>
-        <div class="request-content">
-            <div class="request-column">
-                <p class="request-label">Item borrowed:</p>
-                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
-                <div class="borrow-dates">
-                    <p class="borrow-date"><strong>Start:</strong> 2024-07-01</p>
-                    <p class="borrow-date"><strong>Return:</strong> 2024-07-15</p>
-                </div>
+            {% else %}
+            <div class="request-status pending">
+                <i class="fas fa-clock"></i> Waiting for owner's decision.
             </div>
-        </div>
-
+            {% endif %}
+        {% elif request.status == 'approved' %}
         <div class="request-status accepted">
             <i class="fas fa-check-circle"></i> You accepted this offer.
         </div>
-    </div>
-
-    <div class="request-card">
-        <h1 class="request-title">Borrow Offer Received!</h1>
-        <div class="request-content">
-            <div class="request-column">
-                <p class="request-label">Item borrowed:</p>
-                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
-                <div class="borrow-dates">
-                    <p class="borrow-date"><strong>Start:</strong> 2024-07-01</p>
-                    <p class="borrow-date"><strong>Return:</strong> 2024-07-15</p>
-                </div>
-            </div>
-        </div>
-
+        {% elif request.status == 'rejected' %}
         <div class="request-status rejected">
             <i class="fas fa-times-circle"></i> You rejected this offer.
         </div>
+        {% endif %}
     </div>
+</div>
+{% endfor %}
+
 
     <div class="navigation-bar-container">
         <div class="home-icon" onclick="window.location.href='/homepage'">

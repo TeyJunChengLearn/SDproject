@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="request-card">
+    <!-- <div class="request-card">
         <h1 class="request-title">Trade Offer Received!</h1>
         <div class="request-content">
             <div class="request-column">
@@ -48,49 +48,52 @@
                 <button class="request-btn reject-btn" onclick="alert('Rejected!')">Reject</button>
             </div>
         </div>
-    </div>
+    </div> -->
+   {% for request in requests %}
+        <div class="request-card">
+            <h1 class="request-title">Trade Offer Received!</h1>
+            <div class="request-content">
+                <div class="request-column">
+                    <p class="request-label">You received:</p>
+                    <img src="{{ url_for('static', filename='uploads/' ~ request.listing.image_filename) }}" class="request-img">
+                </div>
 
-    <div class="request-card">
-        <h1 class="request-title">Trade Offer Received!</h1>
-        <div class="request-content">
-            <div class="request-column">
-                <p class="request-label">You received:</p>
-                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+                <i class="fas fa-sync-alt request-icon"></i>
+
+                <div class="request-column">
+                    <p class="request-label">User trade:</p>
+                    <img src="{{ url_for('static', filename='uploads/' ~ request.offered_item.image_filename) }}" class="request-img">
+                </div>
             </div>
 
-            <i class="fas fa-sync-alt request-icon"></i>
-
-            <div class="request-column">
-                <p class="request-label">User trade:</p>
-                <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
-            </div>
-        </div>
-
-        <div class="request-status rejected">
-            <i class="fas fa-times-circle"></i> You rejected this offer.
-        </div>
-    </div>
-
-    <div class="request-card">
-        <h1 class="request-title">Trade Offer Received!</h1>
-        <div class="request-content">
-            <div class="request-column">
-                <p class="request-label">You received:</p>
-                <img src="{{ url_for('static', filename='shirt.png') }}" class="request-img">
+            {% if request.status == 'pending' %}
+            <div class="request-status pending">
+                <i class="fas fa-clock"></i> Waiting for decision.
             </div>
 
-            <i class="fas fa-sync-alt request-icon"></i>
-
-            <div class="request-column">
-                <p class="request-label">User trade:</p>
-                <img src="{{ url_for('static', filename='beau.png') }}" class="request-img">
+            {% if request.listing.owner_id == session['user_id'] %}
+            <div class="request-actions">
+                <a href="{{ url_for('approveTrade', request_id=request.id) }}" class="btn btn-success">
+                    <button class="request-btn accept-btn">Accept</button>
+                </a>
+                <a href="{{ url_for('rejectTrade', request_id=request.id) }}" class="btn btn-danger">
+                    <button class="request-btn reject-btn">Reject</button>
+                </a>
             </div>
-        </div>
+            {% endif %}
+        {% elif request.status == 'approved' %}
+            <div class="request-status accepted">
+                <i class="fas fa-check-circle"></i> You accepted this offer.
+            </div>
+        {% elif request.status == 'rejected' %}
+            <div class="request-status rejected">
+                <i class="fas fa-times-circle"></i> You rejected this offer.
+            </div>
+        {% endif %}
 
-        <div class="request-status accepted">
-            <i class="fas fa-check-circle"></i> You accepted this offer.
         </div>
-    </div>
+    {% endfor %}
+
 
     <div class="navigation-bar-container">
         <div class="home-icon" onclick="window.location.href='/homepage'">
