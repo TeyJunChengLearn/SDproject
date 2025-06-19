@@ -907,24 +907,53 @@ def charity():
 
 @app.route('/charity/donate/<charity_id>')
 def charity_donate(charity_id):
-    # Dummy user products
-    user_products = [
-        {
-            'id': 1,
-            'name': 'Zara Classic White Shirt - White',
-            'image': 'shirt.png'
-        },
-        {
-            'id': 2,
-            'name': 'Zara Classic White Shirt - White',
-            'image': 'marita.png'
-        }
-    ]
-
-    # Empty list to test no products case
-    # user_products = []
+    user_products = Listing.query.filter(
+        Listing.status.in_(['featured', 'urgent', 'verified']),
+        Listing.owner_id == session.get('user_id')
+    ).all()
 
     return render_template('charity_donate.html', charity_id=charity_id, user_products=user_products)
+
+@app.route('/submit-donation', methods=['POST'])
+def submitDonation():
+    user_id = session.get('user_id')
+    listing_id = flask_request.form.get("product_id")
+    charity_id = flask_request.form.get("charity_id")
+
+    if not (user_id and listing_id and charity_id):
+        flash("Missing donation information.", "error")
+        return redirect(url_for("charity"))
+
+    listing = Listing.query.get(listing_id)
+    charity = Charity.query.get(charity_id)
+
+    if not listing or not charity:
+        flash("Invalid listing or charity selected.", "error")
+        return redirect(url_for("charity"))
+
+    # ✅ Create donation request using strategy pattern
+    donation_request = DonationRequest(
+        listing_id=listing.id,
+        requester_id=user_id,
+        status='pending'
+    )
+    donation_request.set_strategy(BorrowStrategy())  # You can create DonationStrategy if needed
+    db.session.add(donation_request)
+
+    # ✅ Mark the item as "sold"
+    listing.status = "sold"
+
+    # ✅ Notify the charity
+    db.session.add(Notification(
+        user_id=charity.id,
+        message=f"A donation request has been sent to your charity for item '{listing.title}'.",
+        is_read=False
+    ))
+
+    db.session.commit()
+
+    flash("Donation request submitted successfully!", "success")
+    return redirect(url_for("charity_confirmation"))
 
 @app.route('/charity/confirmation')
 def charity_confirmation():
@@ -948,36 +977,99 @@ def createCharity():
     flash(f"User {user.email} is now a registered charity!", "success")
     return redirect(url_for('homepage'))
 
-@app.route('/trade-button')
-def trade_button():
-    trade_items = [
-        {
-            'id': 1,
-            'name': 'Zara Hoodie - Black',
-            'image': 'hoodie.png',
-            'status': 'available'
-        },
-        {
-            'id': 2,
-            'name': 'Nike Sneakers - White',
-            'image': 'sneakers.png',
-            'status': 'pending'
-        },
-        {
-            'id': 3,
-            'name': 'Vintage Bag - Brown',
-            'image': 'bag.png',
-            'status': 'traded'
-        }
-    ]
-    return render_template('trade_button.html', trade_items=trade_items)
+@app.route('/trade-button/<product_id>')
+def trade_button(product_id):
+    trade_items = Listing.query.filter(
+        Listing.status.in_(['featured', 'urgent', 'verified']),  # Only these 3
+        Listing.owner_id== session.get('user_id')
+    ).all()
+    return render_template('trade_button.html', trade_items=trade_items,product_id=product_id)
 
-@app.route('/borrow-button', methods=['GET', 'POST'])
-def borrow_button():
+@app.route('/tradeConfirmation',endpoint="tradeConfirmation")
+def tradeConfirmation():
+    return render_template('trade_confirmation.html')
+
+
+@app.route('/submit_trade', methods=['POST'], endpoint="submit_trade")
+def submit_trade():
+    user_id = session.get('user_id')
+    target_id = flask_request.form.get('target_id')  # target = the item you want
+    offered_id = flask_request.form.get('offered_id')  # offered = your item
+
+    if not user_id or not target_id or not offered_id:
+        flash("Missing trade information.", "error")
+        return redirect(url_for('homepage'))
+
+    offered_listing = Listing.query.get(offered_id)
+    target_listing = Listing.query.get(target_id)
+
+    if not offered_listing or not target_listing:
+        flash("Invalid listings selected.", "error")
+        return redirect(url_for('homepage'))
+
+    # Create Trade Request
+    trade_request = TradeRequest(
+        listing_id=target_listing.id,
+        offered_item_id=offered_listing.id,
+        requester_id=user_id,
+        status='pending'
+    )
+    trade_request.set_strategy(TradeStrategy())
+    db.session.add(trade_request)
+
+    # Mark listings as pending (optional)
+    offered_listing.status = 'pending'
+    target_listing.status = 'pending'
+
+    # Notify the target item's owner
+    db.session.add(Notification(
+        user_id=target_listing.owner_id,
+        message=f"You received a trade request for '{target_listing.title}'.",
+        is_read=False
+    ))
+
+    db.session.commit()
+
+    flash("Trade request submitted!", "success")
+    return redirect(url_for('tradeConfirmation'))
+
+
+@app.route('/borrow-button/<int:product_id>', methods=['GET', 'POST'])
+def borrow_button(product_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     if flask_request.method == 'POST':
-        # handle form data here
+        borrow_range = flask_request.form.get("borrow_range")
+        if not borrow_range:
+            flash("Please select a borrow date range.", "error")
+            return redirect(url_for('borrow_button', product_id=product_id))
+
+        try:
+            start_date_str, end_date_str = borrow_range.split(" to ")
+            borrow_start = datetime.strptime(start_date_str.strip(), "%Y-%m-%d").date()
+            borrow_end = datetime.strptime(end_date_str.strip(), "%Y-%m-%d").date()
+        except ValueError:
+            flash("Invalid date format.", "error")
+            return redirect(url_for('borrow_button', product_id=product_id))
+
+        # Create borrow request
+        borrow_request = BorrowRequest(
+            listing_id=product_id,
+            requester_id=session['user_id'],
+            status="pending",
+            borrow_start=borrow_start,
+            borrow_end=borrow_end
+        )
+        borrow_request.set_strategy(BorrowStrategy())
+        db.session.add(borrow_request)
+        db.session.commit()
+
+        flash("Borrow request submitted successfully.", "success")
         return redirect(url_for('borrow_confirmation'))
-    return render_template('borrow_button.html')
+
+    return render_template('borrow_button.html', product_id=product_id)
+
 
 
 @app.route('/borrow-confirmation')

@@ -36,21 +36,22 @@
     </div>
 
     {% if user_products %}
-    <form method="post" action="/submit-donation">
+    <form method="POST" action="/submit-donation">
+        <input type="number" name="charity_id" value="{{charity_id}}" hidden>
         {% for product in user_products %}
         <label class="product-card">
             <input type="radio" name="product_id" value="{{ product.id }}" required>
             <div class="product-content">
-                <img src="{{ url_for('static', filename=product.image) }}" alt="product image" class="product-image">
+                <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="product image" class="product-image">
                 <div class="product-info">
-                    <p class="product-name">{{ product.name }}</p>
+                    <p class="product-name">{{ product.title }}</p>
                 </div>
             </div>
         </label>
         {% endfor %}
         <div class="itempage-btn">
             <button type="back" class="back-btn" onclick="history.back()">Back</button>
-            <button type="button" class="submit-btn" onclick="window.location.href='{{ url_for('charity_confirmation') }}'">Donate</button>
+            <button type="submit" class="submit-btn" >Donate</button>
 
         </div>
     </form>

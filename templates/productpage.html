@@ -62,8 +62,8 @@
     </div>
   
     <div class="itempage-btn">
-        <button type="button" class="trade-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('trade_button') }}'">Trade</button>
-        <button type="button" class="borrow-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('borrow_button') }}'">Borrow</button>
+        <button type="button" class="trade-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('trade_button',product_id=product.id) }}'">Trade</button>
+        <button type="button" class="borrow-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('borrow_button',product_id=product.id) }}'">Borrow</button>
         <button type="button" class="details-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} onclick="window.location.href='{{url_for('buy_item',listing_id=product.id)}}'"{% else %}disable {% endif %}>Buy Now</button>
     </div>
 </body>

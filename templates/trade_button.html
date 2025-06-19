@@ -36,20 +36,21 @@
         <p>Choose an item from your current listing products that wanted to trade with other.</p>
     </div>
 
-    {% if user_products %}
+    {% if trade_items %}
     <form method="post" action="{{ url_for('submit_trade') }}">
+        <input type="number" value="{{product_id}}" name="product_id" hidden>
         {% for item in trade_items %}
         <label class="product-card">
-            {% if item.status == 'available' %}
-            <input type="radio" name="product_id" value="{{ item.id }}" required>
+            {% if item.status in ['featured', 'urgent', 'verified'] %}
+            <input type="radio" name="offered_id" value="{{ item.id }}" required>
             {% else %}
-            <input type="radio" name="product_id" value="{{ item.id }}" disabled>
+            <input type="radio" name="offered_id" value="{{ item.id }}" disabled>
             {% endif %}
             
             <div class="product-content">
-                <img src="{{ url_for('static', filename=item.image) }}" alt="product image" class="product-image">
+                <img src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}" alt="product image" class="product-image">
                 <div class="product-info">
-                    <p class="product-name">{{ item.name }}</p>
+                    <p class="product-name">{{ item.title }}</p>
                     <p class="product-status">Status: {{ item.status }}</p>
                 </div>
             </div>
@@ -58,7 +59,7 @@
 
         <div class="itempage-btn">
             <button type="button" class="back-btn" onclick="history.back()">Back</button>
-            <button type="submit" class="submit-btn" onclick="window.location.href='{{ url_for('trade_confirmation') }}'">Offer Trade</button>
+            <button type="submit" class="submit-btn">Offer Trade</button>
         </div>
     </form>
     {% else %}

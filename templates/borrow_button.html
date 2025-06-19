@@ -39,16 +39,17 @@
         <p>Choose an item from your current listing products that wanted to trade with other.</p>
     </div>
 
-    <form method="get" action="{{ url_for('borrow_confirmation') }}">
+    <form method="POST" action="{{ url_for('borrow_button',product_id=product_id) }}">
         <div class="select-time-section">
             <div id="borrow-calendar" class="calendar-widget"></div>
+            <input type="hidden" name="product_id" value="{{ product_id }}">
             <input type="hidden" name="borrow_range" id="borrow-range-hidden" required>
         </div>
 
 
         <div class="itempage-btn">
             <button type="button" class="back-btn" onclick="history.back()">Back</button>
-            <button type="submit" class="submit-btn" onclick="window.location.href='{{ url_for('borrow_confirmation') }}'">Borrow</button>
+            <button type="submit" class="submit-btn" >Borrow</button>
         </div>
     </form>
 
