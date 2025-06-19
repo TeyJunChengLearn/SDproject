@@ -55,12 +55,6 @@
             <span>My Request (0)</span>
             <i class="fas fa-chevron-right arrow"></i>
         </div>
-        <div class="menu-item">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-            <i class="fas fa-chevron-right arrow"></i>
-        </div>
-        
         {% if user.charity %}
         {% else %}
             <div class="menu-item" onclick="window.location.href='{{ url_for('createCharity') }}'">
@@ -70,7 +64,16 @@
             </div>
             
         {% endif %}
-
+        <a class="menu-item">
+            <i class="bi bi-patch-question-fill"></i>
+            <span>Inquiry</span>
+            <i class="fas fa-chevron-right arrow"></i>
+        </a>
+        <div class="menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+            <i class="fas fa-chevron-right arrow"></i>
+        </div>
     </div>
 
     <div class="logout-btn-wrapper">
