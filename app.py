@@ -21,6 +21,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'junelson2002@gmail.com'
 app.config['MAIL_PASSWORD'] = 'nkfmhtcnmnqhcvnc'
+app.config['MAIL_DEFAULT_SENDER'] = 'junelson2002@gmail.com'
 
 mail = Mail(app)
 
@@ -890,6 +891,185 @@ def createCharity():
     db.session.commit()
     flash(f"User {user.email} is now a registered charity!", "success")
     return redirect(url_for('homepage'))
+
+@app.route('/admin/dashboard', endpoint='admin_dashboard')
+def admin_dashboard():
+    # Example dummy values; replace with actual queries if needed
+    total_users = User.query.count()
+    total_payments = 250000  # replace with a query if available
+    total_admin = Admin.query.count()
+
+    return render_template(
+        'admin_dashboard.html',
+        total_users=total_users,
+        total_payments=f"Rm {total_payments:,}",
+        total_admin=total_admin
+    )
+
+@app.route('/admin/reports', endpoint='admin_reports')
+def admin_reports():
+    # Dummy payment data – replace with actual database queries
+    payment_data = [
+        {"user": "Mithilesh Kumar Singh", "address": "Kritipur, Kathmandu", "date": "12.Jan.2021", "amount": "Rm 100"},
+        {"user": "Suron Maharjan", "address": "Natole, Lalitpur", "date": "21.Feb.2021", "amount": "Rm 100"},
+        {"user": "Sandesh Bajracharya", "address": "Bhinchebahal, Lalitpur", "date": "13.Mar.2021", "amount": "Rm 100"},
+        {"user": "Subin Sedhai", "address": "Baneshwor, Kathmandu", "date": "24.Jan.2021", "amount": "Rm 100"},
+        {"user": "Wonjala Joshi", "address": "Bhaisepati, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Numa Limbu", "address": "Sampang Chowk, Dharan", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Nimesh Sthapit", "address": "Newroad, Pokhara", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Samikshya Basnet", "address": "Nakhipot, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Sushant Kushwar", "address": "Sinamangal, Kathmandu", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Hrishav Gujurel", "address": "Khumaltar, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
+        {"user": "Tisha Joshi", "address": "Ason, Kathmandu", "date": "21.Sep.2021", "amount": "Rm 100"},
+    ]
+
+    # Example chart data (optional — for your chart placeholders)
+    daily_users = 105
+    payment_done_percent = 63
+    payment_pending_percent = 25
+
+    return render_template(
+        'admin_reports.html',
+        payments=payment_data,
+        daily_users=daily_users,
+        payment_done_percent=payment_done_percent,
+        payment_pending_percent=payment_pending_percent
+    )
+
+@app.route('/admin/manage-users', endpoint='admin_manage_users')
+def admin_manage_users():
+    # Dummy user list
+    users = [
+        {'id': 112, 'name': 'Mithilesh Kumar Singh', 'address': 'Kritipur, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 113, 'name': 'Suron Maharjan', 'address': 'Natoole, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 114, 'name': 'Sandesh Bajracharya', 'address': 'Bhinchebhohal, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 115, 'name': 'Subin Sedhai', 'address': 'Baneshwor, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
+    ]
+
+    return render_template('admin_manage_users.html', users=users)
+
+@app.route('/admin/user/<int:user_id>/edit', endpoint='edit_user')
+def edit_user(user_id):
+    return f"Edit User {user_id} (placeholder)"
+
+@app.route('/admin/user/<int:user_id>/delete', endpoint='delete_user')
+def delete_user(user_id):
+    return f"Delete User {user_id} (placeholder)"
+
+
+@app.route('/admin/manage-listing', endpoint='admin_manage_listing')
+def admin_manage_listing():
+    # Dummy listing data
+    listings = [
+        {
+            'id': 1,
+            'name': 'Wireless Mouse',
+            'posted_date': '31st Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+        {
+            'id': 2,
+            'name': 'Bluetooth Speaker',
+            'posted_date': '30th Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+        {
+            'id': 3,
+            'name': 'Laptop Stand',
+            'posted_date': '14th Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+        {
+            'id': 4,
+            'name': 'Desk Lamp',
+            'posted_date': '14th Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+        {
+            'id': 5,
+            'name': 'USB-C Cable',
+            'posted_date': '31st Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+        {
+            'id': 6,
+            'name': 'Notebook',
+            'posted_date': '30th Feb, 2025',
+            'image': 'quokka.jpg',
+        },
+    ]
+
+    return render_template('admin_manage_listing.html', listings=listings)
+
+@app.route('/admin/listing/<int:listing_id>/edit', methods=['GET'])
+def edit_listing(listing_id):
+    # Dummy data again, for simulation purposes
+    listings = [
+        {'id': 1, 'name': 'Wireless Mouse', 'price': 50.00, 'description': 'A nice wireless mouse'},
+        {'id': 2, 'name': 'Bluetooth Speaker', 'price': 120.00, 'description': 'Loud and clear sound'},
+        {'id': 3, 'name': 'Laptop Stand', 'price': 80.00, 'description': 'Adjustable height'},
+        {'id': 4, 'name': 'Desk Lamp', 'price': 60.00, 'description': 'LED lighting with USB'},
+        {'id': 5, 'name': 'USB-C Cable', 'price': 20.00, 'description': 'Durable and fast'},
+        {'id': 6, 'name': 'Notebook', 'price': 10.00, 'description': '80 pages, hardcover'},
+    ]
+
+    listing = next((l for l in listings if l['id'] == listing_id), None)
+
+    if not listing:
+        return "Listing not found", 404
+
+    return render_template('admin_edit_listing.html', listing=listing)
+
+
+@app.route('/admin/listing/<int:listing_id>/edit', methods=['POST'], endpoint='update_listing')
+def update_listing(listing_id):
+    # Logic to update listing from request.form
+    return redirect(url_for('admin_manage_listing'))
+
+@app.route('/admin/listing/<int:listing_id>/delete', methods=['GET'], endpoint='delete_listing')
+def delete_listing(listing_id):
+    # Logic to delete listing
+    return redirect(url_for('admin_manage_listing'))
+
+
+@app.route('/admin/user-inquiry', endpoint='admin_user_inquiry')
+def admin_user_inquiry():
+    inquiries = [
+        {
+            'id': '001',
+            'name': 'Sinkalen',
+            'address': 'The Arc, Cyberjaya',
+            'postcode': '64000',
+            'date': '31/2/2025',
+            'due_amount': 'Rm 53',
+            'status': 'Pending'
+        },
+        {
+            'id': '002',
+            'name': 'Dodolenyeah',
+            'address': 'Mutiara, Cyberjaya',
+            'postcode': '64000',
+            'date': '35/13/2025',
+            'due_amount': 'Rm 69',
+            'status': 'Pending'
+        }
+    ]
+
+    return render_template('admin_user_inquiry.html', inquiries=inquiries)
+
+@app.route('/admin/send-reply', methods=['POST'])
+def send_reply():
+    from flask import request
+
+    recipient = request.form['email']
+    message = request.form['message']
+
+    msg = Message(subject="Reply to your inquiry",
+                  recipients=[recipient],
+                  body=message)
+    mail.send(msg)
+
+    return "Email sent successfully"
 
 
 if __name__ == "__main__":

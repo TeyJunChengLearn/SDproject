@@ -1,0 +1,263 @@
+/* Reset & Fonts */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+  background-color: #f5f8ff;
+  color: #1f2c73;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #ffffff;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #e0e6f3;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4c4cff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 1rem 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #1f2c73;
+  font-weight: 500;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #eef2ff;
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.sidebar ul li a i {
+  font-size: 1.2rem;
+}
+
+
+.sidebar a:hover,
+.sidebar a:focus {
+  background-color: #e0e6f3;
+}
+
+.logout-button {
+  background-color: #4c4cff;
+  color: white !important;
+  padding: 0.7rem;
+  text-align: center;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 2rem;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #3a3aff;
+  color: black !important;
+}
+
+/* Dashboard Main */
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-bar input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  min-width: 200px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.download-button {
+  background-color: #4c4cff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #3a3aff;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-table th,
+.payment-table td {
+  text-align: left;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.payment-table thead {
+  background-color: #f5f8ff;
+  color: #1f2c73;
+}
+
+.analytics {
+  display: flex;
+  gap: 2rem;
+}
+
+.user-analytics,
+.payment-analytics {
+  flex: 1;
+}
+
+.user-count {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.active-label {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 0.5rem;
+}
+
+.user-graph-placeholder,
+.payment-chart-placeholder {
+  background: linear-gradient(to top, #8faaff, #dbeafe);
+  border-radius: 12px;
+  height: 120px;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4f46e5;
+}
+
+.payment-analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-analytics select {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #4f46e5;
+}
+
+.legend .dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.legend .done {
+  background-color: #4f46e5;
+}
+
+.legend .pending {
+  background-color: #a5b4fc;
+}
+
+@media print {
+  .sidebar,
+  .dashboard-header,
+  .download-button,
+  .logout-button,
+  .search-bar,
+  .payment-analytics,
+  .user-analytics {
+    display: none !important;
+  }
+
+  .dashboard {
+    padding: 0;
+  }
+
+  .payment-details {
+    margin: 0;
+    padding: 0;
+  }
+
+  .payment-table {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/adminuserinquiry.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <title>Admin User Inquiry</title>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">ShareBear</div>
+      <nav>
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            <li><a href="#"><i class="fas fa-th-large"></i> Manage System</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> Manage User</a></li>
+            <li><a href="#"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
+            <li><a href="#"><i class="fas fa-inbox"></i> User Inquiry</a></li>
+        </ul>
+      </nav>
+      <a class="logout-button" href="#">Logout</a>
+    </aside>
+    <main class="dashboard">
+      <header class="dashboard-header">
+        <h1>User Inquiry</h1>
+        <div class="search-bar"><input type="text" placeholder="Search" /></div>
+      </header>
+
+
+        <section class="inquiry-section">
+
+        <div class="inquiry-table-container">
+            <div class="inquiry-table-header">
+            <h3>Inquiry List</h3>
+            <form action="/admin/send-reply" method="POST">
+            <input type="email" name="email" placeholder="User's Email" required />
+            <textarea name="message" placeholder="Type your reply here..." required></textarea>
+            <button type="submit">Send Email</button>
+            </form>
+
+            </div>
+
+            <table class="inquiry-table">
+            <thead>
+                <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Postcode</th>
+                <th>Date</th>
+                <th>Due Amount</th>
+                <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inquiry in inquiries %}
+                <tr>
+                <td>{{ inquiry.id }}</td>
+                <td>{{ inquiry.name }}</td>
+                <td>{{ inquiry.address }}</td>
+                <td>{{ inquiry.postcode }}</td>
+                <td>{{ inquiry.date }}</td>
+                <td>{{ inquiry.due_amount }}</td>
+                <td class="status pending">{{ inquiry.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </section>
+
+
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='js/adminreports.js') }}"></script>
+  
+
+</body>
+</html>
