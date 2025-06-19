@@ -39,11 +39,6 @@
         <div class="inquiry-table-container">
             <div class="inquiry-table-header">
             <h3>Inquiry List</h3>
-            <form action="/admin/send-reply" method="POST">
-            <input type="email" name="email" placeholder="User's Email" required />
-            <textarea name="message" placeholder="Type your reply here..." required></textarea>
-            <button type="submit">Send Email</button>
-            </form>
 
             </div>
 
@@ -57,6 +52,7 @@
                 <th>Date</th>
                 <th>Due Amount</th>
                 <th>Status</th>
+                <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,6 +65,9 @@
                 <td>{{ inquiry.date }}</td>
                 <td>{{ inquiry.due_amount }}</td>
                 <td class="status pending">{{ inquiry.status }}</td>
+                <td class="action-icons">
+                    <button onclick="openReplyModal('user@example.com')">Reply</button>
+                </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -77,9 +76,34 @@
         </section>
 
 
+
+                    <!-- Reply Modal -->
+            <div id="replyModal" class="modal">
+            <div class="modal-content">
+                <span onclick="closeModal()" class="close-btn">&times;</span>
+                <h3>Send Email</h3>
+                <form action="/admin/send-reply" method="POST">
+                <input type="email" id="replyEmail" name="email" placeholder="User's Email" required readonly />
+                <textarea name="message" placeholder="Type your reply here..." required></textarea>
+                <button type="submit">Send Email</button>
+                </form>
+            </div>
+            </div>
+
+
     </main>
   </div>
-  <script src="{{ url_for('static', filename='js/adminreports.js') }}"></script>
+        <script>
+        function openReplyModal(email) {
+        document.getElementById('replyEmail').value = email;
+        document.getElementById('replyModal').style.display = 'block';
+        }
+
+        function closeModal() {
+        document.getElementById('replyModal').style.display = 'none';
+        }
+        </script>
+
   
 
 </body>

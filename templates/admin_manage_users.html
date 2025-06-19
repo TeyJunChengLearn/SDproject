@@ -39,7 +39,7 @@
             <div>
             <p class="status-indicator">Staff Active</p>
             </div>
-            <button class="add-user-btn" onclick="document.getElementById('addUserModal').style.display='block'">Add User</button>
+            <a href="{{ url_for('add_user') }}" class="add-user-btn">Add User</a>
         </div>
 
         <div class="user-table-container">
@@ -64,7 +64,10 @@
                 <td>{{ user.role }}</td>
                 <td>{{ user.staff_id }}</td>
                 <td class="action-icons">
-                <i class="fas fa-edit edit-icon" onclick="openEditModal('{{ user.id }}', '{{ user.name }}', '{{ user.address }}', '{{ user.role }}', '{{ user.staff_id }}')"></i>
+                <a href="{{ url_for('edit_user', user_id=user.id) }}" class="edit-icon-link">
+                <i class="fas fa-edit edit-icon"></i>
+                </a>
+
                 <i class="fas fa-trash delete-icon" onclick="openDeleteModal('{{ user.id }}', '{{ user.name }}')"></i>
                 </td>
             </tr>
@@ -73,49 +76,6 @@
             </table>
         </div>
         </section>
-
-                <!-- Add User Modal -->
-        <div id="addUserModal" class="modal">
-        <div class="modal-content">
-            <h2>Add New User</h2>
-            <form id="addUserForm">
-            <label>Name: <input type="text" name="name" id="addName" required></label><br>
-            <label>Address: <input type="text" name="address" id="addAddress" required></label><br>
-            <label>Role: <input type="text" name="role" id="addRole" required></label><br>
-            <label>Staff ID: <input type="text" name="staff_id" id="addStaffId" required></label><br>
-            <button type="submit">Add</button>
-            <button type="button" onclick="closeModal('addUserModal')">Cancel</button>
-            </form>
-        </div>
-        </div>
-
-
-
-                <!-- Edit Modal -->
-        <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h2>Edit User</h2>
-            <form id="editForm">
-            <input type="hidden" id="editUserId">
-            <label>Name: <input type="text" id="editName"></label><br>
-            <label>Address: <input type="text" id="editAddress"></label><br>
-            <label>Role: <input type="text" id="editRole"></label><br>
-            <label>Staff ID: <input type="text" id="editStaffId"></label><br>
-            <button type="submit">Save</button>
-            <button type="button" onclick="closeModal('editModal')">Cancel</button>
-            </form>
-        </div>
-        </div>
-
-        <!-- Delete Modal -->
-        <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <h2>Confirm Delete</h2>
-            <p id="deleteMsg"></p>
-            <button onclick="confirmDelete()">Yes, Delete</button>
-            <button onclick="closeModal('deleteModal')">Cancel</button>
-        </div>
-        </div>
 
 
     </main>

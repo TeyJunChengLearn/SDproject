@@ -948,9 +948,26 @@ def admin_manage_users():
 
     return render_template('admin_manage_users.html', users=users)
 
-@app.route('/admin/user/<int:user_id>/edit', endpoint='edit_user')
+@app.route('/admin/user/<int:user_id>/edit', methods=['GET'])
 def edit_user(user_id):
-    return f"Edit User {user_id} (placeholder)"
+    # Dummy user data
+    users = [
+        {'id': 112, 'name': 'Mithilesh Kumar Singh', 'address': 'Kritipur, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 113, 'name': 'Suron Maharjan', 'address': 'Natoole, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 114, 'name': 'Sandesh Bajracharya', 'address': 'Bhinchebhohal, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
+        {'id': 115, 'name': 'Subin Sedhai', 'address': 'Baneshwor, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
+    ]
+    user = next((u for u in users if u['id'] == user_id), None)
+
+    if not user:
+        return "User not found", 404
+
+    return render_template('admin_edit_user.html', user=user)
+
+@app.route('/admin/user/add', methods=['GET'], endpoint='add_user')
+def add_user():
+    return render_template('admin_add_user.html')
+
 
 @app.route('/admin/user/<int:user_id>/delete', endpoint='delete_user')
 def delete_user(user_id):

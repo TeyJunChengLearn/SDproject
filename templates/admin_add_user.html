@@ -29,34 +29,48 @@
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
-        <h1>Manage Listing</h1>
+        <h1>Edit User</h1>
         <div class="search-bar"><input type="text" placeholder="Search" /></div>
       </header>
 
-
-        <section class="manage-listing">
-        <h2>Recently Added</h2>
-        <div class="card-grid">
-        {% for listing in listings %}
-        <div class="card">
-            <img src="{{ url_for('static', filename=listing.image) }}" alt="{{ listing.name }}" />
-            <div class="card-body">
-            <h3>{{ listing.name }}</h3>
-            <p class="item-id">ID: {{ listing.id }}</p>
-            <p class="date-posted">Posted: {{ listing.posted_date }}</p>
-            <div class="button-group">
-                <a href="{{ url_for('edit_listing', listing_id=listing.id) }}" class="edit-btn">Edit</a>
-                <button class="remove-btn" >Remove</button>
+        <section class="add-user">
+        <div class="edit-form-container">
+            <h2>Add New User</h2>
+            <form action="" method="POST" enctype="multipart/form-data">
+            
+            <!-- Image Upload -->
+            <div class="form-group">
+                <label for="avatar">Upload Avatar:</label>
+                <input type="file" id="avatar" name="avatar" accept="image/*">
             </div>
-            </div>
-        </div>
-        {% endfor %}
 
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <input type="text" id="role" name="role" required>
+            </div>
+
+            <div class="form-group">
+                <label for="staff_id">Staff ID:</label>
+                <input type="text" id="staff_id" name="staff_id" required>
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="confirm-btn">Add User</button>
+                <a href="" class="delete-btn">Cancel</a>
+            </div>
+            </form>
         </div>
         </section>
-
-
-
 
 
 
