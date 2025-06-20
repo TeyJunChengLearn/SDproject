@@ -1721,7 +1721,17 @@ def edit_listing(listing_id):
 
 @app.route('/admin/listing/<int:listing_id>/delete', methods=['GET'], endpoint='delete_listing')
 def delete_listing(listing_id):
-    # Logic to delete listing
+    listing = Listing.query.get_or_404(listing_id)
+
+    # 2) delete any dependent rows first
+    TransactionItem.query.filter_by(listing_id=listing.id).delete(synchronize_session=False)
+    Request.query.filter_by(listing_id=listing.id).delete(synchronize_session=False)
+    CartItem.query.filter_by(listing_id=listing.id).delete(synchronize_session=False)
+
+    # 3) delete the listing itself
+    db.session.delete(listing)
+    db.session.commit()
+
     return redirect(url_for('admin_manage_listing'))
 
 
