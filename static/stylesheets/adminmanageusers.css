@@ -1,0 +1,253 @@
+/* Reset & Fonts */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+  background-color: #f5f8ff;
+  color: #1f2c73;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #ffffff;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #e0e6f3;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4c4cff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 1rem 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #1f2c73;
+  font-weight: 500;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #eef2ff;
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.sidebar ul li a i {
+  font-size: 1.2rem;
+}
+
+
+.sidebar a:hover,
+.sidebar a:focus {
+  background-color: #e0e6f3;
+}
+
+.logout-button {
+  background-color: #4c4cff;
+  color: white !important;
+  padding: 0.7rem;
+  text-align: center;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 2rem;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #3a3aff;
+  color: black !important;
+}
+
+/* Dashboard Main */
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-bar input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  min-width: 200px;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  margin-bottom: 0.3rem;
+}
+
+.page-header h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.status-indicator {
+  color: #2dd4bf;
+  font-weight: 600;
+}
+
+/* Add User Button */
+.add-user-btn {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-user-btn:hover {
+  background-color: #4338ca;
+}
+
+/* User Table */
+.user-table-container {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-table th, .user-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.user-table th {
+  background-color: #f8fafc;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.user-table tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.action-icons {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.edit-icon {
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.delete-icon {
+  color: #ef4444;
+  cursor: pointer;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background: white;
+  margin: 10% auto;
+  padding: 2rem;
+  width: 400px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.modal-content input {
+  width: 90%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.modal-content button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content button:first-of-type {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.modal-content button:last-of-type {
+  background-color: #e5e7eb;
+}
