@@ -17,15 +17,14 @@
       <div class="logo">ShareBear</div>
       <nav>
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
-            <li><a href="#"><i class="fas fa-th-large"></i> Manage System</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Manage User</a></li>
-            <li><a href="#"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
-            <li><a href="#"><i class="fas fa-inbox"></i> User Inquiry</a></li>
+            <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            <li><a href="{{url_for('admin_manage_users')}}"><i class="fas fa-user"></i> Manage User</a></li>
+            <li><a href="{{url_for('admin_manage_listing')}}"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
+            <li><a href="{{url_for('admin_user_inquiry')}}"><i class="fas fa-inbox"></i> User Inquiry</a></li>
         </ul>
       </nav>
-      <a class="logout-button" href="#">Logout</a>
+      <a class="logout-button" href="{{url_for('logout')}}">Logout</a>
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
@@ -36,7 +35,7 @@
         <section class="add-user">
         <div class="edit-form-container">
             <h2>Add New User</h2>
-            <form action="" method="POST" enctype="multipart/form-data">
+            <form action="{{url_for('add_user')}}" method="POST" enctype="multipart/form-data" required>
             
             <!-- Image Upload -->
             <div class="form-group">
@@ -45,29 +44,24 @@
             </div>
 
             <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
             </div>
 
             <div class="form-group">
-                <label for="role">Role:</label>
-                <input type="text" id="role" name="role" required>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" required>
             </div>
-
-            <div class="form-group">
-                <label for="staff_id">Staff ID:</label>
-                <input type="text" id="staff_id" name="staff_id" required>
-            </div>
-
             <div class="button-row">
                 <button type="submit" class="confirm-btn">Add User</button>
                 <a href="" class="delete-btn">Cancel</a>
             </div>
+
             </form>
         </div>
         </section>

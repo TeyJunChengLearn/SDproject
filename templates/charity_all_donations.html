@@ -17,10 +17,10 @@
       <div class="logo">ShareBear</div>
       <nav>
         <ul>
-            <li><a href="#"><i class="fas fa-list-alt"></i> Available Donation</a></li>
+            <li><a href="url_for('logout')"><i class="fas fa-list-alt"></i> Available Donation</a></li>
         </ul>
       </nav>
-      <a class="logout-button" href="#">Logout</a>
+      <a class="logout-button" href="{{url_for('logout')}}">Logout</a>
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
@@ -32,14 +32,14 @@
         <section class="all-donations">
         <h2 class="section-title">Recently Added</h2>
         <div class="card-grid">
-            {% for listing in listings %}
+            {% for request in requests %}
             <div class="donation-card">
-            <img class="donation-image" src="{{ url_for('static', filename=listing.image) }}" alt="{{ listing.name }}" />
+            <img class="donation-image" src="{{ url_for('static', filename='uploads/' ~ request.listing.image_filename) }}" alt="{{ request.listing.name }}" />
             <div class="donation-info">
-                <h3 class="donation-title">{{ listing.name }}</h3>
-                <p class="donation-id">ID Number</p>
-                <p class="donation-date">Posted: {{ listing.posted_date }}</p>
-                <a href="" class="view-btn">View</a>
+                <h3 class="donation-title">{{ request.listing.title }}</h3>
+                <p class="donation-id">ID Number: {{request.id}}</p>
+                <p class="donation-date">Posted: {{ request.created_at }}</p>
+                <a href="{{url_for('charity_view_donation',request_id=request.id)}}" class="view-btn">View</a>
             </div>
             </div>
             {% endfor %}

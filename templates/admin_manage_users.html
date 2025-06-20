@@ -17,15 +17,14 @@
       <div class="logo">ShareBear</div>
       <nav>
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
-            <li><a href="#"><i class="fas fa-th-large"></i> Manage System</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Manage User</a></li>
-            <li><a href="#"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
-            <li><a href="#"><i class="fas fa-inbox"></i> User Inquiry</a></li>
+            <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
+            <li><a href="{{url_for('admin_manage_users')}}"><i class="fas fa-user"></i> Manage User</a></li>
+            <li><a href="{{url_for('admin_manage_listing')}}"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
+            <li><a href="{{url_for('admin_user_inquiry')}}"><i class="fas fa-inbox"></i> User Inquiry</a></li>
         </ul>
       </nav>
-      <a class="logout-button" href="#">Logout</a>
+      <a class="logout-button" href="{{url_for('logout')}}">Logout</a>
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
@@ -48,10 +47,8 @@
             <thead>
                 <tr>
                 <th>UID</th>
-                <th>Name</th>
-                <th>Address</th>
+                <th>Email</th>
                 <th>Role</th>
-                <th>Staff ID</th>
                 <th>Action</th>
                 </tr>
             </thead>
@@ -59,16 +56,22 @@
             {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.address }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ user.staff_id }}</td>
+                <td>{{ user.email }}</td>
+                {% if user.charity %}
+                    <td>Charity</td>
+                {% elif user.admin %}
+                    <td>Admin</td>
+                {% else %}
+                    <td>User</td>
+                {% endif %}
                 <td class="action-icons">
                 <a href="{{ url_for('edit_user', user_id=user.id) }}" class="edit-icon-link">
                 <i class="fas fa-edit edit-icon"></i>
                 </a>
-
-                <i class="fas fa-trash delete-icon" onclick="openDeleteModal('{{ user.id }}', '{{ user.name }}')"></i>
+                <a href="{{url_for('delete_user',user_id=user.id)}}">
+                    <i class="fas fa-trash delete-icon" onclick="openDeleteModal('{{ user.id }}', '{{ user.name }}')"></i>
+                </a>
+                
                 </td>
             </tr>
             {% endfor %}

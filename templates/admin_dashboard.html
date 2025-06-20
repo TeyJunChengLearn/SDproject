@@ -17,15 +17,14 @@
       <div class="logo">ShareBear</div>
       <nav>
         <ul>
-            <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{url_for('admin_dashboard')}}"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="{{ url_for('admin_reports') }}"><i class="fas fa-chart-bar"></i> Reports</a></li>
-            <li><a href="#"><i class="fas fa-th-large"></i> Manage System</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Manage User</a></li>
-            <li><a href="#"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
-            <li><a href="#"><i class="fas fa-inbox"></i> User Inquiry</a></li>
+            <li><a href="{{url_for('admin_manage_users')}}"><i class="fas fa-user"></i> Manage User</a></li>
+            <li><a href="{{url_for('admin_manage_listing')}}"><i class="fas fa-list-alt"></i> Manage Listing</a></li>
+            <li><a href="{{url_for('admin_user_inquiry')}}"><i class="fas fa-inbox"></i> User Inquiry</a></li>
         </ul>
       </nav>
-      <a class="logout-button" href="#">Logout</a>
+      <a class="logout-button" href="{{url_for('logout')}}">Logout</a>
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">

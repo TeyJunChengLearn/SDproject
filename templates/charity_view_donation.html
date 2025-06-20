@@ -1,26 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/charityalldonations.css') }}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <!-- … your head links … -->
   <title>Charity All Donation</title>
 </head>
 <body>
   <div class="container">
     <aside class="sidebar">
-      <div class="logo">ShareBear</div>
-      <nav>
-        <ul>
-            <li><a href="#"><i class="fas fa-list-alt"></i> Available Donation</a></li>
-        </ul>
-      </nav>
-      <a class="logout-button" href="#">Logout</a>
+      <!-- … -->
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
@@ -28,70 +15,52 @@
         <div class="search-bar"><input type="text" placeholder="Search" /></div>
       </header>
 
-
-        <section class="view-donation">
+      <section class="view-donation">
 
         <h3 class="sub-title">Donation Items</h3>
-
         <div class="donation-item-grid">
-            {% for item in donation_items %}
-            <div class="donation-item-card">
-            <img src="{{ url_for('static', filename=item.image) }}" alt="Item Image">
+          {# Loop over exactly one item (your `request`) #}
+          {% for item in [request] %}
+          <div class="donation-item-card">
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ item.listing.image_filename) }}"
+              alt="Item Image"
+            >
             <div class="item-details">
-                <p class="item-name">{{ item.name }}</p>
-                <p class="item-size">Size: {{ item.size }}</p>
+              <p class="item-name">{{ item.listing.title }}</p>
+              <p class="item-size">
+                Size: {{ item.listing.dimensionSize or '—' }}
+              </p>
             </div>
             <div class="item-meta">
-                {% if item.accepted %}
+              {% if item.status == 'approved' %}
                 <span class="status-icon success">&#10003;</span>
-                {% else %}
+              {% else %}
                 <span class="status-icon empty"></span>
-                {% endif %}
-                <span class="item-qty">{{ item.quantity }}</span>
+              {% endif %}
             </div>
-            </div>
-            {% endfor %}
+          </div>
+          {% endfor %}
         </div>
 
         <div class="donation-summary">
-            <p class="summary-name">Item Name</p>
-            <p class="summary-user">By {{ donation_user }}</p>
-            <p class="summary-date">Posted: {{ posted_date }}</p>
-            <button class="accept-btn">Accept</button>
+          <p class="summary-name">{{ request.listing.title }}</p>
+          <p class="summary-user">By {{ request.requester.email }}</p>
+          <p class="summary-date">
+            Posted: {{ request.created_at.strftime('%Y-%m-%d %H:%M') }}
+          </p>
+          <a href="{{url_for('approveDonation',request_id=request.id)}}">
+              <button class="accept-btn">Accept</button>
+          </a>
+          <a href="{{url_for('rejectDonation',request_id=request.id)}}">
+              <button class="accept-btn">Reject</button>
+          </a>
         </div>
-        </section>
-
-        <section class="browse-more">
-        <h3>Browse More</h3>
-        <div class="card-grid">
-            {% for listing in browse_more %}
-            <div class="donation-card">
-            <img src="{{ url_for('static', filename=listing.image) }}" alt="{{ listing.name }}">
-            <div class="donation-info">
-                <h3 class="donation-title">{{ listing.name }}</h3>
-                <p class="donation-id">ID Number</p>
-                <p class="donation-date">Posted: {{ listing.posted_date }}</p>
-                <a href="#" class="view-btn">View</a>
-            </div>
-            </div>
-            {% endfor %}
-        </div>
-        </section>
-
-
-
-
-
-
-
-
-
+      </section>
 
 
     </main>
   </div>
   <script src="{{ url_for('static', filename='js/adminreports.js') }}"></script>
-
-
 </body>
 </html>

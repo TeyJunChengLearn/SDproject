@@ -6,10 +6,12 @@ from xuanxuan import xuanxuan_routes
 from jc import jc_routes
 from jamie import jamie_routes
 from werkzeug.utils import secure_filename
+import json
 import os
 from flask_mail import Mail, Message
 from sqlalchemy import or_, and_
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, backref
+from sqlalchemy import func
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.secret_key = 'super_secret_key'
@@ -30,31 +32,70 @@ mail = Mail(app)
 # =========================== MODELS ===========================
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=True)
     avatar_filename = db.Column(db.String(255), nullable=True)
     status = db.Column(db.String(20), nullable=False, default='active')
-    transactions = db.relationship('Transaction', foreign_keys='Transaction.buyer_id', backref='buyer', lazy=True)
-    charity = db.relationship("Charity", back_populates="user", uselist=False)
-    admin = db.relationship("Admin", back_populates="user", uselist=False)
+
+    listings = db.relationship(
+        'Listing',
+        backref=backref('owner', passive_deletes=True),
+        cascade='all, delete-orphan',
+        lazy=True
+    )
+    transactions = db.relationship(
+        'Transaction',
+        foreign_keys='Transaction.buyer_id',
+        backref=backref('buyer', passive_deletes=True),
+        cascade='all, delete-orphan',
+        lazy=True
+    )
+    admin = db.relationship(
+        'Admin',
+        back_populates='user',
+        cascade='all, delete-orphan',
+        uselist=False,
+        passive_deletes=True
+    )
+    charity = db.relationship(
+        'Charity',
+        back_populates='user',
+        cascade='all, delete-orphan',
+        uselist=False,
+        passive_deletes=True
+    )
 
 class Admin(db.Model):
-    __tablename__ = "admin"
-
-    id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-    user = db.relationship("User", back_populates="admin", uselist=False)
-
+    __tablename__ = 'admin'
+    id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    user = db.relationship(
+        'User',
+        back_populates='admin',
+        passive_deletes=True
+    )
 
 class Charity(db.Model):
-    __tablename__ = "charity"
-
-    id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-    user = db.relationship("User", back_populates="charity", uselist=False)
-
+    __tablename__ = 'charity'
+    id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    user = db.relationship(
+        'User',
+        back_populates='charity',
+        passive_deletes=True
+    )
 
 class Listing(db.Model):
+    __tablename__ = 'listing'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -64,61 +105,122 @@ class Listing(db.Model):
     color = db.Column(db.Text, nullable=True)
     shippingOptions = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), nullable=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
     image_filename = db.Column(db.String(255), nullable=True)
     category = db.Column(db.String(100), nullable=True)
     price = db.Column(db.Float, nullable=False)
-    owner = db.relationship('User', backref='listings')
+
+    transaction_items = db.relationship(
+        'TransactionItem',
+        back_populates='listing',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
+        lazy=True
+    )
+    requests_received = db.relationship(
+        'Request',
+        back_populates='listing',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
+        lazy=True
+    )
+    cart_items = db.relationship(
+        'CartItem',
+        back_populates='listing',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
+        lazy=True
+    )
 
 class Transaction(db.Model):
     __tablename__ = 'transaction'
-
     id = db.Column(db.Integer, primary_key=True)
-    buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    type = db.Column(db.String(50), nullable=False)  # 'purchase', 'borrow', 'trade', 'donation'
-    status = db.Column(db.String(50), default="pending")  # e.g. 'pending', 'approved', 'completed'
+    buyer_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    seller_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    type = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), default='pending')
     date = db.Column(db.DateTime, default=datetime.utcnow)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=True)
-    items = db.relationship('TransactionItem', backref='transaction', lazy=True)
-    def get_listings(self):
-        return [item.listing for item in self.items]
+    parent_id = db.Column(
+        db.Integer,
+        db.ForeignKey('transaction.id', ondelete='CASCADE'),
+        nullable=True
+    )
 
+    items = db.relationship(
+        'TransactionItem',
+        backref=backref('transaction', passive_deletes=True),
+        cascade='all, delete-orphan',
+        lazy=True
+    )
 
 class TransactionItem(db.Model):
     __tablename__ = 'transaction_item'
-
     id = db.Column(db.Integer, primary_key=True)
-    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
-    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    transaction_id = db.Column(
+        db.Integer,
+        db.ForeignKey('transaction.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    listing_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listing.id', ondelete='CASCADE'),
+        nullable=False
+    )
     quantity = db.Column(db.Integer, default=1)
+    role = db.Column(db.String(20), nullable=False)
 
-    listing = db.relationship('Listing', backref='transaction_items')
-    # 'given' = the party gives this item, 'received' = the party receives this item
-    role = db.Column(db.String(20), nullable=False)  # 'given' or 'received'
-    quantity = db.Column(db.Integer, default=1)
-    listing = db.relationship('Listing', backref='transaction_items')
+    listing = db.relationship(
+        'Listing',
+        back_populates='transaction_items',
+        passive_deletes=True
+    )
 
 class Request(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.String(50))
-    status = db.Column(db.String(50), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    decision_time = db.Column(db.DateTime)
-    
-    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
-    requester_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    __tablename__ = 'request'
+    id             = db.Column(db.Integer, primary_key=True)
+    type           = db.Column(db.String(50))
+    status         = db.Column(db.String(50), nullable=False)
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
+    decision_time  = db.Column(db.DateTime)
 
-    # ✅ FIXED backrefs to avoid naming conflicts
-    requester = db.relationship('User', backref='requests_made', lazy=True)
-    listing = db.relationship('Listing', backref='requests_received', lazy=True)
+    # 1) the crucial FK column
+    listing_id     = db.Column(
+        db.Integer,
+        db.ForeignKey('listing.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    requester_id   = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
 
-    strategy = None
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'request',
-        'polymorphic_on': type
-    }
+    # 2) exactly one relationship on each side, tied via back_populates
+    listing   = db.relationship(
+        'Listing',
+        back_populates='requests_received',
+        passive_deletes=True,
+        lazy=True
+    )
+    requester = db.relationship(
+        'User',
+        backref=backref('requests_made', cascade='all, delete-orphan', passive_deletes=True),
+        lazy=True
+    )
+    def set_strategy(self, strategy):
+        self.strategy = strategy
 
     def approve(self):
         if self.strategy:
@@ -128,82 +230,152 @@ class Request(db.Model):
         if self.strategy:
             self.strategy.reject(self)
 
-    def set_strategy(self, strategy):
-        self.strategy = strategy
-
-
-class SupportTicket(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    subject = db.Column(db.String(200), nullable=False)
-    message = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(50), default='open')  # open, in_progress, closed
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    user = db.relationship('User', backref='support_tickets')
-
+    __mapper_args__ = {
+        'polymorphic_identity': 'request',
+        'polymorphic_on':       type
+    }
 
 
 class BorrowRequest(Request):
     __tablename__ = 'borrow_request'
-    id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
+    id = db.Column(
+        db.Integer,
+        db.ForeignKey('request.id', ondelete='CASCADE'),
+        primary_key=True
+    )
     borrow_start = db.Column(db.Date)
     borrow_end = db.Column(db.Date)
+
     __mapper_args__ = {
         'polymorphic_identity': 'borrow_request'
     }
 
 class TradeRequest(Request):
     __tablename__ = 'trade_request'
-    id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
-    offered_item_id = db.Column(db.Integer, db.ForeignKey('listing.id'))
+    id = db.Column(
+        db.Integer,
+        db.ForeignKey('request.id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    offered_item_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listing.id', ondelete='CASCADE')
+    )
     offered_item = db.relationship('Listing', foreign_keys=[offered_item_id])
+
     __mapper_args__ = {
         'polymorphic_identity': 'trade_request'
     }
 
 class DonationRequest(Request):
     __tablename__ = 'donation_request'
-    id = db.Column(db.Integer, db.ForeignKey('request.id'), primary_key=True)
+    id = db.Column(
+        db.Integer,
+        db.ForeignKey('request.id', ondelete='CASCADE'),
+        primary_key=True
+    )
     reason = db.Column(db.String(255))
-    recipient_charity_id = db.Column(db.Integer, db.ForeignKey('charity.id'))
+    recipient_charity_id = db.Column(
+        db.Integer,
+        db.ForeignKey('charity.id', ondelete='CASCADE')
+    )
     recipient_charity = db.relationship('Charity')
 
     __mapper_args__ = {
         'polymorphic_identity': 'donation_request'
     }
 
-class Report(db.Model):
+class SupportTicket(db.Model):
+    __tablename__ = 'support_ticket'
     id = db.Column(db.Integer, primary_key=True)
-    generated_by = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    subject = db.Column(db.String(200), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(50), default='open')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship(
+        'User',
+        backref=backref('support_tickets', cascade='all, delete-orphan', passive_deletes=True)
+    )
+
+class Report(db.Model):
+    __tablename__ = 'report'
+    id = db.Column(db.Integer, primary_key=True)
+    generated_by = db.Column(
+        db.Integer,
+        db.ForeignKey('admin.id', ondelete='CASCADE')
+    )
     data = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Cart(db.Model):
+    __tablename__ = 'cart'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='cart')
-    items = db.relationship('CartItem', backref='cart', lazy=True, cascade='all, delete-orphan')
-
+    user = db.relationship(
+        'User',
+        backref=backref('carts', cascade='all, delete-orphan', passive_deletes=True)
+    )
+    items = db.relationship(
+        'CartItem',
+        back_populates='cart',
+        cascade='all, delete-orphan',
+        passive_deletes=True,
+        lazy=True
+    )
 
 class CartItem(db.Model):
+    __tablename__ = 'cart_item'
     id = db.Column(db.Integer, primary_key=True)
-    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'), nullable=False)
-    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    cart_id = db.Column(
+        db.Integer,
+        db.ForeignKey('cart.id', ondelete='CASCADE'),
+        nullable=False
+    )
+    listing_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listing.id', ondelete='CASCADE'),
+        nullable=False
+    )
 
-    listing = db.relationship('Listing')
+    cart = db.relationship(
+        'Cart',
+        back_populates='items',
+        passive_deletes=True
+    )
+    listing = db.relationship(
+        'Listing',
+        back_populates='cart_items',
+        passive_deletes=True
+    )
 
 class Notification(db.Model):
+    __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', ondelete='CASCADE'),
+        nullable=False
+    )
     message = db.Column(db.String(255), nullable=False)
     is_read = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref='notifications')
-
+    user = db.relationship(
+        'User',
+        backref=backref('notifications', cascade='all, delete-orphan', passive_deletes=True)
+    )
 
 # =========================== DESIGN PATTERNS ===========================
 class ListingNotifier:
@@ -318,7 +490,45 @@ class ReportGenerator:
         return ReportGenerator._instance
 
     def generate_report(self, admin_id):
-        return Report(generated_by=admin_id, data="System Report", created_at=datetime.utcnow())
+        # 1) query total paid per buyer, per day
+        results = (
+            db.session.query(
+                User.email.label("email"),
+                func.date(Transaction.date).label("date"),
+                func.sum(Listing.price * TransactionItem.quantity).label("total_paid")
+            )
+            .join(Transaction, User.id == Transaction.buyer_id)
+            .join(TransactionItem, Transaction.id == TransactionItem.transaction_id)
+            .join(Listing, TransactionItem.listing_id == Listing.id)
+            .filter(
+                Transaction.type == "purchase",
+                Transaction.status == "complete"  # only completed purchases
+            )
+            .group_by(User.email, func.date(Transaction.date))
+            .order_by(func.date(Transaction.date).desc())
+            .all()
+        )
+
+        # 2) marshal into plain data
+        data_list = [
+            {
+                "email": email,
+                "date": date,
+                "total_paid": float(total_paid)
+            }
+            for email, date, total_paid in results
+        ]
+
+        # 3) persist a Report row with the JSON payload
+        report = Report(
+            generated_by=admin_id,
+            data=json.dumps(data_list),        # store as JSON text
+            created_at=datetime.utcnow()
+        )
+        db.session.add(report)
+        db.session.commit()
+
+        return report, data_list
 
 class NotificationLogger(ItemObserver):
     def update(self, listing):
@@ -468,7 +678,12 @@ def password():
 
         # Log in the user fully
         session['user_id'] = user.id
-        return redirect(url_for('homepage'))
+        if user.admin:
+            return redirect(url_for('admin_dashboard'))  # replace with your admin route
+        elif user.charity:
+            return redirect(url_for('charity_all_donations'))  # replace with your charity route
+        else:
+            return redirect(url_for('homepage'))
 
     return render_template('insertpassword.html', email=email)
 
@@ -1200,7 +1415,7 @@ def createCharity():
     db.session.add(charity)
     db.session.commit()
     flash(f"User {user.email} is now a registered charity!", "success")
-    return redirect(url_for('homepage'))
+    return redirect(url_for('charity_all_donations'))
 
 @app.route('/trade-button/<product_id>')
 def trade_button(product_id):
@@ -1316,140 +1531,193 @@ def admin_dashboard():
 
 @app.route('/admin/reports', endpoint='admin_reports')
 def admin_reports():
-    # Dummy payment data – replace with actual database queries
-    payment_data = [
-        {"user": "Mithilesh Kumar Singh", "address": "Kritipur, Kathmandu", "date": "12.Jan.2021", "amount": "Rm 100"},
-        {"user": "Suron Maharjan", "address": "Natole, Lalitpur", "date": "21.Feb.2021", "amount": "Rm 100"},
-        {"user": "Sandesh Bajracharya", "address": "Bhinchebahal, Lalitpur", "date": "13.Mar.2021", "amount": "Rm 100"},
-        {"user": "Subin Sedhai", "address": "Baneshwor, Kathmandu", "date": "24.Jan.2021", "amount": "Rm 100"},
-        {"user": "Wonjala Joshi", "address": "Bhaisepati, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Numa Limbu", "address": "Sampang Chowk, Dharan", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Nimesh Sthapit", "address": "Newroad, Pokhara", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Samikshya Basnet", "address": "Nakhipot, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Sushant Kushwar", "address": "Sinamangal, Kathmandu", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Hrishav Gujurel", "address": "Khumaltar, Lalitpur", "date": "21.Sep.2021", "amount": "Rm 100"},
-        {"user": "Tisha Joshi", "address": "Ason, Kathmandu", "date": "21.Sep.2021", "amount": "Rm 100"},
-    ]
+    admin_id = session.get('user_id')
 
-    # Example chart data (optional — for your chart placeholders)
-    daily_users = 105
-    payment_done_percent = 63
-    payment_pending_percent = 25
+    # 1) generate the detailed per-user, per-day totals
+    report, payment_data = ReportGenerator.get_instance().generate_report(admin_id)
+
+    # 2) count active users
+    active_user_count = User.query.filter_by(status='active').count()
+
+    # 3) compute total / done / pending payment counts
+    total_payments = (
+        db.session.query(func.count(Transaction.id))
+        .filter(Transaction.type == 'purchase')
+        .scalar() or 0
+    )
+    done_count = (
+        db.session.query(func.count(Transaction.id))
+        .filter(Transaction.type == 'purchase', Transaction.status == 'complete')
+        .scalar() or 0
+    )
+    pending_count = total_payments - done_count
+
+    # 4) calculate percentages (guard against divide-by-zero)
+    done_percent = round(done_count / total_payments * 100, 2) if total_payments else 0
+    pending_percent = round(pending_count / total_payments * 100, 2) if total_payments else 0
 
     return render_template(
         'admin_reports.html',
+        # your existing report data…
         payments=payment_data,
-        daily_users=daily_users,
-        payment_done_percent=payment_done_percent,
-        payment_pending_percent=payment_pending_percent
+        generated_at=report.created_at,
+
+        # new metrics
+        active_users=active_user_count,
+        payment_done_percent=done_percent,
+        payment_pending_percent=pending_percent,
     )
 
 @app.route('/admin/manage-users', endpoint='admin_manage_users')
 def admin_manage_users():
     # Dummy user list
-    users = [
-        {'id': 112, 'name': 'Mithilesh Kumar Singh', 'address': 'Kritipur, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 113, 'name': 'Suron Maharjan', 'address': 'Natoole, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 114, 'name': 'Sandesh Bajracharya', 'address': 'Bhinchebhohal, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 115, 'name': 'Subin Sedhai', 'address': 'Baneshwor, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
-    ]
+    users=User.query.all()
 
     return render_template('admin_manage_users.html', users=users)
 
-@app.route('/admin/user/<int:user_id>/edit', methods=['GET'])
+@app.route('/admin/user/<int:user_id>/edit',methods=['GET', 'POST'],endpoint='edit_user')
 def edit_user(user_id):
-    # Dummy user data
-    users = [
-        {'id': 112, 'name': 'Mithilesh Kumar Singh', 'address': 'Kritipur, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 113, 'name': 'Suron Maharjan', 'address': 'Natoole, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 114, 'name': 'Sandesh Bajracharya', 'address': 'Bhinchebhohal, Lalitpur', 'role': 'Staff', 'staff_id': '987659326'},
-        {'id': 115, 'name': 'Subin Sedhai', 'address': 'Baneshwor, Kathmandu', 'role': 'Staff', 'staff_id': '987659326'},
-    ]
-    user = next((u for u in users if u['id'] == user_id), None)
+    user = User.query.get_or_404(user_id)
 
-    if not user:
-        return "User not found", 404
+    if flask_request.method == 'POST':
+        # 1) Update simple fields
+        new_email = flask_request.form.get('email')
+        new_phone = flask_request.form.get('phone')
+        user.email = new_email
+        user.phone_number = new_phone
 
+        # 2) Handle avatar upload
+        avatar_file = flask_request.files.get('avatar')
+        if avatar_file and avatar_file.filename:
+            ext = avatar_file.filename.rsplit('.', 1)[1].lower()
+            timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
+            filename = secure_filename(f"user_{timestamp}.{ext}")
+            save_dir = app.config['UPLOAD_FOLDER']
+            os.makedirs(save_dir, exist_ok=True)
+            avatar_file.save(os.path.join(save_dir, filename))
+            user.avatar_filename = filename
+
+        db.session.commit()
+        flash(f"User {user.email} updated successfully!", "success")
+        return redirect(url_for('admin_manage_users'))
+
+    # GET → render edit form
     return render_template('admin_edit_user.html', user=user)
 
-@app.route('/admin/user/add', methods=['GET'], endpoint='add_user')
+@app.route('/admin/user/add', methods=['GET', 'POST'], endpoint='add_user')
 def add_user():
+    # only admins should be here—optionally check:
+    if 'user_id' not in session or not User.query.get(session['user_id']).admin:
+        flash("Unauthorized", "error")
+        return redirect(url_for('login'))
+
+    if flask_request.method == 'POST':
+        # 1) Collect form fields
+        email    = flask_request.form.get('email')
+        password = flask_request.form.get('password')
+        phone    = flask_request.form.get('phone')
+
+        # 2) Prevent duplicate email
+        if User.query.filter_by(email=email).first():
+            flash("That email is already in use.", "error")
+            return redirect(url_for('add_user'))
+
+        # 3) Handle avatar upload
+        avatar_file = flask_request.files.get('avatar')
+        avatar_filename = None
+        if avatar_file and avatar_file.filename:
+            ext = avatar_file.filename.rsplit('.', 1)[1].lower()
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+            filename = secure_filename(f"user_{timestamp}.{ext}")
+            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+            avatar_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            avatar_filename = filename
+
+        # 4) Create & commit the new user
+        new_user = User(
+            email=email,
+            password=password,
+            phone_number=phone,
+            status='active',
+            avatar_filename=avatar_filename
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash("User added successfully!", "success")
+        # return to the manage-users list
+        return redirect(url_for('admin_manage_users'))
+
+    # GET → show the form
     return render_template('admin_add_user.html')
+
 
 
 @app.route('/admin/user/<int:user_id>/delete', endpoint='delete_user')
 def delete_user(user_id):
-    return f"Delete User {user_id} (placeholder)"
+    # 1) grab or 404
+    user = User.query.get_or_404(user_id)
+
+    # 2) remove any role‐specific rows first
+    Admin.query.filter_by(id=user_id).delete()
+    Charity.query.filter_by(id=user_id).delete()
+
+    # 3) delete the user
+    db.session.delete(user)
+    db.session.commit()
+
+    # 4) feedback & redirect
+    flash(f"User {user.email} has been deleted.", "success")
+    return redirect(url_for('admin_manage_users'))
 
 
 @app.route('/admin/manage-listing', endpoint='admin_manage_listing')
 def admin_manage_listing():
     # Dummy listing data
-    listings = [
-        {
-            'id': 1,
-            'name': 'Wireless Mouse',
-            'posted_date': '31st Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-        {
-            'id': 2,
-            'name': 'Bluetooth Speaker',
-            'posted_date': '30th Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-        {
-            'id': 3,
-            'name': 'Laptop Stand',
-            'posted_date': '14th Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-        {
-            'id': 4,
-            'name': 'Desk Lamp',
-            'posted_date': '14th Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-        {
-            'id': 5,
-            'name': 'USB-C Cable',
-            'posted_date': '31st Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-        {
-            'id': 6,
-            'name': 'Notebook',
-            'posted_date': '30th Feb, 2025',
-            'image': 'quokka.jpg',
-        },
-    ]
+    listings = Listing.query.all()
+    decorated_items = []
+    for l in listings:
+        if l.status == 'featured':
+            decorated_items.append(FeaturedListing(l))
+        elif l.status == 'urgent':
+            decorated_items.append(UrgentListing(l))
+        elif l.status == 'verified':
+            decorated_items.append(VerifiedListing(l))
+        elif l.status == 'sold':
+            decorated_items.append(SoldListing(l))
+        else:
+            decorated_items.append(l)
+    
 
-    return render_template('admin_manage_listing.html', listings=listings)
+    return render_template('admin_manage_listing.html', listings=decorated_items)
 
-@app.route('/admin/listing/<int:listing_id>/edit', methods=['GET'])
+@app.route('/admin/listing/<int:listing_id>/edit',methods=['GET', 'POST'],endpoint='edit_listing')
 def edit_listing(listing_id):
-    # Dummy data again, for simulation purposes
-    listings = [
-        {'id': 1, 'name': 'Wireless Mouse', 'price': 50.00, 'description': 'A nice wireless mouse'},
-        {'id': 2, 'name': 'Bluetooth Speaker', 'price': 120.00, 'description': 'Loud and clear sound'},
-        {'id': 3, 'name': 'Laptop Stand', 'price': 80.00, 'description': 'Adjustable height'},
-        {'id': 4, 'name': 'Desk Lamp', 'price': 60.00, 'description': 'LED lighting with USB'},
-        {'id': 5, 'name': 'USB-C Cable', 'price': 20.00, 'description': 'Durable and fast'},
-        {'id': 6, 'name': 'Notebook', 'price': 10.00, 'description': '80 pages, hardcover'},
-    ]
+    listing = Listing.query.get_or_404(listing_id)
 
-    listing = next((l for l in listings if l['id'] == listing_id), None)
+    if flask_request.method == 'POST':
+        # 1) Update simple fields
+        listing.title       = flask_request.form.get('title', listing.title)
+        listing.price       = float(flask_request.form.get('price', listing.price))
+        listing.description = flask_request.form.get('description', listing.description)
 
-    if not listing:
-        return "Listing not found", 404
+        # 2) Handle image upload (only if provided)
+        image_file = flask_request.files.get('image')
+        if image_file and image_file.filename:
+            ext = image_file.filename.rsplit('.', 1)[1].lower()
+            ts  = datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f")
+            fn  = secure_filename(f"listing_{listing.id}_{ts}.{ext}")
+            save_dir = app.config['UPLOAD_FOLDER']
+            os.makedirs(save_dir, exist_ok=True)
+            image_file.save(os.path.join(save_dir, fn))
+            listing.image_filename = fn
 
+        db.session.commit()
+        flash(f"Listing “{listing.title}” updated successfully.", "success")
+        return redirect(url_for('admin_manage_listing'))
+
+    # GET → render the form
     return render_template('admin_edit_listing.html', listing=listing)
-
-
-@app.route('/admin/listing/<int:listing_id>/edit', methods=['POST'], endpoint='update_listing')
-def update_listing(listing_id):
-    # Logic to update listing from request.form
-    return redirect(url_for('admin_manage_listing'))
 
 @app.route('/admin/listing/<int:listing_id>/delete', methods=['GET'], endpoint='delete_listing')
 def delete_listing(listing_id):
@@ -1484,10 +1752,9 @@ def admin_user_inquiry():
 
 @app.route('/admin/send-reply', methods=['POST'])
 def send_reply():
-    from flask import request
 
-    recipient = request.form['email']
-    message = request.form['message']
+    recipient = flask_request.form['email']
+    message = flask_request.form['message']
 
     msg = Message(subject="Reply to your inquiry",
                   recipients=[recipient],
@@ -1499,72 +1766,44 @@ def send_reply():
 @app.route('/charity/donations', endpoint='charity_all_donations')
 def admin_donations():
     # Dummy listing data for donation items
-    listings = [
-        {
-            'id': 1,
-            'name': 'Donation 1',
-            'posted_date': '31st Feb, 2025',
-            'image': 'images/sample1.png'
-        },
-        {
-            'id': 2,
-            'name': 'Donation 2',
-            'posted_date': '30th Feb, 2025',
-            'image': 'images/sample2.png'
-        },
-        {
-            'id': 3,
-            'name': 'Donation 3',
-            'posted_date': '14th Feb, 2025',
-            'image': 'images/sample3.png'
-        },
-        {
-            'id': 4,
-            'name': 'Item Name',
-            'posted_date': '14th Feb, 2025',
-            'image': 'images/sample1.png'
-        },
-        {
-            'id': 5,
-            'name': 'Item Name',
-            'posted_date': '31st Feb, 2025',
-            'image': 'images/sample2.png'
-        },
-        {
-            'id': 6,
-            'name': 'Item Name',
-            'posted_date': '30th Feb, 2025',
-            'image': 'images/sample3.png'
-        },
-    ]
+    requests = DonationRequest.query.options(
+            joinedload(DonationRequest.listing),
+            joinedload(DonationRequest.requester)
+        ).join(Listing).filter(
+            DonationRequest.status == 'pending',
+            Listing.status == 'sold',
+            DonationRequest.status == 'pending'
+        ).all()
 
-    return render_template('charity_all_donations.html', listings=listings)
+    return render_template('charity_all_donations.html', requests=requests)
 
-@app.route('/charity/donation/<int:donation_id>', endpoint='charity_view_donation')
-def charity_view_donation(donation_id):
-    donation_items = [
-        {"name": "Cotton shirt Regular Fit", "size": "M", "quantity": 2, "image": "images/shirt.png", "accepted": True},
-        {"name": "Running Shoes", "size": "M", "quantity": 2, "image": "images/shoes.png", "accepted": False},
-        {"name": "Yellow Blouse", "size": "M", "quantity": 2, "image": "images/yellow.png", "accepted": True},
-        # Add more if needed
-    ]
-
-    browse_more = [
-        {"name": "Doantino 1", "posted_date": "31st Feb,2025", "image": "images/sample1.png"},
-        {"name": "Donation 2", "posted_date": "30th Feb,2025", "image": "images/sample2.png"},
-        {"name": "Donation 3", "posted_date": "14th Feb,2025", "image": "images/sample3.png"},
-    ]
+@app.route('/charity/donation/<int:request_id>', endpoint='charity_view_donation')
+def charity_view_donation(request_id):
+    request=DonationRequest.query.get(request_id)
 
     return render_template(
         'charity_view_donation.html',
-        donation_items=donation_items,
-        donation_user="USER",
-        posted_date="31st Feb,2025",
-        browse_more=browse_more
+        request=request
     )
 
 
 if __name__ == "__main__":
     with app.app_context():
+        # db.drop_all()
         db.create_all()
+        user = User.query.filter_by(email="admin@example.com").first()
+        if user is None:
+            user = User(
+                email="admin@example.com",
+                password="admin123",
+                status="active"
+            )
+            db.session.add(user)
+            db.session.commit()
+
+        # 2) Ensure there’s an Admin row for that user.id
+        if Admin.query.get(user.id) is None:
+            admin = Admin(id=user.id)
+            db.session.add(admin)
+            db.session.commit()
     app.run(debug=True)
