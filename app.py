@@ -1027,6 +1027,8 @@ def trade_request():
             TradeRequest.listing_id.in_(user_listing_ids),
             TradeRequest.offered_item_id.in_(user_listing_ids)
         )
+    ).order_by(
+        TradeRequest.id.desc()
     ).all()
 
     return render_template('trade_request.html', requests=requests)
@@ -1087,6 +1089,8 @@ def borrow_request():
             BorrowRequest.requester_id == user_id,
             BorrowRequest.listing_id.in_(user_listing_ids)
         )
+    ).order_by(
+        BorrowRequest.id.desc()
     ).all()
 
     return render_template('borrow_request.html', requests=requests)
@@ -1152,6 +1156,8 @@ def donation_request():
             joinedload(DonationRequest.requester)
         ).filter(
             DonationRequest.listing_id.in_(user_listing_ids)
+        ).order_by(
+            DonationRequest.id.desc()
         ).all()
 
     return render_template('donation_request.html', requests=requests)

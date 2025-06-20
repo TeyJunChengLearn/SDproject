@@ -46,7 +46,7 @@
               </p>
             </div>
             <div class="item-meta">
-              {% if item.status == 'approved' %}
+              {% if item.status == 'rejected' %}
                 <span class="status-icon success">&#10003;</span>
               {% else %}
                 <span class="status-icon empty"></span>
@@ -62,12 +62,14 @@
           <p class="summary-date">
             Posted: {{ request.created_at.strftime('%Y-%m-%d %H:%M') }}
           </p>
-          <a href="{{url_for('approveDonation',request_id=request.id)}}" class="hidden-btn">
+          {% if request.status not in ['approved', 'rejected'] %}
+          <a href="{{url_for('approveDonation',request_id=request.id)}}" >
               <button class="accept-btn">Accept</button>
           </a>
-          <a href="{{url_for('rejectDonation',request_id=request.id)}}" class="hidden-btn">
+          <a href="{{url_for('rejectDonation',request_id=request.id)}}" >
               <button class="accept-btn">Reject</button>
           </a>
+          {% endif%}
         </div>
       </section>
 
