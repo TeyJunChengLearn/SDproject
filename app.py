@@ -1772,15 +1772,11 @@ def send_reply():
 
 @app.route('/charity/donations', endpoint='charity_all_donations')
 def admin_donations():
-    # Dummy listing data for donation items
-    requests = DonationRequest.query.options(
-            joinedload(DonationRequest.listing),
-            joinedload(DonationRequest.requester)
-        ).join(Listing).filter(
-            DonationRequest.status == 'pending',
-            Listing.status == 'sold',
-            DonationRequest.status == 'pending'
-        ).all()
+    user_id=session.get('user_id')
+    charity_id = User.query.get(user_id).charity.id
+    requests = DonationRequest.query.filter_by(
+    recipient_charity_id=charity_id
+    ).order_by(DonationRequest.id.desc()).all()
 
     return render_template('charity_all_donations.html', requests=requests)
 
