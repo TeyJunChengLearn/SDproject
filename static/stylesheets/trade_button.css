@@ -1,0 +1,299 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+.top-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    margin-top: 30px;
+}
+
+.header-text {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    display: flex;
+    gap: 5px;
+}
+
+.cart, .notify {
+    width: 24px;
+    height: 24px;
+}
+
+.text-container {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.title-container {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.title-container p{
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: black;
+}
+
+h1 {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    color: #1A8FE3;
+}
+
+h2 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+}
+
+p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300px;
+    color: #9A9A9A;
+}
+.charity-card {
+    margin: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.charity-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.charity-info {
+    padding: 15px;
+    background-color: #fff;
+}
+
+.charity-info h2 {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.button-container {
+    text-align: right;
+}
+
+.charity-info button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.product-card {
+    display: block;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px auto 25px;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 25px;
+    width: 90%;              /* ✅ or try 320px for fixed */
+    max-width: 400px;
+}
+
+.product-card input[type="radio"] {
+    position: absolute;
+    top: 18px;
+    left: 16px;
+    transform: scale(1.3);
+}
+
+.product-content {
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+
+.product-name {
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: black;
+}
+
+.product-qty {
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+}
+
+.product-price {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.itempage-btn {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between; /* distribute buttons side by side */
+    align-items: center;
+    gap: 10px; /* spacing between buttons */
+    padding: 20px;
+    background-color: white; /* optional: to keep it visible */
+    z-index: 999; /* ensures it's above other elements */
+}
+
+.submit-btn,
+.back-btn {
+    background-color: #004BFE;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 10px;
+}
+
+.back-btn {
+    background-color: transparent;
+    color: #004BFE;
+    border-radius: 60px;
+    padding: 15px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    cursor: pointer;
+    width: 100%;
+    max-width: 336px;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 100px;
+    align-items: center;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.illustration img {
+    width: 200px;
+    max-height: 188px;
+    object-fit: contain;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.message h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 20px 10px;
+}
+
+.message p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.confirm-button {
+    position: fixed;
+    bottom: 10px; /* add spacing above nav bar */
+    left: 0;
+    right: 0;
+    padding: 0 20px;
+    background-color: white;
+    z-index: 999;
+}
+
+.container button {
+    background-color: #1A8FE3;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.navigation-bar-container {
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navigation-bar-container > div {
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center icon & text */
+    font-size: 12px;
+    font-family: "Prompt", sans-serif;
+    color: #333;
+}
+
+.navigation-bar-container i {
+    font-size: 18px;          /* larger icon */
+  }
+  
+.navigation-bar-container span {
+    margin-top: 6px;           /* small gap under the icon */
+}
+
+.charity-list, .upload-container, .confirmation-container{
+    padding-bottom: 80px; /* Or margin-bottom */
+}

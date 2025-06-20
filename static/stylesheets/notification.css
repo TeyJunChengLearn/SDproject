@@ -7,6 +7,7 @@ body {
     padding: 0;
     font-family: 'Nunito Sans', sans-serif;
     overflow-x: hidden;
+    padding-bottom: 80px;
 }
 
 .top-bar-container {
@@ -139,6 +140,53 @@ p {
 
 .dot.blue {
     background-color: #004BFE;
+}
+
+.request-card {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 10px;
+    max-width: 330px;
+    margin: 20px auto;
+}
+
+.request-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0066ff;
+    margin-bottom: 20px;
+}
+
+.request-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.request-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.request-icon {
+    font-size: 30px;
+    color: #333;
+    margin: 0 5px;
+}
+
+.request-btn {
+    margin-left: auto;
+    padding: 10px 20px;
+    background-color: #5a8bd3;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
 }
 
 .navigation-bar-container {

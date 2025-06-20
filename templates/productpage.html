@@ -17,54 +17,54 @@
   <title>ShareBear</title>
 </head>
 <body>
-  <div class="navigation-bar-container">
-      <div class="leftarrowicon" onclick="window.history.back()" style="cursor: pointer;">
-          <i class="bi bi-arrow-left"></i>
-      </div>
-      <div class="header-text">Product Detail</div>
-      <div class="icon">
-          <div class="notify" onclick="window.location.href='/notification'">
-              <i class="bi bi-bell"></i>
-          </div>
-          <div class="cart" onclick="window.location.href='/cart'">
-              <i class="bi bi-cart3"></i>
-          </div>
-      </div>
-  </div>
+    <div class="navigation-bar-container">
+        <div class="leftarrowicon" onclick="window.history.back()" style="cursor: pointer;">
+            <i class="bi bi-arrow-left"></i>
+        </div>
+        <div class="header-text">Product Detail</div>
+        <div class="icon">
+            <div class="notify" onclick="window.location.href='/notification'">
+                <i class="bi bi-bell"></i>
+            </div>
+            <div class="cart" onclick="window.location.href='/cart'">
+                <i class="bi bi-cart3"></i>
+            </div>
+        </div>
+    </div>
 
-  <div class="upload-box" id="uploadBox">
-      <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="Product Image" style="width:100%; max-width:300px; height:auto;">
-  </div>
+    <div class="upload-box" id="uploadBox">
+        <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="Product Image" style="width:100%; max-width:300px; height:auto;">
+    </div>
 
-  <div class="description-box">
-    <h3>{{ product.get_title() }}</h3>
+    <div class="description-box">
+        <h3>{{ product.get_title() }}</h3>
 
 
-      <!-- No discount, show only original price -->
-      <h2 style="font-weight: bold; color: #004BFE;">RM{{ product.price }}</h2>
+        <!-- No discount, show only original price -->
+        <h2 style="font-weight: bold; color: #004BFE;">RM{{ product.price }}</h2>
 
-    <p>{{ product.description }}</p>
-</div>
+        <p>{{ product.description }}</p>
+    </div>
 
-  <div class="contact-seller-box">
-      <div class="contact-seller-information">
-          <div class="profile-img">
-              <img src="{{ url_for('static', filename='uploads/' ~ product.owner.avatar_filename) }}" alt="Profile" />
-          </div>
-          <div class="seller-details">
-              <p class="seller-name">{{product.owner.email}}</p>
-          </div>
-          <div class="contact-action" onclick="window.location.href='https://wa.me/{{product.owner.email}}'"> <!--Insert WA link-->
-              <span>Contact seller</span>
-              <i class="bi bi-arrow-right"></i>
-          </div>
-      </div>
-  </div>
+    <div class="contact-seller-box">
+        <div class="contact-seller-information">
+            <div class="profile-img">
+                <img src="{{ url_for('static', filename='uploads/' ~ product.owner.avatar_filename) }}" alt="Profile" />
+            </div>
+            <div class="seller-details">
+                <p class="seller-name">{{product.owner.email}}</p>
+            </div>
+            <div class="contact-action" onclick="window.location.href='https://wa.me/{{product.owner.email}}'"> <!--Insert WA link-->
+                <span>Contact seller</span>
+                <i class="bi bi-arrow-right"></i>
+            </div>
+        </div>
+    </div>
   
-  <div class="itempage-btn">
-      <button type="button" class="back-btn" {% if product.status in ['featured', 'urgent', 'verified'] %}disable{% endif %}>Trade</button>
-        <button type="button" class="details-btn" {% if product.status in ['featured', 'urgent', 'verified'] %}onclick="window.location.href='{{url_for('buy_item',listing_id=product.id)}}'"{% else %}disable {% endif %}>Buy Now</button>
-      </a>
-  </div>
+    <div class="itempage-btn">
+        <button type="button" class="trade-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('trade_button',product_id=product.id) }}'">Trade</button>
+        <button type="button" class="borrow-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} disable {% endif %} onclick="window.location.href='{{ url_for('borrow_button',product_id=product.id) }}'">Borrow</button>
+        <button type="button" class="details-btn" {% if product.status in ['featured', 'urgent', 'verified'] %} onclick="window.location.href='{{url_for('buy_item',listing_id=product.id)}}'"{% else %}disable {% endif %}>Buy Now</button>
+    </div>
 </body>
 </html>

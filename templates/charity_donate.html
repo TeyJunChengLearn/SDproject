@@ -30,30 +30,34 @@
             </div>
         </div>
     </div>
+    <div class="title-container">
+        <h2>Choose Item</h2>
+        <p>Choose an item from your current listing products that wanted to donate to the charity.</p>
+    </div>
 
-    <form>
-        <div class="title-container">
-            <h2>Add Item</h2>
-            <p>Add item that wanted to donate to the charity.</p>
-        </div>
-        <div class="upload-box" id="uploadBox">
-            <div class="upload-icon">📤</div>
-            <p><strong>Choose a file or drag & drop it here</strong></p>
-            <p class="subtext">JPEG, PNG formats, up to 50MB</p>
-            <label class="browse-button">
-            Browse File
-            <input type="file" name="photos" id="fileInput" accept="image/*" style="display: none;">
-            </label>
-        </div>
-
-        <div id="previewContainer"></div>
-
+    {% if user_products %}
+    <form method="POST" action="/submit-donation">
+        <input type="number" name="charity_id" value="{{charity_id}}" hidden>
+        {% for product in user_products %}
+        <label class="product-card">
+            <input type="radio" name="product_id" value="{{ product.id }}" required>
+            <div class="product-content">
+                <img src="{{ url_for('static', filename='uploads/' ~ product.image_filename) }}" alt="product image" class="product-image">
+                <div class="product-info">
+                    <p class="product-name">{{ product.title }}</p>
+                </div>
+            </div>
+        </label>
+        {% endfor %}
         <div class="itempage-btn">
-            <button type="button" class="back-btn" onclick="window.location.href='/charity'">Back</button>
-            <button type="button" class="next-btn" onclick="window.location.href='/charity/confirmation'">Next</button>
+            <button type="back" class="back-btn" onclick="history.back()">Back</button>
+            <button type="submit" class="submit-btn" >Donate</button>
+
         </div>
     </form>
+    {% else %}
+    <p style="text-align: center; margin-top: 20px;">You have no listing item</p>
+    {% endif %}
 
-    <script src="{{ url_for('static', filename='js/charity_donate.js') }}"></script>
 </body>
 </html>

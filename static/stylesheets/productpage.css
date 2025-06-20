@@ -128,29 +128,35 @@ p {
     font-size: 10px;
 }
 
-.details-btn {
-    background-color: #004BFE;
-    color: white;
-    border: none;
-    border-radius: 60px;
-    padding: 15px;
-    font-size: 14px;
-    font-family: "Prompt", sans-serif;
-    cursor: pointer;
-    margin-left: 20px;
-    width: 100%;
-    max-width: 336px;;
+.itempage-btn {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
 }
 
-.back-btn {
+.trade-btn,
+.borrow-btn,
+.details-btn {
+    flex: 1 1 30%; /* Allows flexibility for smaller screens */
+    max-width: 110px; /* Adjust as needed */
+    padding: 12px;
+    font-size: 14px;
+    font-family: "Prompt", sans-serif;
+    border-radius: 60px;
+    border: none;
+    cursor: pointer;
+}
+
+.details-btn {
+     background-color: #004BFE;
+    color: white;
+}
+
+.trade-btn, .borrow-btn {
     background-color: transparent;
     color: #004BFE;
     border: 1px solid #ccc;
-    border-radius: 60px;
-    padding: 15px;
-    font-size: 14px;
-    font-family: "Prompt", sans-serif;
-    cursor: pointer;
-    width: 100%;
-    max-width: 336px;
 }

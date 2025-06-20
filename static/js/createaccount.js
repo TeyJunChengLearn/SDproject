@@ -96,14 +96,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Password validation
-      if (password.value.length < 1 || password.value.length > 8) {
-  e.preventDefault();
-  password.setCustomValidity('Password must be between 1 and 8 characters');
-  password.reportValidity();
-  password.focus();
-} else {
-  password.setCustomValidity('');
-}
+      if (password.value.length !== 8) {
+      e.preventDefault();
+      password.setCustomValidity('Password must be exactly 8 characters');
+      password.reportValidity();
+      password.focus();
+    } else {
+      password.setCustomValidity('');
+    }
+
     });
   });
 
