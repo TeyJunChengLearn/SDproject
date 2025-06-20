@@ -1,0 +1,378 @@
+/* Reset & Fonts */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+  background-color: #f5f8ff;
+  color: #1f2c73;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: #ffffff;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid #e0e6f3;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4c4cff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin: 1rem 0;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #1f2c73;
+  font-weight: 500;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #eef2ff;
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.sidebar ul li a i {
+  font-size: 1.2rem;
+}
+
+
+.sidebar a:hover,
+.sidebar a:focus {
+  background-color: #e0e6f3;
+}
+
+.logout-button {
+  background-color: #4c4cff;
+  color: white !important;
+  padding: 0.7rem;
+  text-align: center;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-top: 2rem;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #3a3aff;
+  color: black !important;
+}
+
+/* Dashboard Main */
+.dashboard {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.search-bar input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  min-width: 200px;
+}
+
+.all-donations {
+  padding: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1f2c73;
+  margin-bottom: 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.donation-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.donation-card:hover {
+  transform: translateY(-5px);
+}
+
+.donation-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.donation-info {
+  padding: 1rem;
+  text-align: left;
+}
+
+.donation-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2c73;
+  margin-bottom: 0.25rem;
+}
+
+.donation-id {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.donation-date {
+  color: #6366f1;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.view-btn {
+  display: inline-block;
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.view-btn:hover {
+  background-color: #4338ca;
+}
+
+.view-donation {
+  padding: 2rem;
+}
+
+.header-section .breadcrumb {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2c73;
+  margin-bottom: 1rem;
+}
+
+.sub-title {
+  font-size: 1.25rem;
+  color: #1f2c73;
+  margin: 1.5rem 0 1rem;
+}
+
+.donation-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.donation-item-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.donation-item-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.item-details {
+  flex-grow: 1;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1f2c73;
+}
+
+.item-size {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-icon.success {
+  color: green;
+  font-size: 1.2rem;
+}
+
+.status-icon.empty {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+.item-qty {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.donation-summary {
+  margin-top: 1rem;
+  padding-left: 0.5rem;
+}
+
+.summary-name,
+.summary-user,
+.summary-date {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+.summary-date {
+  color: #6366f1;
+  font-weight: 500;
+}
+
+.accept-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.browse-more {
+  padding: 2rem;
+}
+
+.browse-more h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1f2c73;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.donation-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.donation-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.donation-info {
+  padding: 1rem;
+}
+
+.donation-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2c73;
+  margin-bottom: 0.25rem;
+}
+
+.donation-id {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.donation-date {
+  color: #6366f1;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.view-btn {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+}
