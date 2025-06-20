@@ -72,6 +72,16 @@
             </tbody>
             </table>
         </div>
+        <!-- Success Modal -->
+    <div id="successModal" class="modal" style="display: flex; align-items: center; justify-content: center;">
+      <div class="modal-content success-modal-content">
+        <span onclick="closeSuccessModal()" class="close-btn">&times;</span>
+        <i class="fas fa-check-circle success-icon"></i>
+        <h3>Email Sent Successfully!</h3>
+        <p>Your reply has been delivered.</p>
+          <button onclick="closeSuccessModal()">Back to Inquiry List</button>
+      </div>
+    </div>
         </section>
 
 
@@ -90,6 +100,9 @@
             </div>
 
 
+
+
+
     </main>
   </div>
         <script>
@@ -102,6 +115,11 @@
         function closeModal() {
         document.getElementById('replyModal').style.display = 'none';
         }
+        </script>
+        <script>
+                function closeSuccessModal() {
+                document.getElementById('successModal').style.display = 'none';
+                }
         </script>
 
 

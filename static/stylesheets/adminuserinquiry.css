@@ -280,12 +280,45 @@ body {
   border-radius: 8px;
 }
 
-.modal-content button {
-  padding: 0.5rem 1rem;
+.modal-content button[type="submit"] {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.6rem;
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background: linear-gradient(90deg, #4338ca, #6366f1);
+}
+.success-modal-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.success-icon {
+  font-size: 3rem;
+  color: #10b981; /* Tailwind emerald-500 green */
+  margin-bottom: 1rem;
+}
+
+#successModal .modal-content button {
   background: #4f46e5;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 0.6rem 1.5rem;
+  border-radius: 12px;
   font-weight: bold;
+  margin-top: 1rem;
   cursor: pointer;
+}
+
+#successModal .modal-content button:hover {
+  background: #4338ca;
 }

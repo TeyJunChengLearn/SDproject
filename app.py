@@ -1736,15 +1736,6 @@ def admin_user_inquiry():
             'date': '31/2/2025',
             'due_amount': 'Rm 53',
             'status': 'Pending'
-        },
-        {
-            'id': '002',
-            'name': 'Dodolenyeah',
-            'address': 'Mutiara, Cyberjaya',
-            'postcode': '64000',
-            'date': '35/13/2025',
-            'due_amount': 'Rm 69',
-            'status': 'Pending'
         }
     ]
 
@@ -1761,7 +1752,7 @@ def send_reply():
                   body=message)
     mail.send(msg)
 
-    return "Email sent successfully"
+    return render_template('admin_email_sent.html')
 
 @app.route('/charity/donations', endpoint='charity_all_donations')
 def admin_donations():
