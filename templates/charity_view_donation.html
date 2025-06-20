@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- … your head links … -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/charityviewdonation.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <title>Charity All Donation</title>
 </head>
 <body>
   <div class="container">
     <aside class="sidebar">
-      <!-- … -->
+      <div class="logo">ShareBear</div>
+      <nav>
+        <ul>
+            <li><a href="{{url_for('charity_all_donations')}}"><i class="fas fa-list-alt"></i> Available Donation</a></li>
+        </ul>
+      </nav>
+      <a class="logout-button" href="{{url_for('logout')}}">Logout</a>
     </aside>
     <main class="dashboard">
       <header class="dashboard-header">
@@ -49,10 +62,10 @@
           <p class="summary-date">
             Posted: {{ request.created_at.strftime('%Y-%m-%d %H:%M') }}
           </p>
-          <a href="{{url_for('approveDonation',request_id=request.id)}}">
+          <a href="{{url_for('approveDonation',request_id=request.id)}}" class="hidden-btn">
               <button class="accept-btn">Accept</button>
           </a>
-          <a href="{{url_for('rejectDonation',request_id=request.id)}}">
+          <a href="{{url_for('rejectDonation',request_id=request.id)}}" class="hidden-btn">
               <button class="accept-btn">Reject</button>
           </a>
         </div>

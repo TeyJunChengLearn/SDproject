@@ -149,20 +149,23 @@ body {
 }
 
 .donation-item-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 16px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  padding: 1rem 1.5rem;
+  gap: 1.5rem;
+  transition: transform 0.2s ease;
+  min-height: 120px;
 }
 
 .donation-item-card img {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
   object-fit: cover;
+  border: 1px solid #e5e7eb;
 }
 
 .item-details {
@@ -170,35 +173,37 @@ body {
 }
 
 .item-name {
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: 700;
+  font-size: 1rem;
   color: #1f2c73;
+  margin-bottom: 0.3rem;
 }
 
 .item-size {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #6b7280;
 }
 
 .item-meta {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f3f4f6;
 }
 
 .status-icon.success {
-  color: green;
-  font-size: 1.2rem;
+  color: #22c55e;
+  font-size: 1.4rem;
+  line-height: 1;
 }
 
 .status-icon.empty {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-  display: inline-block;
+  display: none;
 }
+
 
 .item-qty {
   font-weight: bold;
@@ -297,4 +302,8 @@ body {
   text-decoration: none;
   font-weight: 600;
   display: inline-block;
+}
+
+.hidden-btn {
+  display: none;
 }
